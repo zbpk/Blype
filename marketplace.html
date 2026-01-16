@@ -2,222 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - Marketplace</title>
+    <title>BLYPEME - Marketplace</title>
     <style>
-        body {
-            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
-            background-attachment: fixed;
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            min-height: 100vh;
-        }
-
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        /* NAVIGATION */
-        .sub-nav {
-            background-color: #8a49a8;
-            padding: 10px 0;
-            color: white;
-            font-size: 12px;
-            text-align: center;
-            border-bottom: 3px solid #5a2d6d;
-        }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 12px; font-weight: bold; }
-        .sub-nav a:hover { text-decoration: underline; }
-
-        /* HEADER SECTION */
-        .market-header {
-            padding: 20px;
-            background: #fff;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .balance-pill {
-            background: #eaffea;
-            border: 1px solid #27ae60;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            color: #1e6900;
-        }
-
-        /* MARKET GRID */
-        .market-container {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .filter-box {
-            background: #fff;
-            border: 1px solid #a4a4a4;
-            padding: 10px;
-            height: fit-content;
-        }
-
-        .item-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-        }
-
-        /* ITEM CARD */
-        .item-card {
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-            transition: transform 0.1s;
-        }
-        .item-card:hover {
-            border-color: #8a49a8;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .item-img {
-            width: 100%;
-            height: 120px;
-            background: #eee;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .item-img img { max-width: 100%; max-height: 100%; }
-
-        .item-name { font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px; }
-        .price-text { color: green; font-weight: bold; font-size: 13px; display: block; margin-bottom: 8px; }
-
-        .buy-btn {
-            background: linear-gradient(to bottom, #72fb3c, #4caf50);
-            border: 1px solid #1e6900;
-            color: #fff;
-            font-weight: bold;
-            padding: 5px 10px;
-            cursor: pointer;
-            width: 100%;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
-        }
-        .buy-btn:hover { background: #60e030; }
-
-        .footer { text-align: center; font-size: 10px; padding: 20px; border-top: 1px solid #ccc; background: #f9f9f9; }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: rgba(255,255,255,0.7); min-height: 100vh; }
+        .sub-nav { background-color: #8a49a8; padding: 8px 0; color: white; text-align: center; border-bottom: 1px solid #000; font-size: 11px; font-weight: bold; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .balance-bar { background: #fff; padding: 10px; border-bottom: 1px solid #ccc; text-align: right; font-weight: bold; font-size: 12px; }
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px; }
+        .item-card { background: #fff; border: 1px solid #ccc; padding: 10px; text-align: center; }
+        .item-img { width: 100%; height: 120px; background: #eee; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; }
+        .price-text { color: green; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px; }
+        .buy-btn { background: #72fb3c; border: 1px solid #27ae60; padding: 5px 10px; font-weight: bold; cursor: pointer; width: 100%; }
+        .owned-label { background: #ccc; border: 1px solid #999; color: #666; padding: 5px 10px; font-weight: bold; display: block; text-align: center; }
     </style>
 </head>
 <body>
-
-    <div class="site-wrapper">
-        <div class="sub-nav">
-            <a href="index.html">Home</a> | 
-            <a href="games.html">Games</a> | 
-            <a href="marketplace.html">Marketplace</a> | 
-            <a href="shop.html">Shop</a> | 
-            <a href="forum.html">Forum</a> | 
-            <a href="settings.html">Settings</a>
+<div class="site-wrapper">
+    <div class="sub-nav">
+        <a href="index.html">Home</a> | <a href="games.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="character.html">Character</a> | <a href="shop.html">Shop</a>
+    </div>
+    <div class="balance-bar">Balance: <span style="color:green;">B$ <span id="current-bux">0</span></span></div>
+    <div class="market-grid">
+        <div class="item-card" id="item-brown-shirt">
+            <div class="item-img"><img src="Brown Shirt Front.png" style="max-width:100%"></div>
+            <b>Brown Shirt</b><br><span class="price-text">B$ 50</span>
+            <div class="action-area"><button class="buy-btn" onclick="purchaseItem(50, 'brown-shirt', 'Brown Shirt')">Buy Now</button></div>
         </div>
-
-        <div class="market-header">
-            <h1 style="margin:0; font-size: 24px;">Marketplace</h1>
-            <div class="balance-pill">
-                B$ <span id="current-bux">0</span>
-            </div>
-        </div>
-
-        <div class="market-container">
-            <aside class="filter-box">
-                <b style="font-size: 12px;">Categories</b>
-                <ul style="font-size: 11px; list-style: none; padding: 5px 0;">
-                    <li><input type="checkbox" checked> Shirts</li>
-                    <li><input type="checkbox"> Hats</li>
-                    <li><input type="checkbox"> Faces</li>
-                    <li><input type="checkbox"> Gear</li>
-                </ul>
-                <hr>
-                <b style="font-size: 11px;">Currency</b><br>
-                <select style="font-size: 10px; width: 100%;">
-                    <option>Blypo-Bux Only</option>
-                </select>
-            </aside>
-
-            <main class="item-grid">
-                
-                <div class="item-card">
-                    <div class="item-img">
-                        <img src="Brown Shirt Front.png" alt="Brown Shirt">
-                    </div>
-                    <span class="item-name">Brown Shirt</span>
-                    <span class="price-text">B$ 50</span>
-                    <button class="buy-btn" onclick="purchaseItem(50, 'Brown Shirt')">Buy Now</button>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-img">
-                        <div style="color:#ccc; font-size:10px;">[ Image Placeholder ]</div>
-                    </div>
-                    <span class="item-name">Red Hoodie</span>
-                    <span class="price-text">B$ 75</span>
-                    <button class="buy-btn" onclick="purchaseItem(75, 'Red Hoodie')">Buy Now</button>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-img">
-                        <div style="color:#ccc; font-size:10px;">[ Image Placeholder ]</div>
-                    </div>
-                    <span class="item-name">Blype Cap</span>
-                    <span class="price-text">B$ 120</span>
-                    <button class="buy-btn" onclick="purchaseItem(120, 'Blype Cap')">Buy Now</button>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-img">
-                        <div style="color:#ccc; font-size:10px;">[ Image Placeholder ]</div>
-                    </div>
-                    <span class="item-name">Admin Sword</span>
-                    <span class="price-text">B$ 5,000</span>
-                    <button class="buy-btn" onclick="purchaseItem(5000, 'Admin Sword')">Buy Now</button>
-                </div>
-
-            </main>
-        </div>
-
-        <div class="footer">
-            <b>BLYPE Corporation © 2026</b>
+        <div class="item-card" id="item-admin-cape">
+            <div class="item-img" style="background:#444; color:#fff;">CAPE</div>
+            <b>Admin Cape</b><br><span class="price-text">B$ 5M</span>
+            <div class="action-area"><button class="buy-btn" onclick="purchaseItem(5000000, 'admin-cape', 'Admin Cape')">Buy Now</button></div>
         </div>
     </div>
-
-    <script>
-        // Sync balance from localStorage
-        function updateBalanceUI() {
-            const balance = localStorage.getItem("blypoBux") || "0";
-            document.getElementById('current-bux').innerText = balance;
-        }
-
-        function purchaseItem(cost, itemName) {
-            let currentBux = parseInt(localStorage.getItem("blypoBux") || 0);
-
-            if (currentBux >= cost) {
-                currentBux -= cost;
-                localStorage.setItem("blypoBux", currentBux);
-                updateBalanceUI();
-                alert("Successfully purchased: " + itemName + "!\nRemaining Balance: B$ " + currentBux);
-            } else {
-                alert("Insufficient Blypo-Bux! Visit the Shop to get more.");
-            }
-        }
-
-        // Initialize UI
-        window.onload = updateBalanceUI;
-    </script>
+</div>
+<script>
+    function formatBux(num) {
+        num = parseInt(num);
+        if (num >= 1e12) return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
+        if (num >= 1e9) return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+        if (num >= 1e6) return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (num >= 1e3) return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
+        return num.toString();
+    }
+    function purchaseItem(cost, id, name) {
+        let bux = parseInt(localStorage.getItem("blypoBux") || 0);
+        if (bux >= cost) {
+            localStorage.setItem("blypoBux", bux - cost);
+            let owned = JSON.parse(localStorage.getItem("ownedItems") || "[]");
+            owned.push({id: id, name: name});
+            localStorage.setItem("ownedItems", JSON.stringify(owned));
+            alert("Purchased!"); render();
+        } else { alert("Not enough Blypo-Bux!"); }
+    }
+    function render() {
+        document.getElementById('current-bux').innerText = formatBux(localStorage.getItem("blypoBux") || 0);
+        let owned = JSON.parse(localStorage.getItem("ownedItems") || "[]");
+        owned.forEach(item => {
+            const card = document.getElementById('item-' + item.id);
+            if (card) card.querySelector('.action-area').innerHTML = '<span class="owned-label">Owned</span>';
+        });
+    }
+    window.onload = render;
+</script>
 </body>
 </html>
