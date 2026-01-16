@@ -23,7 +23,7 @@
         .banner-container { background: #fff; border-bottom: 1px solid #000; }
         .banner-img { width: 900px; display: block; }
 
-        /* NAVIGATION */
+        /* NAVIGATION BAR */
         .sub-nav {
             background-color: #8a49a8;
             padding: 10px 0;
@@ -42,6 +42,7 @@
             padding: 15px;
         }
 
+        /* RETRO BOXES */
         .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
         .box-header {
             background: linear-gradient(to bottom, #f9f9f9, #e9e9e9);
@@ -58,7 +59,7 @@
             padding: 10px 20px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block;
         }
 
-        .footer { text-align: center; font-size: 10px; padding: 30px; border-top: 1px solid #ccc; }
+        .footer { text-align: center; font-size: 10px; padding: 30px; border-top: 1px solid #ccc; background: #f9f9f9; }
         
         #auth-status { display: none; text-align: center; font-size: 11px; }
         .streak-tag { font-size: 10px; color: #8a49a8; margin-top: 5px; font-weight: bold; }
@@ -71,7 +72,7 @@
             <img src="Banner.png" alt="BLYPE Banner" class="banner-img">
         </div>
 
-        <div class="sub-nav">
+        <div class="sub-nav" id="main-nav">
             <a href="index.html">Home</a> | 
             <a href="games.html">Games</a> | 
             <a href="marketplace.html">Marketplace</a> | 
@@ -89,10 +90,8 @@
                     
                     <div id="auth-status">
                         Welcome, <b id="display-name">Admin</b>!<br>
-                        <span style="color: green;">B$ <span id="user-bux">0</span> Blypo-Bux</span>
+                        <span style="color: green; font-weight: bold;">B$ <span id="user-bux">0</span></span>
                         <div id="streak-display" class="streak-tag"></div>
-                        <br>
-                        <a href="admin.html" id="admin-link" style="color:red; font-weight:bold; display:none;">Admin Panel</a>
                         <br>
                         <button class="btn" onclick="logout()" style="margin-top:5px;">Logout</button>
                     </div>
@@ -108,7 +107,9 @@
 
                 <div class="box">
                     <div class="box-header">Users Chip Tray</div>
-                    <div id="tray" style="font-size: 10px;">Admin_Krew</div>
+                    <div id="tray" style="font-size: 10px;">
+                        Admin_Krew <span style="color: green;">●</span>
+                    </div>
                 </div>
             </aside>
 
@@ -116,10 +117,10 @@
                 <div class="box">
                     <div class="box-header">Featured Experience</div>
                     <div style="display: flex; gap: 15px;">
-                        <div style="background: #333; width: 200px; height: 120px; border: 1px solid #8a49a8;"></div>
+                        <div style="background: #333; width: 200px; height: 120px; border: 1px solid #8a49a8; display: flex; align-items: center; justify-content: center; color: #555;">[PREVIEW]</div>
                         <div>
                             <h3 id="feat-title" style="margin:0;">Frozen Peak</h3>
-                            <p style="font-size: 10px; color: #666;">The coolest obby on BLYPE.</p>
+                            <p style="font-size: 10px; color: #666; margin-bottom: 15px;">Experience the most popular game on BLYPE today!</p>
                             <a href="games.html" class="play-btn">Play Now</a>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
                 <div class="box">
                     <div class="box-header">Latest News</div>
                     <div id="news-feed" style="font-size: 11px; line-height: 1.4;">
-                        Welcome to the grand opening of BLYPE!
+                        Fetching latest updates from the BLYPE blog...
                     </div>
                 </div>
             </main>
@@ -136,29 +137,39 @@
             <aside>
                 <div class="box">
                     <div class="box-header">BLYPE Facts</div>
-                    <div id="facts-area" style="font-size: 10px;">100 Points = 10 Blypo-Bux</div>
+                    <div id="facts-area" style="font-size: 10px; line-height: 1.5;">
+                        100 Points = 10 Blypo-Bux
+                    </div>
                 </div>
                 <div class="box">
                     <div class="box-header">Dev Tweets</div>
-                    <div id="tweets-area" style="font-size: 10px; font-style: italic;">@Admin_Krew: Just updated the physics!</div>
+                    <div id="tweets-area" style="font-size: 10px; font-style: italic; color: #555;">
+                        @Admin_Krew: Welcome to the future of building!
+                    </div>
                 </div>
             </aside>
         </div>
 
-        <div class="footer">BLYPE Corporation © 2026</div>
+        <div class="footer">
+            Privacy Policy | Contact Us | Jobs<br><br>
+            <b>BLYPE Corporation © 2026</b>
+        </div>
     </div>
 
     <script>
+        // LOGIN LOGIC
         function attemptLogin() {
             const user = document.getElementById('user-input').value;
             const pass = document.getElementById('pass-input').value;
 
             if (user.toLowerCase() === "admin" && pass === "1234") {
                 localStorage.setItem("isAdmin", "true");
-                if (!localStorage.getItem("blypoBux")) localStorage.setItem("blypoBux", "500");
+                if (!localStorage.getItem("blypoBux")) {
+                    localStorage.setItem("blypoBux", "500"); // Starter cash
+                }
                 location.reload();
             } else {
-                alert("Invalid login!");
+                alert("Invalid Character Name or Password.");
             }
         }
 
@@ -167,6 +178,7 @@
             location.reload();
         }
 
+        // DAILY REWARD & STREAK LOGIC
         function checkDailyReward() {
             if (localStorage.getItem("isAdmin") !== "true") return;
 
@@ -193,23 +205,37 @@
             }
         }
 
+        // INITIALIZE PAGE
         window.onload = function() {
+            // Check for System Alerts from Admin
+            const msg = localStorage.getItem("globalAlert");
+            if (msg) {
+                alert("SYSTEM ALERT: " + msg);
+                localStorage.removeItem("globalAlert");
+            }
+
             if (localStorage.getItem("isAdmin") === "true") {
                 checkDailyReward();
+                
+                // Toggle UI
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('auth-status').style.display = 'block';
                 document.getElementById('user-bux').innerText = localStorage.getItem("blypoBux");
-                document.getElementById('admin-link').style.display = 'block';
                 
+                // Add Admin Tab to Nav
+                const nav = document.getElementById('main-nav');
+                nav.innerHTML += ' | <a href="admin.html" style="color: #ffd700;">Admin Panel</a>';
+                
+                // Show Streak
                 const streak = localStorage.getItem("loginStreak") || 1;
                 document.getElementById('streak-display').innerText = "🔥 " + streak + " Day Streak";
             }
 
-            // Sync with Admin Panel values
+            // Sync with Admin Panel Content
             document.getElementById('feat-title').innerText = localStorage.getItem("admin_featGame") || "Frozen Peak";
             document.getElementById('facts-area').innerText = localStorage.getItem("admin_facts") || "100 Points = 10 Blypo-Bux";
-            document.getElementById('tweets-area').innerText = localStorage.getItem("admin_tweet") || "@Admin_Krew: Welcome!";
-            document.getElementById('news-feed').innerText = localStorage.getItem("admin_news") || "Welcome to BLYPE!";
+            document.getElementById('tweets-area').innerText = localStorage.getItem("admin_tweet") || "@Admin_Krew: Just updated!";
+            document.getElementById('news-feed').innerHTML = localStorage.getItem("admin_news") || "Welcome to BLYPE! Start exploring the marketplace or playing games today.";
         };
     </script>
 </body>
