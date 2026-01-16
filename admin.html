@@ -96,5 +96,24 @@
             document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "@Admin_Krew: Build it today!";
         };
     </script>
+    <section>
+    <h2>Streak Management</h2>
+    <div>
+        <label>Current Streak Level:</label>
+        <input type="number" id="streak-in" value="1">
+        <button onclick="updateStreak()">Set Manual Streak</button>
+    </div>
+    <div style="font-size: 10px; color: #888;">
+        Higher streaks can be used for "Veteran" badges in the future!
+    </div>
+</section>
+
+<script>
+    function updateStreak() {
+        let val = document.getElementById('streak-in').value;
+        localStorage.setItem("loginStreak", val);
+        alert("Streak set to " + val + " days.");
+    }
+</script>
 </body>
 </html>
