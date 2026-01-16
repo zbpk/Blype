@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLYPE - People</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
+            background-attachment: fixed;
+            font-family: 'Verdana', sans-serif;
+            margin: 0; padding: 0;
+            min-height: 100vh;
+        }
+
+        .site-wrapper {
+            width: 900px;
+            margin: 0 auto;
+        }
+
+        .banner-container {
+            background: #fff;
+            border-bottom: 1px solid #000;
+        }
+        .banner-img {
+            width: 900px;
+            display: block;
+        }
+
+        .sub-nav {
+            background-color: #8a49a8;
+            padding: 8px 0;
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            border-bottom: 2px solid #5a2d6d;
+            width: 900px;
+        }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        .box-header {
+            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
+            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+        }
+
+        /* PEOPLE SEARCH & LIST */
+        .search-row { display: flex; gap: 5px; margin-bottom: 15px; }
+        .search-input { flex-grow: 1; padding: 4px; font-size: 12px; border: 1px solid #777; }
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .person-card {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: center;
+            font-size: 10px;
+        }
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            background: #ddd;
+            margin: 0 auto 5px auto;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 3px;
+        }
+        .online { background: #39ff14; }
+        .offline { background: #bbb; }
+
+        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
+
+        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="site-wrapper">
+        <div class="banner-container">
+            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        </div>
+
+        <div class="sub-nav">
+            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        </div>
+
+        <div class="main-container">
+            <aside>
+                <div class="box">
+                    <div class="box-header">Member Login</div>
+                    <div style="font-size: 10px;">Character Name</div>
+                    <input type="text" style="width:90%; font-size:10px; margin-bottom:5px;">
+                    <div style="text-align: center;">
+                        <button class="btn">Login</button>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Users Chip Tray</div>
+                    <div id="tray" style="font-size: 10px;">
+                        <div style="background:#f0f0f0; border:1px solid #ccc; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                            Admin_Krew <button onclick="this.parentElement.remove()" style="font-size:8px;">X</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main>
+                <div class="box">
+                    <div class="box-header">Search BLYPE Players</div>
+                    <div class="search-row">
+                        <input type="text" class="search-input" placeholder="Enter character name...">
+                        <button class="btn">Search</button>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Recently Online</div>
+                    <div class="people-grid">
+                        
+                        <div class="person-card">
+                            <div class="avatar-placeholder">Avatar</div>
+                            <b>Admin_Krew</b><br>
+                            <span class="status-dot online"></span><small>Online</small>
+                        </div>
+
+                        <div class="person-card">
+                            <div class="avatar-placeholder">Avatar</div>
+                            <b>ArcticBuilder</b><br>
+                            <span class="status-dot offline"></span><small>Offline</small>
+                        </div>
+
+                        <div class="person-card">
+                            <div class="avatar-placeholder">Avatar</div>
+                            <b>Vesmond</b><br>
+                            <span class="status-dot online"></span><small>In-Game</small>
+                        </div>
+
+                        <div class="person-card">
+                            <div class="avatar-placeholder">Avatar</div>
+                            <b>PixelRacer</b><br>
+                            <span class="status-dot offline"></span><small>Offline</small>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div class="footer">
+            Privacy Policy | Advertise | Contact Us | About Us | Jobs
+            <br><br>
+            <b>BLYPE Corporation © 2026</b>
+        </div>
+    </div>
+</body>
+</html>
