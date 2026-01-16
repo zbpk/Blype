@@ -3,50 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>BLYPE - Super Admin</title>
-    <script>if(localStorage.getItem("isAdmin")!=="true") window.location.href="index.html";</script>
+    <script>
+        // IMMEDIATE SECURITY CHECK
+        if (localStorage.getItem("isAdmin") !== "true") {
+            window.location.replace("../../index.html"); // Force redirect if not admin
+        }
+    </script>
     <style>
-        body { font-family: 'Courier New', monospace; background: #222; color: #0f0; padding: 20px; }
-        .panel { border: 2px solid #0f0; padding: 20px; max-width: 800px; margin: auto; }
-        section { border-bottom: 1px solid #444; padding: 15px 0; }
-        h2 { color: #fff; background: #444; padding: 5px; font-size: 14px; }
-        input, textarea { background: #000; color: #0f0; border: 1px solid #0f0; width: 100%; margin: 5px 0; }
-        button { background: #0f0; color: #000; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; margin-top: 5px; }
+        body { font-family: 'Courier New', monospace; background: #1a1a1a; color: #00ff00; padding: 20px; }
+        .panel { border: 2px solid #00ff00; padding: 20px; max-width: 900px; margin: auto; box-shadow: 0 0 15px #00ff00; }
+        section { border-bottom: 1px solid #333; padding: 15px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        h2 { color: #fff; background: #333; padding: 5px; font-size: 14px; grid-column: span 2; }
+        input, textarea, select { background: #000; color: #00ff00; border: 1px solid #00ff00; width: 100%; margin: 5px 0; padding: 5px; }
+        button { background: #00ff00; color: #000; border: none; padding: 8px; cursor: pointer; font-weight: bold; margin-top: 5px; }
         button:hover { background: #fff; }
+        .danger { background: #ff0000; color: white; }
     </style>
 </head>
 <body>
     <div class="panel">
-        <h1>BLYPE MAINBOARD v1.0</h1>
+        <h1>BLYPE COMMAND CENTER v2.0</h1>
+        <p>Authenticated as: SYSTEM_ADMIN</p>
         
         <section>
             <h2>User & Economy Control</h2>
-            <input type="text" id="target-user" placeholder="Username">
-            <input type="number" id="bux-amount" placeholder="Blypo-Bux Amount">
-            <button onclick="updateBux(1)">Add B$</button>
-            <button onclick="updateBux(-1)" style="background:orange">Remove B$</button>
-            <button onclick="alert('User Banned')" style="background:red">BAN USER</button>
+            <div>
+                <label>Target Username:</label>
+                <input type="text" id="target-user" placeholder="e.g. Guest_123">
+                <label>Adjust Blypo-Bux:</label>
+                <input type="number" id="bux-amount" value="100">
+                <button onclick="updateBux(1)">Add B$</button>
+                <button onclick="updateBux(-1)" style="background:orange">Remove B$</button>
+            </div>
+            <div style="border-left: 1px solid #333; padding-left: 20px;">
+                <label>Moderation:</label>
+                <button class="danger" onclick="alert('User Terminated')">BAN USER</button>
+                <button class="danger" onclick="alert('Account Wiped')">DELETE ACCOUNT</button>
+            </div>
         </section>
 
         <section>
-            <h2>Site Content (Homepage)</h2>
-            <label>Featured Game Name:</label>
-            <input type="text" id="feat-game-in">
-            <label>Site Facts:</label>
-            <textarea id="facts-in"></textarea>
-            <label>Latest News Post:</label>
-            <textarea id="news-in"></textarea>
-            <label>Developer Tweet:</label>
-            <input type="text" id="tweet-in">
-            <button onclick="saveContent()">Push Updates to Site</button>
+            <h2>Live Site Content</h2>
+            <div>
+                <label>Featured Game Name:</label>
+                <input type="text" id="feat-game-in">
+                <label>Latest News Post:</label>
+                <textarea id="news-in" rows="3"></textarea>
+            </div>
+            <div>
+                <label>Site Facts:</label>
+                <input type="text" id="facts-in">
+                <label>Developer Tweet:</label>
+                <input type="text" id="tweet-in">
+                <button onclick="saveContent()" style="width:100%; height:50px; margin-top:20px;">PUSH UPDATES LIVE</button>
+            </div>
         </section>
 
         <section>
-            <h2>Marketplace & Forum</h2>
-            <button onclick="alert('Item added to marketplace')">Add New Asset</button>
-            <button onclick="alert('Forum Category Wiped')">Reset Forum Posts</button>
+            <h2>Forum & Marketplace</h2>
+            <div>
+                <button onclick="alert('Marketplace Refreshed')">Add Item to Catalog</button>
+                <button onclick="alert('Forum Moderated')">Delete Recent Posts</button>
+            </div>
+            <div>
+                <button onclick="localStorage.clear(); location.reload();" class="danger">HARD RESET SYSTEM</button>
+            </div>
         </section>
 
-        <p><a href="index.html" style="color:#fff;">← Exit Admin Mode</a></p>
+        <p style="text-align:center;"><a href="../../index.html" style="color:#fff;">← Return to Home</a></p>
     </div>
 
     <script>
@@ -54,7 +78,7 @@
             let amt = parseInt(document.getElementById('bux-amount').value) * multiplier;
             let current = parseInt(localStorage.getItem("blypoBux") || 0);
             localStorage.setItem("blypoBux", current + amt);
-            alert("Economy Updated.");
+            alert("Updated! New Admin Balance: B$ " + (current + amt));
         }
 
         function saveContent() {
@@ -62,14 +86,14 @@
             localStorage.setItem("admin_facts", document.getElementById('facts-in').value);
             localStorage.setItem("admin_news", document.getElementById('news-in').value);
             localStorage.setItem("admin_tweet", document.getElementById('tweet-in').value);
-            alert("Global Variables Updated!");
+            alert("GLOBAL SYNC COMPLETE: Site content is now live.");
         }
 
         window.onload = function() {
-            document.getElementById('feat-game-in').value = localStorage.getItem("admin_featGame") || "";
-            document.getElementById('facts-in').value = localStorage.getItem("admin_facts") || "";
-            document.getElementById('news-in').value = localStorage.getItem("admin_news") || "";
-            document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "";
+            document.getElementById('feat-game-in').value = localStorage.getItem("admin_featGame") || "Frozen Peak";
+            document.getElementById('facts-in').value = localStorage.getItem("admin_facts") || "100 Tallyz = 10 Blypo-Bux";
+            document.getElementById('news-in').value = localStorage.getItem("admin_news") || "Welcome to the new BLYPE!";
+            document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "@Admin_Krew: Build it today!";
         };
     </script>
 </body>
