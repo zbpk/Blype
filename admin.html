@@ -2,275 +2,155 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - Root Administration</title>
+    <title>BLYPEME - Administrative Portal</title>
     <script>
-        // CRITICAL SECURITY: Only Admin/1234 can stay here
+        // Security Gate
         if (localStorage.getItem("isAdmin") !== "true") {
             window.location.replace("index.html");
         }
     </script>
     <style>
-        body {
-            background: #1a1a1a; /* Dark mode for admin panel */
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            color: #eee;
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: transparent; }
+        
+        /* Matching Navbar */
+        .sub-nav {
+            background-color: #8a49a8; padding: 8px 0; color: white;
+            font-size: 11px; font-weight: bold; border-bottom: 1px solid #000; text-align: center;
+        }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+
+        .admin-container {
+            display: grid; grid-template-columns: 250px 1fr; gap: 15px; padding: 20px 0; text-align: left;
         }
 
-        /* HEADER */
-        .admin-top-bar {
-            background: #8a49a8;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #5a2d6d;
+        /* Box Styling from your image */
+        .box { background: #f0f0f0; border: 1px solid #a4a4a4; margin-bottom: 15px; padding: 10px; font-size: 11px; }
+        .box-header {
+            background: #e9e9e9; border-bottom: 1px solid #a4a4a4; padding: 4px;
+            font-weight: bold; margin: -10px -10px 10px -10px; color: #333;
         }
 
-        .site-wrapper {
-            width: 1000px;
-            margin: 20px auto;
+        /* Forms */
+        label { display: block; font-weight: bold; margin: 10px 0 3px 0; font-size: 10px; }
+        input, textarea, select { width: 95%; font-family: 'Verdana'; font-size: 11px; border: 1px solid #777; padding: 3px; }
+        .btn { padding: 4px 12px; font-size: 11px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-save { background: #72fb3c; border: 1px solid #27ae60; }
+        .btn-danger { background: #ff4d4d; color: white; border: 1px solid #900; }
+
+        .system-log {
+            background: #fff; border: 1px solid #ccc; height: 100px; 
+            overflow-y: scroll; font-family: monospace; padding: 5px; font-size: 10px;
         }
-
-        /* DASHBOARD LAYOUT */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 280px 1fr 280px;
-            gap: 20px;
-        }
-
-        /* MODULES */
-        .module {
-            background: #2b2b2b;
-            border: 1px solid #444;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .module-header {
-            background: #3d3d3d;
-            padding: 8px 12px;
-            font-size: 11px;
-            font-weight: bold;
-            color: #72fb3c; /* Matrix green accents */
-            border-bottom: 1px solid #444;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .module-body { padding: 15px; }
-
-        /* FORM ELEMENTS */
-        label { font-size: 10px; color: #aaa; display: block; margin-bottom: 4px; }
-        input, select, textarea {
-            width: 100%;
-            background: #111;
-            border: 1px solid #555;
-            color: #72fb3c;
-            padding: 6px;
-            font-size: 11px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 1px solid #000;
-            margin-bottom: 5px;
-        }
-
-        .btn-green { background: #27ae60; color: white; }
-        .btn-red { background: #c0392b; color: white; }
-        .btn-gray { background: #555; color: white; }
-        button:hover { filter: brightness(1.2); }
-
-        /* LOGS */
-        .log-box {
-            background: #000;
-            height: 150px;
-            overflow-y: scroll;
-            padding: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 10px;
-            color: #00ff00;
-            border: 1px solid #444;
-        }
-
-        .stat-text { font-size: 12px; margin-bottom: 8px; }
-        .stat-text b { color: #fff; }
-
-        .footer { text-align: center; font-size: 9px; color: #666; padding: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="admin-top-bar">
-        <div><b>BLYPE OS</b> - v4.0.1 Internal Account: <b>Admin_Root</b></div>
-        <a href="index.html" style="color: white; text-decoration: none; font-size: 11px; font-weight: bold;">[ EXIT TO SITE ]</a>
+<div class="site-wrapper">
+    <div class="sub-nav">
+        <a href="index.html">RETURN TO MAIN SITE</a> | <b>SYSTEM ADMINISTRATION MODE</b>
     </div>
 
-    <div class="site-wrapper">
-        <div class="dashboard">
-            
-            <aside>
-                <div class="module">
-                    <div class="module-header">Economy Override</div>
-                    <div class="module-body">
-                        <label>Target Username</label>
-                        <input type="text" id="target-user" value="Admin">
-                        
-                        <label>Action</label>
-                        <select id="bux-action">
-                            <option value="add">Add Blypo-Bux</option>
-                            <option value="set">Set Exact Balance</option>
-                            <option value="sub">Remove Blypo-Bux</option>
-                        </select>
-                        
-                        <label>B$ Amount</label>
-                        <input type="number" id="bux-val" placeholder="0.00">
-                        
-                        <button class="btn-green" onclick="modifyBux()">EXECUTE TRANSACTION</button>
-                    </div>
+    <div class="admin-container">
+        <aside>
+            <div class="box">
+                <div class="box-header">User & Economy</div>
+                <label>Target Character</label>
+                <input type="text" id="target-user" value="Admin">
+                
+                <label>Adjust Blypo-Bux</label>
+                <input type="number" id="bux-val" placeholder="Amount">
+                <button class="btn btn-save" onclick="modBux(1)">Add</button>
+                <button class="btn" onclick="modBux(-1)">Remove</button>
+                
+                <hr style="border:0; border-top:1px solid #ccc; margin: 10px 0;">
+                
+                <button class="btn btn-danger" style="width:100%" onclick="alert('User Banned')">Ban User</button>
+                <button class="btn btn-danger" style="width:100%" onclick="alert('Posts Deleted')">Clear User Posts</button>
+            </div>
+
+            <div class="box">
+                <div class="box-header">System Health</div>
+                <div style="font-size: 10px;">
+                    <b>Status:</b> <span style="color:green">Online</span><br>
+                    <b>Users:</b> 1,402<br>
+                    <b>Server Time:</b> Jan 16, 2026
                 </div>
+            </div>
+        </aside>
 
-                <div class="module">
-                    <div class="module-header">Moderation Tools</div>
-                    <div class="module-body">
-                        <button class="btn-gray">VIEW USER INVENTORY</button>
-                        <button class="btn-gray" onclick="sendGlobalAlert()">SEND SYSTEM POP-UP</button>
-                        <button class="btn-red" onclick="alert('User Banned')">BAN BY USERNAME</button>
-                        <button class="btn-red" style="background:#000;">PERMANENT IP BAN</button>
+        <main>
+            <div class="box">
+                <div class="box-header">Homepage Content Engine</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label>Featured Game Title</label>
+                        <input type="text" id="feat-title-in">
+                        
+                        <label>Sidebar Facts</label>
+                        <textarea id="facts-in" rows="4"></textarea>
                     </div>
-                </div>
-            </aside>
-
-            <main>
-                <div class="module">
-                    <div class="module-header">Main Site Content Manager (Home Page)</div>
-                    <div class="module-body">
-                        <label>Featured Experience Name</label>
-                        <input type="text" id="feat-game-in">
-
-                        <label>Home Page News Text (Supports HTML)</label>
-                        <textarea id="news-in" rows="5"></textarea>
-
-                        <label>Sidebar Blype Fact</label>
-                        <input type="text" id="facts-in">
-
-                        <label>Dev Tweet (@Admin_Krew)</label>
+                    <div>
+                        <label>Dev Tweet (Krew's Korner)</label>
                         <input type="text" id="tweet-in">
-
-                        <button class="btn-green" style="height: 50px; font-size: 14px;" onclick="pushLive()">PUSH LIVE TO SITE</button>
+                        
+                        <label>Recent News Feed</label>
+                        <textarea id="news-in" rows="4"></textarea>
                     </div>
                 </div>
+                <button class="btn btn-save" style="width:100%; height:30px; margin-top:15px;" onclick="pushLive()">UPDATE BLYPEME FRONT PAGE</button>
+            </div>
 
-                <div class="module">
-                    <div class="module-header">System Event Logs</div>
-                    <div class="module-body">
-                        <div class="log-box" id="sys-logs">
-                            [18:42:01] System boot sequence complete...<br>
-                            [18:43:10] Admin logged in from IP 127.0.0.1<br>
-                            [18:45:22] Marketplace database synced...<br>
-                        </div>
-                    </div>
+            <div class="box">
+                <div class="box-header">Marketplace & Forum Admin</div>
+                <button class="btn">Add Marketplace Item</button>
+                <button class="btn">Add Forum Category</button>
+                <button class="btn">New Blog Post</button>
+                <button class="btn btn-danger" onclick="localStorage.clear(); location.reload();">RESET ENTIRE DATABASE</button>
+            </div>
+
+            <div class="box">
+                <div class="box-header">Administrative Logs</div>
+                <div class="system-log" id="logs">
+                    [18:50] Admin session started...<br>
+                    [18:51] Security check passed...<br>
                 </div>
-            </main>
-
-            <aside>
-                <div class="module">
-                    <div class="module-header">Live Server Stats</div>
-                    <div class="module-body">
-                        <div class="stat-text">Active Users: <b id="u-count">1,420</b></div>
-                        <div class="stat-text">Memory Load: <b>38.4%</b></div>
-                        <div class="stat-text">Uptime: <b>104h 22m</b></div>
-                        <div class="stat-text">Database: <b style="color:#72fb3c;">OPTIMIZED</b></div>
-                    </div>
-                </div>
-
-                <div class="module">
-                    <div class="module-header">Global Alert Message</div>
-                    <div class="module-body">
-                        <textarea id="alert-msg" placeholder="Type an alert for all users..."></textarea>
-                        <button class="btn-red" onclick="sendGlobalAlert()">BROADCAST TO ALL</button>
-                    </div>
-                </div>
-
-                <div class="module">
-                    <div class="module-header">Server Maintenance</div>
-                    <div class="module-body">
-                        <button class="btn-red" onclick="localStorage.clear(); location.reload();">WIPE ALL LOCAL DATA</button>
-                        <p style="font-size: 9px; color: #666; margin-top: 10px;">Warning: This resets your Blypo-Bux and Streaks.</p>
-                    </div>
-                </div>
-            </aside>
-        </div>
-
-        <div class="footer">
-            &copy; 2026 BLYPE CORPORATION - INTERNAL USE ONLY
-        </div>
+            </div>
+        </main>
     </div>
+</div>
 
-    <script>
-        // CORE FUNCTIONS
-        function modifyBux() {
-            let val = parseInt(document.getElementById('bux-val').value);
-            let action = document.getElementById('bux-action').value;
-            let current = parseInt(localStorage.getItem("blypoBux") || 0);
+<script>
+    function modBux(dir) {
+        let val = parseInt(document.getElementById('bux-val').value) * dir;
+        let current = parseInt(localStorage.getItem("blypoBux") || 0);
+        localStorage.setItem("blypoBux", current + val);
+        addLog(`Modified B$ for Admin: ${val}`);
+        alert("Balance Updated!");
+    }
 
-            if (isNaN(val)) return alert("Please enter a valid number.");
+    function pushLive() {
+        localStorage.setItem("admin_featGame", document.getElementById('feat-title-in').value);
+        localStorage.setItem("admin_facts", document.getElementById('facts-in').value);
+        localStorage.setItem("admin_news", document.getElementById('news-in').value);
+        localStorage.setItem("admin_tweet", document.getElementById('tweet-in').value);
+        addLog("Pushed new content to homepage.");
+        alert("Changes are now Live!");
+    }
 
-            if (action === "add") current += val;
-            else if (action === "sub") current -= val;
-            else current = val;
+    function addLog(msg) {
+        const div = document.getElementById('logs');
+        div.innerHTML += `[${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}] ${msg}<br>`;
+        div.scrollTop = div.scrollHeight;
+    }
 
-            localStorage.setItem("blypoBux", current);
-            addLog(`Economy adjusted: B$ ${val} (${action})`);
-            alert("Success! New Balance: B$ " + current);
-        }
+    window.onload = function() {
+        document.getElementById('feat-title-in').value = localStorage.getItem("admin_featGame") || "Frozen Peak Obby";
+        document.getElementById('facts-in').value = localStorage.getItem("admin_facts") || "";
+        document.getElementById('news-in').value = localStorage.getItem("admin_news") || "";
+        document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "";
+    };
+</script>
 
-        function pushLive() {
-            localStorage.setItem("admin_featGame", document.getElementById('feat-game-in').value);
-            localStorage.setItem("admin_facts", document.getElementById('facts-in').value);
-            localStorage.setItem("admin_news", document.getElementById('news-in').value);
-            localStorage.setItem("admin_tweet", document.getElementById('tweet-in').value);
-            addLog("Site content pushed live successfully.");
-            alert("Site Wrapper Updated!");
-        }
-
-        function sendGlobalAlert() {
-            const msg = document.getElementById('alert-msg').value;
-            if (msg) {
-                localStorage.setItem("globalAlert", msg);
-                addLog("Global alert broadcasted: " + msg.substring(0, 15) + "...");
-                alert("Message queued for all users.");
-            }
-        }
-
-        function addLog(text) {
-            const time = new Date().toLocaleTimeString();
-            const log = document.getElementById('sys-logs');
-            log.innerHTML += `[${time}] ${text}<br>`;
-            log.scrollTop = log.scrollHeight;
-        }
-
-        // INITIALIZE
-        window.onload = function() {
-            document.getElementById('feat-game-in').value = localStorage.getItem("admin_featGame") || "Frozen Peak";
-            document.getElementById('facts-in').value = localStorage.getItem("admin_facts") || "100 Points = 10 Blypo-Bux";
-            document.getElementById('news-in').value = localStorage.getItem("admin_news") || "Welcome to the new BLYPE!";
-            document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "@Admin_Krew: Just updated!";
-            
-            // Random user count simulation
-            setInterval(() => {
-                document.getElementById('u-count').innerText = Math.floor(Math.random() * (1500 - 1400) + 1400);
-            }, 3000);
-        };
-    </script>
 </body>
 </html>
