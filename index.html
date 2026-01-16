@@ -5,120 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLYPEME - Building the Future</title>
     <style>
-        /* SKY BLUE GRADIENT BACKGROUND */
         body {
             background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
             background-attachment: fixed;
-            font-family: 'Verdana', 'Geneva', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
+            font-family: 'Verdana', sans-serif;
+            margin: 0; padding: 0;
         }
 
-        /* BANNER AREA */
+        /* BANNER IMAGE (NO FOLDER) */
         .banner-container {
             width: 100%;
             background: #fff;
-            text-align: center;
             border-bottom: 1px solid #000;
         }
         .banner-img {
-            width: 1000px;
-            height: auto;
+            width: 900px;
             display: block;
             margin: 0 auto;
         }
 
-        /* NAV BAR */
+        /* NAVIGATION BAR */
         .sub-nav {
             background-color: #8a49a8;
             padding: 8px;
             color: white;
-            font-size: 12px;
+            font-size: 11px;
             text-align: center;
             border-bottom: 2px solid #5a2d6d;
         }
-        .sub-nav a { 
-            color: white; 
-            text-decoration: none; 
-            margin: 0 10px; 
-            font-weight: bold;
-        }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
 
-        /* MAIN CONTENT GRID */
+        /* GRID LAYOUT */
         .main-container {
-            width: 1000px;
+            width: 950px;
             margin: 15px auto;
             display: grid;
-            grid-template-columns: 210px 1fr 210px;
+            grid-template-columns: 200px 1fr 200px;
             gap: 12px;
         }
 
-        /* WHITE CONTENT BOXES */
-        .box {
-            background: #ffffff;
-            border: 1px solid #a4a4a4;
-            padding: 10px;
-            margin-bottom: 12px;
-        }
-
+        /* BOX STYLING */
+        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
         .box-header {
-            background: #e9e9e9;
-            border-bottom: 1px solid #a4a4a4;
-            padding: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            margin: -10px -10px 10px -10px;
-            color: #000;
+            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
+            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
         }
 
-        /* LOGIN INPUTS */
-        .login-input {
-            width: 90%;
-            font-size: 10px;
-            margin-bottom: 4px;
-            border: 1px solid #777;
+        /* VIDEO PLAYER / SOCIAL HANGOUT AREA */
+        .video-player {
+            background: #000;
+            height: 280px;
+            position: relative;
+            border: 2px solid #a4a4a4;
+            display: flex; align-items: center; justify-content: center;
         }
-        .login-btn {
-            background: #f2f2f2;
-            border: 1px solid #777;
-            font-size: 10px;
-            padding: 2px 10px;
-            cursor: pointer;
-            margin-top: 5px;
+        /* SPEECH BUBBLE FROM YOUR IMAGE */
+        .speech-bubble {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 15px;
+            color: black; font-weight: bold; font-size: 14px;
+            border: 2px solid black;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; left: 30px;
+            border-width: 15px 15px 0;
+            border-style: solid;
+            border-color: black transparent;
+            display: block; width: 0;
         }
 
-        /* FEATURED CONTENT */
-        .featured-main {
-            border: 2px solid #8a49a8;
-            background: black;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .play-btn-large {
-            background: linear-gradient(to bottom, #72fb3c, #2e9f00);
-            border: 2px solid #1e6900;
-            color: white;
-            padding: 10px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        /* BUTTONS AND INPUTS */
+        input { width: 90%; font-size: 10px; margin-bottom: 5px; border: 1px solid #777; }
+        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
+        .play-btn { background: #0080ff; color: white; border: 1px solid #003366; padding: 8px 15px; font-weight: bold; cursor: pointer; }
 
         /* FOOTER */
-        .footer-links {
-            grid-column: 1 / span 3;
-            text-align: center;
-            font-size: 10px;
-            padding: 20px 0;
-            color: #444;
-            border-top: 1px solid #ccc;
-        }
+        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -137,73 +104,80 @@
             <div class="box">
                 <div class="box-header">Member Login</div>
                 <div style="font-size: 10px;">Character Name</div>
-                <input type="text" class="login-input">
+                <input type="text">
                 <div style="font-size: 10px;">Password</div>
-                <input type="password" class="login-input">
-                <div style="text-align: center;">
-                    <button class="login-btn">Login</button>
-                    <button class="login-btn">Register</button>
-                </div>
-                <div style="font-size: 9px; text-align: center; margin-top: 8px;">
-                    <a href="#">Parent Login</a><br>
-                    <a href="#">Forgot your password?</a>
+                <input type="password">
+                <div style="text-align: center; margin-top: 5px;">
+                    <button class="btn">Login</button> <button class="btn">Register</button>
                 </div>
             </div>
 
             <div class="box">
-                <div class="box-header">User Chip Tray</div>
-                <div id="tray" style="font-size: 10px;">
-                    <div style="background:#f9f9f9; border:1px solid #ddd; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;">
-                        Admin_Krew <button onclick="this.parentElement.remove()" style="font-size:8px;">X</button>
+                <div class="box-header">Users Chip Tray</div>
+                <div id="tray" style="font-size: 11px; padding: 5px;">
+                    <div style="background:#f0f0f0; border:1px solid #ccc; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                        Admin_Krew <button onclick="this.parentElement.remove()" style="font-size:8px; cursor:pointer;">X</button>
                     </div>
                 </div>
-                <button style="width:100%; font-size:9px; cursor:pointer;">+ New Link</button>
+                <button onclick="addLink()" style="width:100%; font-size:10px; cursor:pointer;">+ New Link</button>
             </div>
         </aside>
 
         <main>
-            <div class="box" style="background:#e9e9e9; display:flex; align-items:center; justify-content:space-between;">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div style="background:#333; width:40px; height:40px;"></div>
-                    <b style="font-size:14px;">The FREE online building engine.</b>
+            <div class="box">
+                <div class="box-header">Online Social Hangout - BLYPEME</div>
+                <div class="video-player">
+                    <div class="speech-bubble">I hear this is all FREE?!</div>
+                    <button style="font-size: 40px; background: none; border: none; color: white; cursor: pointer;" onclick="alert('Playing Video...')">▶</button>
                 </div>
-                <button class="play-btn-large" style="font-size:14px;">Play Now</button>
             </div>
 
             <div class="box">
                 <div class="box-header">Featured Free Game: Frozen Peak</div>
-                <div class="featured-main">
-                    <button class="play-btn-large">Play This</button>
+                <div style="display: flex; gap: 15px;">
+                    <div style="background: #333; width: 300px; height: 180px; border: 1px solid #8a49a8;"></div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 16px;">Frozen Peak</h3>
+                        <p style="font-size: 10px; color: #666;">By ArcticBuilder</p>
+                        <button class="play-btn" onclick="alert('Joining Game...')">Play This</button>
+                        <p style="font-size: 10px; margin-top: 10px;">Updated: 2 months ago<br>Favorited: 3,248 times</p>
+                    </div>
                 </div>
-                <p style="font-size: 11px;">Reach the summit in this snowy adventure! Created by: <b>Defaultio</b></p>
             </div>
         </main>
 
         <aside>
             <div class="box">
                 <div class="box-header">BLYPEME Facts</div>
-                <div style="font-size: 10px;">
-                    <b>Average bid:</b> 610 Tallyz<br><br>
-                    <b>623 bombastic items</b> available in the marketplace.<br><br>
-                    <b>100 KOBUt</b> buys about 474 tickets.
-                </div>
+                <p style="font-size: 10px; line-height: 1.4;">The average bid for a user-run rectangle is <b>610 Tallyz</b>.</p>
+                <p style="font-size: 10px; line-height: 1.4;">623 bombastic items available.</p>
             </div>
 
             <div class="box">
                 <div class="box-header">Parents' Corner</div>
-                <p style="font-size: 10px;">BLYPEME is a kid-friendly place on the internet where you can exercise creativity.</p>
-                <div style="display:flex; gap:5px;">
-                    <button style="font-size:9px;">Learn More</button>
-                    <button style="font-size:9px;">Access Account</button>
-                </div>
+                <p style="font-size: 10px; line-height: 1.4;">Blype is a safe, creative community for kids of all ages.</p>
+                <button class="btn" style="width: 100%;">Safety Guide</button>
             </div>
         </aside>
 
-        <div class="footer-links">
-            Privacy Policy | Advertise with Us | Contact Us | About Us | Related Resources | Jobs
+        <div class="footer">
+            Privacy Policy | Advertise | Contact Us | About Us | Related Resources | Jobs
             <br><br>
-            BLYPEME, "Online Building Toy", characters, logos, and all related indicia are trademarks of Blype Corp, ©2026.
+            <b>BLYPEME Corporation © 2026</b>
         </div>
     </div>
+
+    <script>
+        function addLink() {
+            let name = prompt("Character to Link?");
+            if (name) {
+                let tray = document.getElementById('tray');
+                let newChip = document.createElement('div');
+                newChip.style = "background:#f0f0f0; border:1px solid #ccc; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;";
+                newChip.innerHTML = `${name} <button onclick="this.parentElement.remove()" style="font-size:8px; cursor:pointer;">X</button>`;
+                tray.appendChild(newChip);
+            }
+        }
+    </script>
 </body>
 </html>
