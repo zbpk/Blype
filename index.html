@@ -9,255 +9,246 @@
         body {
             background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
             background-attachment: fixed;
-            font-family: Verdana, sans-serif;
+            font-family: 'Verdana', 'Geneva', sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
         }
 
-        /* TOP PURPLE NAVIGATION BAR */
-        .top-nav {
-            background-color: #8a49a8;
-            border-bottom: 2px solid #5a2d6d;
-            padding: 12px;
+        /* TOP PURPLE HEADER (MATCHES IMAGE) */
+        .header-main {
+            background: #8a49a8;
+            padding: 15px 0;
             text-align: center;
+            border-bottom: 3px solid #5a2d6d;
+            position: relative;
         }
 
         .logo {
-            font-size: 38px;
+            font-size: 42px;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 2px 2px 0px #5a2d6d;
+            text-shadow: 3px 3px 0px #5a2d6d;
             letter-spacing: -2px;
+            text-transform: uppercase;
         }
 
+        /* PLAY NOW BUTTON IN HEADER */
+        .play-now-header {
+            position: absolute;
+            right: 40px;
+            top: 15px;
+            background: linear-gradient(to bottom, #72fb3c, #2e9f00);
+            border: 2px solid #1e6900;
+            color: white;
+            padding: 8px 25px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0px 3px 0px #185200;
+        }
+
+        /* NAV BAR (UPDATED LABELS) */
         .sub-nav {
             background-color: #b580cf;
-            padding: 6px;
+            padding: 8px;
             color: white;
-            font-size: 11px;
+            font-size: 12px;
             text-align: center;
             border-bottom: 1px solid #8a49a8;
-            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
         }
 
         .sub-nav a { 
             color: white; 
             text-decoration: none; 
-            margin: 0 12px; 
-            font-weight: bold; 
-            text-transform: uppercase;
+            margin: 0 10px; 
+            font-weight: bold;
         }
 
-        /* MAIN CONTENT LAYOUT */
+        /* MAIN CONTENT GRID */
         .main-container {
-            width: 950px;
-            margin: 25px auto;
+            width: 960px;
+            margin: 20px auto;
             display: grid;
             grid-template-columns: 210px 1fr 210px;
-            gap: 15px;
+            gap: 12px;
         }
 
-        /* RETRO CONTENT BOXES */
+        /* WHITE CONTENT BOXES */
         .box {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             border: 1px solid #a4a4a4;
             padding: 10px;
-            box-shadow: 3px 3px 0px rgba(0,0,0,0.05);
+            margin-bottom: 12px;
         }
 
         .box-header {
-            background: #e9e9e9;
+            background: #f2f2f2;
             border-bottom: 1px solid #a4a4a4;
-            padding: 6px;
-            font-size: 13px;
+            padding: 5px;
+            font-size: 12px;
             font-weight: bold;
             margin: -10px -10px 10px -10px;
-            color: #333;
+            color: #000;
         }
 
-        /* SIDEBAR: LINK-CHIP TRAY */
-        .chip-tray { font-size: 11px; }
+        /* CHIP TRAY (LEFT SIDEBAR) */
         .chip {
-            background: #ffffff;
-            border: 1px solid #ccc;
-            padding: 6px;
-            margin-bottom: 6px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            font-size: 11px;
             border-left: 3px solid #39ff14;
         }
 
-        .eject-btn { 
-            background: #ff4d4d; 
-            color: white; 
-            border: 1px solid #000; 
-            cursor: pointer; 
-            font-size: 9px; 
-            padding: 2px 5px;
-        }
-
-        .add-btn {
-            width: 100%;
-            background: #eee;
-            border: 1px dashed #777;
-            padding: 5px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        /* CENTER AREA: FEATURED CONTENT */
-        .video-placeholder {
-            background: #000;
-            height: 320px;
+        .eject-btn {
+            background: #ff4d4d;
             color: white;
+            border: 1px solid #000;
+            cursor: pointer;
+            font-size: 9px;
+            padding: 1px 4px;
+        }
+
+        /* FEATURED CONTENT (CENTER) */
+        .featured-main {
+            border: 2px solid #8a49a8;
+            background: black;
+            height: 320px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 4px solid #8a49a8;
             position: relative;
         }
 
-        .play-now-btn {
+        .play-btn-large {
             background: linear-gradient(to bottom, #72fb3c, #2e9f00);
             border: 2px solid #1e6900;
             color: white;
-            padding: 12px 30px;
-            font-size: 22px;
+            padding: 15px 40px;
+            font-size: 24px;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            text-shadow: 1px 1px #1e6900;
-            box-shadow: 0px 4px 0px #185200;
         }
 
-        .play-now-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0px 2px 0px #185200;
-        }
+        /* FACTS (RIGHT SIDEBAR) */
+        .fact-text { font-size: 11px; margin-bottom: 10px; line-height: 1.4; }
 
-        /* NEWS GRID AT BOTTOM */
-        .news-grid {
+        /* FOOTER NEWS GRID */
+        .news-row {
             grid-column: 1 / span 3;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            margin-top: 15px;
         }
 
-        .news-item { 
-            height: 130px; 
-            border: 2px solid #8a49a8; 
-            background: #222; 
-            color: white; 
-            padding: 12px; 
-            font-size: 13px;
+        .news-box {
+            background: #333;
+            border: 2px solid #8a49a8;
+            height: 120px;
+            color: white;
+            padding: 10px;
+            font-size: 12px;
             font-weight: bold;
             display: flex;
             align-items: flex-end;
-            text-transform: uppercase;
         }
 
-        .footer-text {
+        .footer-links {
             grid-column: 1 / span 3;
             text-align: center;
             font-size: 10px;
-            color: #555;
-            margin-top: 20px;
-            padding-bottom: 30px;
+            padding: 20px 0;
+            color: #666;
         }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
+    <div class="header-main">
         <div class="logo">BLYPEME</div>
+        <button class="play-now-header" onclick="alert('Launching Engine...')">PLAY NOW</button>
     </div>
 
     <div class="sub-nav">
-        <a href="#">Games</a> | <a href="#">Arcade</a> | <a href="#">Forge</a> | <a href="#">Forum</a> | <a href="#">News</a> | <a href="#">Parents</a> | <a href="#">Help</a>
+        <a href="#">Gammes</a> | <a href="#">Marketplace</a> | <a href="#">People</a> | <a href="#">Forum</a> | <a href="#">Help</a>
     </div>
 
     <div class="main-container">
         
-        <div class="box chip-tray">
-            <div class="box-header">User Chip Tray</div>
-            <div id="tray">
-                <div class="chip" id="c1">
-                    <span>Admin_Krew</span> 
-                    <button class="eject-btn" onclick="eject('c1')">EJECT</button>
-                </div>
-                <div class="chip" id="c2">
-                    <span>Vibe_Checker</span> 
-                    <button class="eject-btn" onclick="eject('c2')">EJECT</button>
-                </div>
-            </div>
-            <button class="add-btn" onclick="addLink()">+ Add New Link</button>
-        </div>
-
-        <div>
+        <aside>
             <div class="box">
-                <div class="box-header">Featured: The Blype Engine</div>
-                <div class="video-placeholder">
-                    <button class="play-now-btn" onclick="alert('Launching Blype Player...')">PLAY NOW</button>
-                    <p style="font-size: 10px; margin-top: 15px; opacity: 0.7;">Blype Creator V1.0.4 - FREE</p>
+                <div class="box-header">User Chip Tray</div>
+                <div id="tray">
+                    <div class="chip" id="u1">
+                        <span>Admin_Krew</span>
+                        <button class="eject-btn" onclick="eject('u1')">EJECT</button>
+                    </div>
                 </div>
+                <button onclick="addLink()" style="width:100%; font-size:10px; cursor:pointer;">+ New Link</button>
             </div>
             
-            <div class="box" style="margin-top: 15px;">
+            <div class="box" style="background:#e9e9e9; text-align:center; padding: 20px 10px;">
+                <p style="font-size: 12px; font-weight: bold;">FREE online building engine</p>
+                <button style="background: #0080ff; color: white; border: none; padding: 5px 15px; border-radius: 20px; cursor:pointer;">Play Now</button>
+            </div>
+        </aside>
+
+        <main>
+            <div class="box">
                 <div class="box-header">Featured Game: Frozen Peak</div>
-                <div style="background: #ccc; height: 180px; width: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-style: italic;">
-                    [ Game Screenshot Area ]
+                <div class="featured-main">
+                    <button class="play-btn-large" onclick="alert('Joining Frozen Peak...')">Play This</button>
                 </div>
             </div>
+        </main>
+
+        <aside>
+            <div class="box">
+                <div class="box-header">BLYPEME Facts</div>
+                <div class="fact-text"><b>Average bid:</b> 610 Tallyz</div>
+                <div class="fact-text"><b>Items available:</b> 600+ new ones this month</div>
+                <div class="fact-text"><b>KOBUt:</b> 88,674 monthly users</div>
+            </div>
+
+            <div class="box">
+                <div class="box-header">Krew's Korner</div>
+                <p style="font-size: 10px;">BLYPEME is the kid-friendly engine where you can build anything.</p>
+                <a href="#" style="font-size: 10px; color: #8a49a8;">Learn more</a>
+            </div>
+        </aside>
+
+        <div class="news-row">
+            <div class="news-box" style="background: #8a49a8;">FORGE YOUR DREAMS</div>
+            <div class="news-box">LATEST RELEASES</div>
+            <div class="news-box">TOP CREATORS</div>
+            <div class="news-box">MARKETPLACE</div>
         </div>
 
-        <div class="box">
-            <div class="box-header">Blype Facts</div>
-            <p style="font-size: 11px;"><b>Users Online:</b> 12,402</p>
-            <p style="font-size: 11px;"><b>Games Built:</b> 890,122</p>
-            <p style="font-size: 11px;">Blype is a 100% free building engine for creators.</p>
-            <hr style="border: 0; border-top: 1px solid #ccc;">
-            <div class="box-header">Krew's Korner</div>
-            <p style="font-size: 10px; line-height: 1.4;">"Welcome to Blype! We just added new physics blocks to the Forge. Go check them out!"</p>
-            <a href="#" style="font-size: 10px; color: #8a49a8;">Learn more...</a>
+        <div class="footer-links">
+            Privacy Policy | Advertise | Contact Us | About Us | Jobs
+            <br><br>
+            &copy; 2026 BLYPEME Corporation. All rights reserved.
         </div>
-
-        <div class="news-grid">
-            <div class="news-item" style="background: linear-gradient(45deg, #8a49a8, #b580cf);">Forge Your Dreams</div>
-            <div class="news-item" style="background: #333;">Latest Releases</div>
-            <div class="news-item" style="background: #333;">Top Creators</div>
-            <div class="news-item" style="background: #333;">Discord Hub</div>
-        </div>
-
-        <div class="footer-text">
-            BLYPEME: An "Online Building Engine" for everyone. &copy; 2026 Blype Corp. 
-            <br>
-            Privacy Policy | Advertise | Terms of Service
-        </div>
-
     </div>
 
     <script>
         function eject(id) {
-            const element = document.getElementById(id);
-            element.style.opacity = "0";
-            element.style.transform = "scale(0.8)";
-            setTimeout(() => { element.remove(); }, 200);
+            document.getElementById(id).remove();
         }
-
         function addLink() {
-            let name = prompt("Enter username to Link-Chip:");
+            let name = prompt("User to Link?");
             if (name) {
-                let id = "c" + Math.random();
-                let tray = document.getElementById('tray');
-                let newChip = document.createElement('div');
-                newChip.className = 'chip';
-                newChip.id = id;
-                newChip.innerHTML = `<span>${name}</span> <button class="eject-btn" onclick="eject('${id}')">EJECT</button>`;
-                tray.appendChild(newChip);
+                let id = "u" + Math.random();
+                document.getElementById('tray').innerHTML += `
+                    <div class="chip" id="${id}">
+                        <span>${name}</span>
+                        <button class="eject-btn" onclick="eject('${id}')">EJECT</button>
+                    </div>`;
             }
         }
     </script>
