@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPE - Super Admin</title>
+    <script>if(localStorage.getItem("isAdmin")!=="true") window.location.href="index.html";</script>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #222; color: #0f0; padding: 20px; }
+        .panel { border: 2px solid #0f0; padding: 20px; max-width: 800px; margin: auto; }
+        section { border-bottom: 1px solid #444; padding: 15px 0; }
+        h2 { color: #fff; background: #444; padding: 5px; font-size: 14px; }
+        input, textarea { background: #000; color: #0f0; border: 1px solid #0f0; width: 100%; margin: 5px 0; }
+        button { background: #0f0; color: #000; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; margin-top: 5px; }
+        button:hover { background: #fff; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h1>BLYPE MAINBOARD v1.0</h1>
+        
+        <section>
+            <h2>User & Economy Control</h2>
+            <input type="text" id="target-user" placeholder="Username">
+            <input type="number" id="bux-amount" placeholder="Blypo-Bux Amount">
+            <button onclick="updateBux(1)">Add B$</button>
+            <button onclick="updateBux(-1)" style="background:orange">Remove B$</button>
+            <button onclick="alert('User Banned')" style="background:red">BAN USER</button>
+        </section>
+
+        <section>
+            <h2>Site Content (Homepage)</h2>
+            <label>Featured Game Name:</label>
+            <input type="text" id="feat-game-in">
+            <label>Site Facts:</label>
+            <textarea id="facts-in"></textarea>
+            <label>Latest News Post:</label>
+            <textarea id="news-in"></textarea>
+            <label>Developer Tweet:</label>
+            <input type="text" id="tweet-in">
+            <button onclick="saveContent()">Push Updates to Site</button>
+        </section>
+
+        <section>
+            <h2>Marketplace & Forum</h2>
+            <button onclick="alert('Item added to marketplace')">Add New Asset</button>
+            <button onclick="alert('Forum Category Wiped')">Reset Forum Posts</button>
+        </section>
+
+        <p><a href="index.html" style="color:#fff;">← Exit Admin Mode</a></p>
+    </div>
+
+    <script>
+        function updateBux(multiplier) {
+            let amt = parseInt(document.getElementById('bux-amount').value) * multiplier;
+            let current = parseInt(localStorage.getItem("blypoBux") || 0);
+            localStorage.setItem("blypoBux", current + amt);
+            alert("Economy Updated.");
+        }
+
+        function saveContent() {
+            localStorage.setItem("admin_featGame", document.getElementById('feat-game-in').value);
+            localStorage.setItem("admin_facts", document.getElementById('facts-in').value);
+            localStorage.setItem("admin_news", document.getElementById('news-in').value);
+            localStorage.setItem("admin_tweet", document.getElementById('tweet-in').value);
+            alert("Global Variables Updated!");
+        }
+
+        window.onload = function() {
+            document.getElementById('feat-game-in').value = localStorage.getItem("admin_featGame") || "";
+            document.getElementById('facts-in').value = localStorage.getItem("admin_facts") || "";
+            document.getElementById('news-in').value = localStorage.getItem("admin_news") || "";
+            document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "";
+        };
+    </script>
+</body>
+</html>
