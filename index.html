@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPEME - Building the Future</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            font-family: Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Purple Navigation Bar */
+        .top-nav {
+            background-color: #8a49a8;
+            border-bottom: 2px solid #5a2d6d;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 2px 2px #5a2d6d;
+            letter-spacing: -1px;
+        }
+
+        .sub-nav {
+            background-color: #b580cf;
+            padding: 5px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            border-bottom: 1px solid #8a49a8;
+        }
+
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+
+        /* Main Grid Layout */
+        .main-container {
+            width: 900px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            gap: 15px;
+        }
+
+        /* Box Styling */
+        .box {
+            background: white;
+            border: 1px solid #a4a4a4;
+            padding: 10px;
+            box-shadow: 2px 2px 0px #ccc;
+        }
+
+        .box-header {
+            background: #e9e9e9;
+            border-bottom: 1px solid #a4a4a4;
+            padding: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            margin: -10px -10px 10px -10px;
+        }
+
+        /* Sidebar Social */
+        .chip-tray { font-size: 11px; }
+        .chip {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .eject-btn { background: #ff4d4d; color: white; border: 1px solid #000; cursor: pointer; font-size: 9px; }
+
+        /* Featured Content */
+        .video-box {
+            background: black;
+            height: 300px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #8a49a8;
+        }
+
+        .play-now-btn {
+            background: linear-gradient(to bottom, #72fb3c, #2e9f00);
+            border: 2px solid #1e6900;
+            color: white;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-shadow: 1px 1px #1e6900;
+        }
+
+        /* Bottom Row */
+        .news-grid {
+            grid-column: 1 / span 3;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .news-item { height: 120px; border: 2px solid #8a49a8; background: #333; color: white; padding: 10px; font-size: 12px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="logo">BLYPEME</div>
+    </div>
+
+    <div class="sub-nav">
+        <a href="#">Games</a> | <a href="#">Arcade</a> | <a href="#">Forge</a> | <a href="#">Forum</a> | <a href="#">News</a> | <a href="#">Help</a>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="box chip-tray">
+            <div class="box-header">User Chip Tray</div>
+            <div id="tray">
+                <div class="chip" id="c1">Admin <button class="eject-btn" onclick="eject('c1')">X</button></div>
+                <div class="chip" id="c2">BuildGuy <button class="eject-btn" onclick="eject('c2')">X</button></div>
+            </div>
+            <button onclick="add()" style="width: 100%; font-size: 10px; margin-top: 5px;">+ Add Link</button>
+        </div>
+
+        <div>
+            <div class="box">
+                <div class="box-header">Featured: World of Blype</div>
+                <div class="video-box">
+                    <button class="play-now-btn">PLAY NOW</button>
+                </div>
+            </div>
+            <div class="box" style="margin-top: 15px;">
+                <div class="box-header">Featured Game: Frozen Peak</div>
+                <img src="https://via.placeholder.com/450x200" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header">Blype Facts</div>
+            <p style="font-size: 11px;">100% Free building engine.</p>
+            <p style="font-size: 11px;">Over 5,000 games made today.</p>
+            <hr>
+            <div class="box-header">Krew's Korner</div>
+            <p style="font-size: 10px;">Check out the latest update in the Forge!</p>
+        </div>
+
+        <div class="news-grid">
+            <div class="news-item" style="background: #8a49a8;">FORGE YOUR DREAMS</div>
+            <div class="news-item">LATEST NEWS</div>
+            <div class="news-item">TOP CREATORS</div>
+            <div class="news-item">DISCORD HUB</div>
+        </div>
+
+    </div>
+
+    <script>
+        function eject(id) {
+            document.getElementById(id).remove();
+        }
+        function add() {
+            let name = prompt("User Name?");
+            if (name) {
+                let id = "c" + Math.random();
+                document.getElementById('tray').innerHTML += `<div class="chip" id="${id}">${name} <button class="eject-btn" onclick="eject('${id}')">X</button></div>`;
+            }
+        }
+    </script>
+</body>
+</html>
