@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLYPE - Games</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
+            background-attachment: fixed;
+            font-family: 'Verdana', sans-serif;
+            margin: 0; padding: 0;
+            min-height: 100vh;
+        }
+
+        /* WRAPPER TO KEEP EVERYTHING 900PX WIDE */
+        .site-wrapper {
+            width: 900px;
+            margin: 0 auto;
+        }
+
+        /* HEADER BANNER */
+        .banner-container {
+            background: #fff;
+            border-bottom: 1px solid #000;
+        }
+        .banner-img {
+            width: 900px;
+            display: block;
+        }
+
+        /* NAVIGATION BAR */
+        .sub-nav {
+            background-color: #8a49a8;
+            padding: 8px 0;
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            border-bottom: 2px solid #5a2d6d;
+            width: 900px;
+        }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+
+        /* MAIN CONTENT GRID */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        /* BOX STYLING */
+        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        .box-header {
+            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
+            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+        }
+
+        /* SEARCH BAR */
+        .search-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-input { flex-grow: 1; padding: 5px; border: 1px solid #777; font-size: 12px; }
+        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 11px; padding: 4px 12px; cursor: pointer; }
+
+        /* GAMES GRID */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .game-card {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+            background: #fff;
+            cursor: pointer;
+        }
+        .game-card:hover { border-color: #8a49a8; }
+        .game-thumb {
+            background: #333;
+            width: 100%;
+            height: 120px;
+            margin-bottom: 5px;
+            border: 1px solid #000;
+        }
+        .game-title { font-size: 12px; font-weight: bold; color: #000; display: block; }
+        .game-stats { font-size: 9px; color: #666; }
+
+        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="site-wrapper">
+        <div class="banner-container">
+            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        </div>
+
+        <div class="sub-nav">
+            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        </div>
+
+        <div class="main-container">
+            <main>
+                <div class="box">
+                    <div class="box-header">Search BLYPE Games</div>
+                    <div class="search-area">
+                        <input type="text" class="search-input" placeholder="Find an adventure...">
+                        <button class="btn">Search</button>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">All Games</div>
+                    <div class="games-grid">
+                        <div class="game-card">
+                            <div class="game-thumb"></div>
+                            <span class="game-title">Frozen Peak Obby</span>
+                            <span class="game-stats">By ArcticBuilder<br>3,248 Favorites</span>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-thumb"></div>
+                            <span class="game-title">Cosmic Drifters</span>
+                            <span class="game-stats">By PixelRacer<br>1,102 Favorites</span>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-thumb"></div>
+                            <span class="game-title">Sword Fight HQ</span>
+                            <span class="game-stats">By KnightBuild<br>5,890 Favorites</span>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-thumb"></div>
+                            <span class="game-title">Blype City RPG</span>
+                            <span class="game-stats">By MayorVibe<br>12,400 Favorites</span>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-thumb"></div>
+                            <span class="game-title">Dungeon Dive</span>
+                            <span class="game-stats">By Cyycran<br>894 Favorites</span>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-thumb"></div>
+                            <span class="game-title">Void Racers</span>
+                            <span class="game-stats">By Vesmond<br>452 Favorites</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside>
+                <div class="box">
+                    <div class="box-header">Top Earners</div>
+                    <ol style="font-size: 10px; padding-left: 20px;">
+                        <li>ArcticBuilder</li>
+                        <li>KnightBuild</li>
+                        <li>MayorVibe</li>
+                        <li>Vesmond</li>
+                        <li>PixelRacer</li>
+                    </ol>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Top Favorited</div>
+                    <p style="font-size: 10px;"><b>Blype City RPG</b> leads today with 500 new fans!</p>
+                </div>
+            </aside>
+        </div>
+
+        <div class="footer">
+            Privacy Policy | Advertise | Contact Us | About Us | Jobs
+            <br><br>
+            <b>BLYPE Corporation © 2026</b>
+        </div>
+    </div>
+</body>
+</html>
