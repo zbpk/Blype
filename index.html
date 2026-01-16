@@ -8,43 +8,45 @@
         body {
             background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
             background-attachment: fixed;
-            font-family: 'Verdana', 'Geneva', sans-serif;
+            font-family: 'Verdana', sans-serif;
             margin: 0; padding: 0;
             min-height: 100vh;
         }
 
-        /* HEADER BANNER */
-        .banner-container {
-            width: 100%;
-            background: #fff;
-            border-bottom: 1px solid #000;
-            text-align: center;
-        }
-        .banner-img {
+        /* WRAPPER TO KEEP EVERYTHING 900PX WIDE */
+        .site-wrapper {
             width: 900px;
-            max-width: 100%;
-            display: block;
             margin: 0 auto;
         }
 
-        /* NAVIGATION BAR */
+        /* HEADER BANNER */
+        .banner-container {
+            background: #fff;
+            border-bottom: 1px solid #000;
+        }
+        .banner-img {
+            width: 900px;
+            display: block;
+        }
+
+        /* NAVIGATION BAR - SIZED TO BANNER */
         .sub-nav {
             background-color: #8a49a8;
-            padding: 8px;
+            padding: 8px 0;
             color: white;
             font-size: 11px;
             text-align: center;
             border-bottom: 2px solid #5a2d6d;
+            width: 900px;
         }
         .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
 
-        /* GRID LAYOUT */
+        /* MAIN CONTENT GRID */
         .main-container {
-            width: 1000px;
-            margin: 15px auto;
             display: grid;
-            grid-template-columns: 210px 1fr 210px;
-            gap: 15px;
+            grid-template-columns: 190px 1fr 190px;
+            gap: 10px;
+            margin-top: 15px;
         }
 
         /* BOX STYLING */
@@ -52,10 +54,9 @@
         .box-header {
             background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
             padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
-            color: #333;
         }
 
-        /* VIDEO PLAYER / SOCIAL HANGOUT AREA */
+        /* VIDEO AREA */
         .video-player {
             background: #000;
             height: 280px;
@@ -63,143 +64,119 @@
             border: 2px solid #a4a4a4;
             display: flex; align-items: center; justify-content: center;
         }
-
-        /* SPEECH BUBBLE */
         .speech-bubble {
             position: absolute;
             top: 20px; right: 20px;
-            background: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            color: black; font-weight: bold; font-size: 14px;
+            background: white; border-radius: 50px;
+            padding: 12px 18px; color: black; font-weight: bold; font-size: 13px;
             border: 2px solid black;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
-        /* BUTTONS AND INPUTS */
-        input { width: 90%; font-size: 10px; margin-bottom: 5px; border: 1px solid #777; padding: 2px; }
-        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 3px 10px; cursor: pointer; }
-        .play-btn-blue { background: #0080ff; color: white; border: 1px solid #003366; padding: 10px 20px; font-weight: bold; cursor: pointer; }
+        /* BUTTONS/INPUTS */
+        input { width: 90%; font-size: 10px; margin-bottom: 5px; border: 1px solid #777; }
+        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
+        .play-btn { background: #0080ff; color: white; border: 1px solid #003366; padding: 8px 15px; font-weight: bold; cursor: pointer; }
 
-        /* FOOTER */
-        .footer-row { grid-column: 1 / span 3; text-align: center; padding: 20px; border-top: 1px solid #ccc; margin-top: 20px; }
-        .footer-links { font-size: 10px; color: #444; margin-bottom: 10px; }
-        
-        /* CHIP TRAY */
-        .chip { background:#f0f0f0; border:1px solid #ccc; padding:5px; margin-bottom:4px; display:flex; justify-content:space-between; font-size: 10px; }
+        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="banner-container">
-        <img src="Banner.png" alt="Blype" class="banner-img">
-    </div>
+    <div class="site-wrapper">
+        <div class="banner-container">
+            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        </div>
 
-    <div class="sub-nav">
-        <a href="index.html">Gammes</a> | 
-        <a href="marketplace.html">Marketplace</a> | 
-        <a href="people.html">People</a> | 
-        <a href="forum.html">Forum</a> | 
-        <a href="news.html">News</a> | 
-        <a href="help.html">Help</a>
-    </div>
+        <div class="sub-nav">
+            <a href="index.html">Gammes</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        </div>
 
-    <div class="main-container">
-        
-        <aside>
-            <div class="box">
-                <div class="box-header">Member Login</div>
-                <div style="font-size: 10px;">Character Name</div>
-                <input type="text" id="user-input">
-                <div style="font-size: 10px;">Password</div>
-                <input type="password">
-                <div style="text-align: center; margin-top: 5px;">
-                    <button class="btn">Login</button>
-                    <button class="btn">Register</button>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header">Users Chip Tray</div>
-                <div id="tray">
-                    <div class="chip">Admin_Krew <button onclick="this.parentElement.remove()" style="font-size:8px;">X</button></div>
-                </div>
-                <button onclick="addLink()" style="width:100%; font-size:9px; cursor:pointer; margin-top:5px;">+ New Link</button>
-            </div>
-
-            <div class="box">
-                <div class="box-header">Parents' Corner</div>
-                <p style="font-size: 10px; line-height: 1.4;">Learn how BLYPEME keeps building safe for your children.</p>
-                <button class="btn" style="width:100%;">Safety Guide</button>
-            </div>
-        </aside>
-
-        <main>
-            <div class="box">
-                <div class="box-header">Online Social Hangout - BLYPEME</div>
-                <div class="video-player">
-                    <div class="speech-bubble">I hear this is all FREE?!</div>
-                    <button style="font-size: 40px; background: none; border: none; color: white; cursor: pointer;" onclick="alert('Video playing...')">▶</button>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header">Featured Free Game: Frozen Peak</div>
-                <div style="display: flex; gap: 15px;">
-                    <div style="background: #333; width: 320px; height: 180px; border: 1px solid #8a49a8; display: flex; align-items: center; justify-content: center; color: #777;">[ Game Screenshot ]</div>
-                    <div>
-                        <h3 style="margin: 0; font-size: 16px;">Frozen Peak Obby</h3>
-                        <p style="font-size: 10px; color: #666;">Created by: ArcticBuilder</p>
-                        <button class="play-btn-blue" onclick="alert('Joining Frozen Peak...')">Play This</button>
-                        <p style="font-size: 10px; margin-top: 10px;">Updated: 2 months ago<br>Visited: 23,013 times</p>
+        <div class="main-container">
+            <aside>
+                <div class="box">
+                    <div class="box-header">Member Login</div>
+                    <div style="font-size: 10px;">Character Name</div>
+                    <input type="text">
+                    <div style="font-size: 10px;">Password</div>
+                    <input type="password">
+                    <div style="text-align: center; margin-top: 5px;">
+                        <button class="btn">Login</button> <button class="btn">Register</button>
                     </div>
                 </div>
-            </div>
-        </main>
 
-        <aside>
-            <div class="box">
-                <div class="box-header">BLYPEME Facts</div>
-                <p style="font-size: 10px; line-height: 1.4;">
-                    <b>Average bid:</b> 610 Tallyz<br><br>
-                    <b>623 bombastic items</b> available in the catalog.<br><br>
-                    <b>100 KOBUt</b> buys 474 tickets.
-                </p>
-            </div>
+                <div class="box">
+                    <div class="box-header">Users Chip Tray</div>
+                    <div id="tray" style="font-size: 10px;">
+                        <div style="background:#f0f0f0; border:1px solid #ccc; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                            Admin_Krew <button onclick="this.parentElement.remove()" style="font-size:8px;">X</button>
+                        </div>
+                    </div>
+                    <button onclick="addLink()" style="width: 100%; font-size: 9px;">+ New Link</button>
+                </div>
 
-            <div class="box">
-                <div class="box-header">Recent News</div>
-                <p style="font-size: 10px;"><b>Jan 16:</b> Physics Update v2.1</p>
-                <p style="font-size: 10px;"><b>Jan 12:</b> Winter Fest Launch!</p>
-                <a href="news.html" style="font-size: 10px; color: #8a49a8;">Read more...</a>
-            </div>
+                <div class="box">
+                    <div class="box-header">Parents' Corner</div>
+                    <p style="font-size: 10px;">A safe place for kids.</p>
+                    <button class="btn" style="width: 100%;">Safety Guide</button>
+                </div>
+            </aside>
 
-            <div class="box" style="text-align: center;">
-                <div class="box-header">Krew's Korner</div>
-                <div style="background: #f0f0f0; height: 50px; margin-bottom: 5px; border: 1px solid #ccc;"></div>
-                <p style="font-size: 10px; font-style: italic;">"Forge your own destiny today!"</p>
-            </div>
-        </aside>
+            <main>
+                <div class="box">
+                    <div class="box-header">Online Social Hangout - BLYPEME</div>
+                    <div class="video-player">
+                        <div class="speech-bubble">I hear this is all FREE?!</div>
+                        <button style="font-size: 40px; background: none; border: none; color: white; cursor: pointer;">▶</button>
+                    </div>
+                </div>
 
-        <footer class="footer-row">
-            <div class="footer-links">
-                Privacy Policy | Advertise with Us | Contact Us | About Us | Parents | Jobs
-            </div>
-            <div style="font-size: 10px; color: #666;">
-                BLYPEME Corporation © 2026. All Rights Reserved.
-            </div>
-        </footer>
+                <div class="box">
+                    <div class="box-header">Featured Free Game: Frozen Peak</div>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="background: #333; width: 250px; height: 150px; border: 1px solid #8a49a8;"></div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 14px;">Frozen Peak Obby</h3>
+                            <button class="play-btn" style="margin-top: 5px;">Play This</button>
+                            <p style="font-size: 10px; margin-top: 10px;">Favorited: 3,248 times</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside>
+                <div class="box">
+                    <div class="box-header">BLYPEME Facts</div>
+                    <p style="font-size: 10px;">Average bid: <b>610 Tallyz</b></p>
+                    <p style="font-size: 10px;"><b>623 items</b> available.</p>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Recent News</div>
+                    <p style="font-size: 10px;"><b>Jan 16:</b> Update v2.1</p>
+                    <p style="font-size: 10px;"><b>Jan 12:</b> Winter Fest!</p>
+                </div>
+
+                <div class="box" style="text-align: center;">
+                    <div class="box-header">Krew's Korner</div>
+                    <div style="background: #eee; height: 40px; border: 1px solid #ccc;"></div>
+                    <p style="font-size: 9px; font-style: italic;">"Build it today!"</p>
+                </div>
+            </aside>
+        </div>
+
+        <div class="footer">
+            Privacy Policy | Advertise | Contact Us | About Us | Jobs
+            <br><br>
+            <b>BLYPEME Corporation © 2026</b>
+        </div>
     </div>
 
     <script>
         function addLink() {
-            let name = prompt("Enter Character Name to Link-Chip:");
+            let name = prompt("Name?");
             if (name) {
                 let tray = document.getElementById('tray');
-                let newChip = document.createElement('div');
-                newChip.className = 'chip';
-                newChip.innerHTML = `${name} <button onclick="this.parentElement.remove()" style="font-size:8px; cursor:pointer;">X</button>`;
-                tray.appendChild(newChip);
+                tray.innerHTML += `<div style="background:#f0f0f0; border:1px solid #ccc; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;">${name} <button onclick="this.parentElement.remove()" style="font-size:8px;">X</button></div>`;
             }
         }
     </script>
