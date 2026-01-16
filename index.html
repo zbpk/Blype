@@ -2,226 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - Building the Future</title>
+    <title>BLYPEME - Home</title>
     <style>
-        body {
-            background: #ade8ff;
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            text-align: center;
-        }
-
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-            background-color: transparent;
-        }
-
-        /* HEADER & BANNER */
-        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; }
-        .banner-img { width: 100%; }
-
-        /* NAVIGATION BAR */
-        .sub-nav {
-            background-color: #8a49a8;
-            padding: 8px 0;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-        }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; }
+        .sub-nav { background-color: #8a49a8; padding: 8px 0; color: white; font-size: 11px; font-weight: bold; border-bottom: 1px solid #000; text-align:center; }
         .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
-        .sub-nav a:hover { text-decoration: underline; }
-
-        /* MAIN CONTENT GRID */
-        .main-container {
-            display: grid;
-            grid-template-columns: 200px 1fr 200px;
-            gap: 15px;
-            padding: 20px 0;
-            text-align: left;
-        }
-
-        /* SIDEBAR BOXES */
-        .box { 
-            background: #f0f0f0; 
-            border: 1px solid #a4a4a4; 
-            margin-bottom: 15px; 
-            padding: 10px;
-            font-size: 11px;
-        }
-        .box-header {
-            background: #e9e9e9;
-            border-bottom: 1px solid #a4a4a4;
-            padding: 4px;
-            font-weight: bold;
-            margin: -10px -10px 10px -10px;
-        }
-
-        /* INPUTS & BUTTONS */
+        .main-container { display: grid; grid-template-columns: 200px 1fr 200px; gap: 15px; padding: 20px 0; text-align: left; }
+        .box { background: #f0f0f0; border: 1px solid #a4a4a4; margin-bottom: 15px; padding: 10px; font-size: 11px; }
+        .box-header { background: #e9e9e9; border-bottom: 1px solid #a4a4a4; padding: 4px; font-weight: bold; margin: -10px -10px 10px -10px; }
         input { width: 85%; margin-bottom: 5px; font-size: 10px; }
         .btn { font-size: 10px; cursor: pointer; padding: 2px 8px; }
-        .play-btn { background: #0080ff; color: white; border: 1px solid #003366; padding: 8px 15px; font-weight: bold; cursor: pointer; }
-
-        /* CENTER VIDEO AREA */
-        .video-box { background: #000; height: 300px; border: 2px solid #000; position: relative; display: flex; align-items: center; justify-content: center; }
-        .speech-bubble {
-            position: absolute; top: 20px; right: 20px;
-            background: white; border-radius: 20px; padding: 10px 15px;
-            font-weight: bold; font-size: 12px; border: 2px solid #000;
-        }
-
-        .footer { font-size: 9px; color: #444; padding: 40px 0; border-top: 1px solid #ccc; margin-top: 20px; }
     </style>
 </head>
 <body>
-
-    <div class="site-wrapper">
-        <div class="banner-container"><img src="Banner.png" alt="BLYPE" class="banner-img"></div>
-
-        <div class="sub-nav" id="main-nav">
-            <a href="index.html">Gammes</a> | 
-            <a href="marketplace.html">Marketplace</a> | 
-            <a href="people.html">People</a> | 
-            <a href="forum.html">Forum</a> | 
-            <a href="news.html">News</a> | 
-            <a href="help.html">Help</a>
-        </div>
-
-        <div class="main-container">
-            <aside>
-                <div class="box" id="login-box">
-                    <div class="box-header">Member Login</div>
-                    <div id="logged-out-view">
-                        Character Name<br><input type="text" id="user-input"><br>
-                        Password<br><input type="password" id="pass-input"><br>
-                        <button class="btn" onclick="attemptLogin()">Login</button> <button class="btn">Register</button>
-                    </div>
-                    <div id="logged-in-view" style="display:none; text-align:center;">
-                        Welcome, <b>Admin</b>!<br>
-                        <span style="color:green; font-weight:bold;">B$ <span id="user-bux">0</span> Blypo-Bux</span><br>
-                        <div id="streak-info" style="font-size:9px; color:#8a49a8; margin:5px 0;"></div>
-                        <button class="btn" onclick="logout()">Logout</button>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="box-header">Users Chip Tray</div>
-                    <div style="background:#fff; border:1px solid #ccc; padding:3px; display:flex; justify-content:space-between;">
-                        Admin_Krew <button disabled>X</button>
-                    </div>
-                    <button class="btn" style="width:100%; margin-top:5px;">+ New Link</button>
-                </div>
-
-                <div class="box">
-                    <div class="box-header">Parents' Corner</div>
-                    Learn how BLYPEME keeps building safe for your children.<br><br>
-                    <button style="width:100%">Safety Guide</button>
-                </div>
-            </aside>
-
-            <main>
-                <div class="box">
-                    <div class="box-header">Online Social Hangout - BLYPEME</div>
-                    <div class="video-box">
-                        <div class="speech-bubble">I hear this is all FREE?!</div>
-                        <div style="color:white; font-size:40px;">▶</div>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="box-header">Featured Free Game: Frozen Peak</div>
-                    <div style="display:flex; gap:15px;">
-                        <div style="width:250px; height:150px; background:#333; display:flex; align-items:center; justify-content:center; color:#555;">[ Game Screenshot ]</div>
-                        <div>
-                            <h3 id="feat-title" style="margin:0;">Frozen Peak Obby</h3>
-                            <p style="font-size:10px;">Created by: ArcticBuilder</p>
-                            <button class="play-btn">Play This</button>
-                            <p style="font-size:9px; color:#666;">Updated: 2 months ago<br>Visited: 23,013 times</p>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-            <aside>
-                <div class="box">
-                    <div class="box-header">BLYPEME Facts</div>
-                    <div id="facts-area" style="line-height:1.6;">
-                        <b>Average bid:</b> 610 Tallyz<br>
-                        <b>623 bombastic items</b> available in the catalog.<br>
-                        <b>100 KOBUt</b> buys 474 tickets.
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="box-header">Recent News</div>
-                    <div id="news-feed">
-                        <b>Jan 16:</b> Physics Update v2.1<br>
-                        <b>Jan 12:</b> Winter Fest Launch!<br>
-                        <a href="#" style="color:blue;">Read more...</a>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="box-header">Krew's Korner</div>
-                    <div style="width:100%; height:80px; background:#eee; border:1px solid #ccc;"></div>
-                    <p style="font-style:italic; text-align:center;">"Forge your own destiny today!"</p>
-                </div>
-            </aside>
-        </div>
-
-        <div class="footer">
-            Privacy Policy | Advertise with Us | Contact Us | About Us | Parents | Jobs<br><br>
-            BLYPEME Corporation © 2026. All Rights Reserved.
-        </div>
+<div class="site-wrapper">
+    <div class="sub-nav" id="main-nav">
+        <a href="index.html">Home</a> | <a href="games.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="character.html">Character</a> | <a href="forum.html">Forum</a>
     </div>
-
-    <script>
-        function attemptLogin() {
-            const u = document.getElementById('user-input').value;
-            const p = document.getElementById('pass-input').value;
-
-            if (u.toLowerCase() === "admin" && p === "1234") {
-                localStorage.setItem("isAdmin", "true");
-                if(!localStorage.getItem("blypoBux")) localStorage.setItem("blypoBux", "500");
-                location.reload();
-            } else {
-                alert("Invalid login.");
-            }
+    <div class="main-container">
+        <aside>
+            <div class="box">
+                <div class="box-header">Member Login</div>
+                <div id="out">Name<br><input type="text" id="u"><br>Pass<br><input type="password" id="p"><br><button onclick="login()">Login</button></div>
+                <div id="in" style="display:none; text-align:center;">
+                    Welcome, <b>Admin</b>!<br>
+                    <span style="color:green; font-weight:bold;">B$ <span id="bux-disp">0</span></span><br>
+                    <button onclick="localStorage.removeItem('isAdmin'); location.reload();">Logout</button>
+                </div>
+            </div>
+        </aside>
+        <main><div class="box"><div class="box-header">News</div>Welcome to BLYPEME!</div></main>
+        <aside><div class="box"><div class="box-header">Facts</div>B$ 5B is a lot of money!</div></aside>
+    </div>
+</div>
+<script>
+    function formatBux(num) {
+        num = parseInt(num);
+        if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+        if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+        if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+        return num;
+    }
+    function login() {
+        if(document.getElementById('u').value.toLowerCase() === 'admin' && document.getElementById('p').value === '1234') {
+            localStorage.setItem("isAdmin", "true"); location.reload();
         }
-
-        function logout() {
-            // Clear only the login state, keeping site data
-            localStorage.removeItem("isAdmin");
-            // To bring the site back to the EXACT image state, 
-            // we redirect to index.html and the window.onload handles the rest.
-            window.location.href = "index.html";
+    }
+    window.onload = function() {
+        if(localStorage.getItem("isAdmin") === "true") {
+            document.getElementById('out').style.display='none';
+            document.getElementById('in').style.display='block';
+            document.getElementById('bux-disp').innerText = formatBux(localStorage.getItem("blypoBux") || 0);
+            document.getElementById('main-nav').innerHTML += ' | <a href="admin.html" style="color:yellow">Admin</a>';
         }
-
-        window.onload = function() {
-            const isAdmin = localStorage.getItem("isAdmin") === "true";
-
-            if (isAdmin) {
-                // Show Admin UI
-                document.getElementById('logged-out-view').style.display = 'none';
-                document.getElementById('logged-in-view').style.display = 'block';
-                document.getElementById('user-bux').innerText = localStorage.getItem("blypoBux");
-                
-                // Add Admin Tab
-                const nav = document.getElementById('main-nav');
-                nav.innerHTML += ' | <a href="admin.html" style="color:#ffd700;">Admin Panel</a>';
-                
-                // Show Streak
-                const streak = localStorage.getItem("loginStreak") || 1;
-                document.getElementById('streak-info').innerText = "🔥 " + streak + " Day Streak";
-
-                // Load any Admin Overrides
-                if(localStorage.getItem("admin_featGame")) document.getElementById('feat-title').innerText = localStorage.getItem("admin_featGame");
-                if(localStorage.getItem("admin_facts")) document.getElementById('facts-area').innerText = localStorage.getItem("admin_facts");
-                if(localStorage.getItem("admin_news")) document.getElementById('news-feed').innerText = localStorage.getItem("admin_news");
-            }
-        };
-    </script>
+    }
+</script>
 </body>
 </html>
