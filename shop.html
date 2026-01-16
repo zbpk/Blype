@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPE - Blypo-Bux Shop</title>
+    <style>
+        body { background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%); background-attachment: fixed; font-family: 'Verdana', sans-serif; margin: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: rgba(255,255,255,0.8); min-height: 100vh; }
+        .sub-nav { background-color: #8a49a8; padding: 10px 0; color: white; text-align: center; border-bottom: 3px solid #5a2d6d; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 12px; font-weight: bold; font-size: 12px; }
+        .header-box { background: #fff; padding: 20px; border-bottom: 1px solid #ccc; text-align: center; }
+        .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; }
+        .shop-card { background: #fff; border: 1px solid #aaa; padding: 15px; text-align: center; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+        .bux-icon { font-size: 30px; font-weight: bold; color: #27ae60; margin-bottom: 10px; }
+        .buy-btn { background: #27ae60; color: white; border: none; padding: 10px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .buy-btn:hover { background: #219150; }
+    </style>
+</head>
+<body>
+    <div class="site-wrapper">
+        <div class="sub-nav">
+            <a href="index.html">Home</a> | <a href="games.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="shop.html" style="color:#72fb3c;">Shop</a> | <a href="settings.html">Settings</a>
+        </div>
+
+        <div class="header-box">
+            <h1>The Blypo-Bux Shop</h1>
+            <p>Your Current Balance: <b style="color:green;">B$ <span id="balance-display">0</span></b></p>
+        </div>
+
+        <div class="shop-grid">
+            <div class="shop-card">
+                <div class="bux-icon">B$ 50</div>
+                <p>Starter Pile</p>
+                <button class="buy-btn" onclick="buyBux(50)">Convert 500 Points</button>
+            </div>
+            <div class="shop-card">
+                <div class="bux-icon">B$ 500</div>
+                <p>Super Stack</p>
+                <button class="buy-btn" onclick="buyBux(500)">Convert 4,500 Points</button>
+            </div>
+            <div class="shop-card" style="border: 2px solid #8a49a8;">
+                <div class="bux-icon" style="color:#8a49a8;">B$ 2,000</div>
+                <p><b>MEGA CRATE</b></p>
+                <button class="buy-btn" onclick="buyBux(2000)" style="background:#8a49a8;">Convert 15,000 Points</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('balance-display').innerText = localStorage.getItem("blypoBux") || 0;
+
+        function buyBux(amt) {
+            let current = parseInt(localStorage.getItem("blypoBux") || 0);
+            localStorage.setItem("blypoBux", current + amt);
+            document.getElementById('balance-display').innerText = current + amt;
+            alert("Success! B$ " + amt + " has been added to your account.");
+            location.reload(); // Updates the top bar balance
+        }
+    </script>
+</body>
+</html>
