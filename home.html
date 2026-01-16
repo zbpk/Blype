@@ -3,144 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blype | Build. Play. Eject.</title>
+    <title>BLYPE | Build. Play. Eject.</title>
     <style>
-        /* Retro-Modern Color Palette */
+        /* BLYPE CORE THEME */
         :root {
             --blype-purple: #8a2be2;
-            --glass-white: rgba(255, 255, 255, 0.1);
-            --plastic-white: #f0f0f5;
             --neon-green: #39ff14;
             --eject-red: #ff4b2b;
+            --glass: rgba(255, 255, 255, 0.1);
+            --bg: #0d0d15;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: var(--plastic-white);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0d0d15 100%);
+            color: white;
+            font-family: 'Courier New', Courier, monospace; /* Retro-feel font */
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            overflow-x: hidden;
         }
 
-        /* Glass Header */
+        /* GLASS NAV BAR */
         nav {
-            width: 100%;
-            background: rgba(138, 43, 226, 0.2);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-white);
-            padding: 15px 0;
-            text-align: center;
-            font-weight: bold;
-            letter-spacing: 2px;
+            background: rgba(138, 43, 226, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        nav a { color: white; margin: 0 15px; text-decoration: none; text-transform: uppercase; }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
 
-        /* The Main Layout Grid */
+        nav a:hover { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+
+        /* BENTO LAYOUT */
         .container {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 300px 1fr;
             gap: 20px;
-            width: 90%;
             max-width: 1200px;
-            margin-top: 30px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        /* Social Chip Tray */
+        /* LINK-CHIP TRAY (The Social Part) */
         .chip-tray {
-            background: var(--glass-white);
-            border-radius: 15px;
+            background: var(--glass);
+            border: 1px solid var(--glass);
+            border-radius: 20px;
             padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            height: fit-content;
         }
 
-        .friend-chip {
-            background: rgba(0,0,0,0.3);
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
+        .chip {
+            background: rgba(0,0,0,0.5);
+            border-left: 5px solid var(--neon-green);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--neon-green);
+            animation: slideIn 0.5s ease;
         }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
         .eject-btn {
             background: var(--eject-red);
             border: none;
             color: white;
-            border-radius: 4px;
+            padding: 5px 10px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 10px;
-            padding: 5px;
+            font-weight: bold;
+            transition: 0.2s;
         }
 
-        /* Game Discovery Area */
+        .eject-btn:hover { background: white; color: var(--eject-red); transform: scale(1.1); }
+
+        /* MAIN DISCOVERY STAGE */
         .main-stage {
-            background: rgba(255,255,255,0.05);
+            background: var(--glass);
             border-radius: 20px;
-            padding: 30px;
+            padding: 40px;
+            border: 1px solid var(--glass);
             text-align: center;
         }
 
-        .featured-image {
+        .featured-box {
             width: 100%;
-            height: 300px;
+            height: 400px;
             background: #000;
             border-radius: 15px;
+            border: 2px solid var(--blype-purple);
             margin: 20px 0;
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid var(--blype-purple);
         }
 
-        .play-button {
+        .play-btn {
             background: var(--neon-green);
             color: black;
-            padding: 15px 40px;
-            font-size: 24px;
+            font-size: 2rem;
             font-weight: bold;
-            border: none;
+            padding: 20px 60px;
             border-radius: 50px;
+            border: none;
             cursor: pointer;
-            box-shadow: 0 0 20px var(--neon-green);
-            transition: 0.3s;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+            transition: 0.4s;
         }
 
-        .play-button:hover { transform: scale(1.1); }
+        .play-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 50px var(--neon-green);
+        }
+
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#">BlypeMe</a> | <a href="#">Arcade</a> | <a href="#">The Forge</a> | <a href="#">Help</a>
+        <a href="#">BlypeMe</a>
+        <a href="#">Games</a>
+        <a href="#">Forge</a>
+        <a href="#">News</a>
     </nav>
 
     <div class="container">
         <aside class="chip-tray">
-            <h2 style="font-size: 18px; color: var(--blype-purple);">Link-Chip Tray</h2>
-            <div class="friend-chip">
-                <span>Player_One</span>
-                <button class="eject-btn">EJECT</button>
+            <h2 style="color: var(--neon-green); margin-top: 0;">LINK-CHIPS</h2>
+            <div id="chip-container">
+                <div class="chip" id="friend-1">
+                    <span>Admin_User</span>
+                    <button class="eject-btn" onclick="eject('friend-1')">EJECT</button>
+                </div>
+                <div class="chip" id="friend-2">
+                    <span>Guest_99</span>
+                    <button class="eject-btn" onclick="eject('friend-2')">EJECT</button>
+                </div>
             </div>
-            <div class="friend-chip">
-                <span>VibeMaster</span>
-                <button class="eject-btn">EJECT</button>
-            </div>
-            <button style="width:100%; background:none; border: 1px dashed white; color: white; padding: 10px; border-radius: 8px; cursor: pointer;">+ Add New Link</button>
+            <button onclick="addFriend()" style="width:100%; background:none; border: 1px dashed white; color: white; padding: 10px; border-radius: 10px; cursor: pointer; margin-top: 10px;">+ NEW LINK</button>
         </aside>
 
         <main class="main-stage">
-            <h1>Featured: <span style="color: var(--neon-green);">Frozen Peak Obby</span></h1>
-            <div class="featured-image">
-                <p>[ Placeholder for Godot Game Preview ]</p>
+            <h1 style="font-size: 3rem; margin-top: 0;">BLYPΣ</h1>
+            <p style="color: #aaa;">CREATOR HUB V1.0 - ALPHA ACCESS</p>
+            
+            <div class="featured-box">
+                <p style="color: var(--blype-purple); letter-spacing: 5px;">[ ENGINE LOADING... ]</p>
             </div>
-            <button class="play-button" onclick="alert('Launching Blype Engine...')">PLAY NOW</button>
+
+            <button class="play-btn" onclick="alert('Blype Engine Launching...')">PLAY NOW</button>
         </main>
     </div>
 
+    <script>
+        // THE UNIQUE EJECT FUNCTION
+        function eject(id) {
+            const element = document.getElementById(id);
+            element.style.transition = "0.3s";
+            element.style.transform = "translateX(100px)";
+            element.style.opacity = "0";
+            
+            setTimeout(() => {
+                element.remove();
+            }, 300);
+        }
+
+        // ADD FRIEND FUNCTION
+        function addFriend() {
+            const name = prompt("Enter Username to Link:");
+            if (name) {
+                const id = "friend-" + Math.random();
+                const newChip = `
+                    <div class="chip" id="${id}">
+                        <span>${name}</span>
+                        <button class="eject-btn" onclick="eject('${id}')">EJECT</button>
+                    </div>`;
+                document.getElementById('chip-container').innerHTML += newChip;
+            }
+        }
+    </script>
 </body>
 </html>
