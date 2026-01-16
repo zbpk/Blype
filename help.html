@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLYPE - Help</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
+            background-attachment: fixed;
+            font-family: 'Verdana', sans-serif;
+            margin: 0; padding: 0;
+            min-height: 100vh;
+        }
+
+        .site-wrapper {
+            width: 900px;
+            margin: 0 auto;
+        }
+
+        .banner-container {
+            background: #fff;
+            border-bottom: 1px solid #000;
+        }
+        .banner-img {
+            width: 900px;
+            display: block;
+        }
+
+        .sub-nav {
+            background-color: #8a49a8;
+            padding: 8px 0;
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            border-bottom: 2px solid #5a2d6d;
+            width: 900px;
+        }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        .box-header {
+            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
+            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+        }
+
+        /* HELP TOPICS */
+        .help-topic { margin-bottom: 20px; }
+        .help-topic h3 { font-size: 14px; color: #8a49a8; margin-bottom: 5px; }
+        .help-topic p { font-size: 12px; line-height: 1.5; color: #333; }
+        
+        .faq-list { font-size: 11px; padding-left: 20px; }
+        .faq-list li { margin-bottom: 8px; }
+        .faq-list a { color: #0080ff; text-decoration: none; }
+        .faq-list a:hover { text-decoration: underline; }
+
+        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
+
+        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="site-wrapper">
+        <div class="banner-container">
+            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        </div>
+
+        <div class="sub-nav">
+            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        </div>
+
+        <div class="main-container">
+            <aside>
+                <div class="box">
+                    <div class="box-header">Help Center</div>
+                    <ul style="font-size: 10px; list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="#">General FAQ</a></li>
+                        <li><a href="#">Building Guide</a></li>
+                        <li><a href="#">Account Safety</a></li>
+                        <li><a href="#">Billing & Tallyz</a></li>
+                        <li><a href="#">Rules of Conduct</a></li>
+                    </ul>
+                </div>
+                
+                <div class="box">
+                    <div class="box-header">Contact Us</div>
+                    <p style="font-size: 10px;">Still stuck? Email our Krew at support@blype.com</p>
+                </div>
+            </aside>
+
+            <main>
+                <div class="box">
+                    <div class="box-header">Frequently Asked Questions</div>
+                    
+                    <div class="help-topic">
+                        <h3>How do I earn Tallyz?</h3>
+                        <p>Tallyz can be earned by creating popular games, selling clothes in the Marketplace, or through daily login bonuses for members!</p>
+                    </div>
+
+                    <div class="help-topic">
+                        <h3>Is BLYPE free to play?</h3>
+                        <p>Yes! BLYPE is a free online building engine. While you can buy Tallyz for special items, building and playing is 100% free.</p>
+                    </div>
+
+                    <div class="help-topic">
+                        <h3>Safety & Privacy</h3>
+                        <p>We take safety seriously. All chat is filtered, and we have a dedicated team of moderators. Check the <a href="#">Parents' Corner</a> for more details.</p>
+                    </div>
+
+                    <div class="help-topic">
+                        <h3>Technical Issues</h3>
+                        <ul class="faq-list">
+                            <li><a href="#">My character is stuck in a brick!</a></li>
+                            <li><a href="#">The game won't load on my browser.</a></li>
+                            <li><a href="#">How to report a bug to the Krew.</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div class="footer">
+            Privacy Policy | Advertise | Contact Us | About Us | Jobs
+            <br><br>
+            <b>BLYPE Corporation © 2026</b>
+        </div>
+    </div>
+</body>
+</html>
