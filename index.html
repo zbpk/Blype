@@ -12,17 +12,12 @@
             text-align: center;
         }
 
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-            background-color: transparent;
-        }
+        .site-wrapper { width: 900px; margin: 0 auto; }
 
-        /* HEADER & BANNER */
-        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; }
+        /* UNIFIED HEADER */
+        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
         .banner-img { width: 100%; }
 
-        /* NAVIGATION BAR */
         .sub-nav {
             background-color: #8a49a8;
             padding: 8px 0;
@@ -43,7 +38,7 @@
             text-align: left;
         }
 
-        /* SIDEBAR BOXES */
+        /* BOX STYLING */
         .box { 
             background: #f0f0f0; 
             border: 1px solid #a4a4a4; 
@@ -57,28 +52,28 @@
             padding: 4px;
             font-weight: bold;
             margin: -10px -10px 10px -10px;
+            color: #333;
         }
 
-        /* INPUTS & BUTTONS */
-        input { width: 85%; margin-bottom: 5px; font-size: 10px; }
-        .btn { font-size: 10px; cursor: pointer; padding: 2px 8px; }
+        /* FORMS & BUTTONS */
+        input { width: 85%; margin-bottom: 5px; font-size: 10px; border: 1px solid #777; padding: 2px; }
+        .btn { font-size: 10px; cursor: pointer; padding: 2px 8px; font-weight: bold; }
         .play-btn { background: #0080ff; color: white; border: 1px solid #003366; padding: 8px 15px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
 
-        /* CENTER VIDEO AREA */
-        .video-box { background: #000; height: 300px; border: 2px solid #000; position: relative; display: flex; align-items: center; justify-content: center; }
-        .speech-bubble {
-            position: absolute; top: 20px; right: 20px;
-            background: white; border-radius: 20px; padding: 10px 15px;
-            font-weight: bold; font-size: 12px; border: 2px solid #000;
-        }
+        /* CENTER CONTENT */
+        .hero-video { background: #000; height: 250px; border: 2px solid #000; display: flex; align-items: center; justify-content: center; position: relative; }
+        .hero-video:after { content: '▶'; color: white; font-size: 50px; opacity: 0.8; }
+        .speech { position: absolute; top: 15px; right: 15px; background: #fff; padding: 5px 10px; border: 2px solid #000; border-radius: 15px; font-weight: bold; }
 
-        .footer { font-size: 9px; color: #444; padding: 40px 0; border-top: 1px solid #ccc; margin-top: 20px; }
+        .footer { font-size: 9px; color: #444; padding: 30px 0; border-top: 1px solid #ccc; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container"><img src="Banner.png" alt="BLYPE" class="banner-img"></div>
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" alt="BLYPE" class="banner-img">
+        </div>
 
         <div class="sub-nav" id="main-nav">
             <a href="index.html">Home</a> | 
@@ -86,7 +81,6 @@
             <a href="marketplace.html">Marketplace</a> | 
             <a href="character.html">Character</a> | 
             <a href="forum.html">Forum</a> | 
-            <a href="news.html">News</a> | 
             <a href="help.html">Help</a>
         </div>
 
@@ -95,46 +89,54 @@
                 <div class="box" id="login-box">
                     <div class="box-header">Member Login</div>
                     <div id="logged-out-view">
-                        Character Name<br><input type="text" id="user-input"><br>
-                        Password<br><input type="password" id="pass-input"><br>
-                        <button class="btn" onclick="attemptLogin()">Login</button> <button class="btn">Register</button>
+                        Name<br><input type="text" id="u-in"><br>
+                        Pass<br><input type="password" id="p-in"><br>
+                        <button class="btn" onclick="login()">Login</button>
                     </div>
                     <div id="logged-in-view" style="display:none; text-align:center;">
                         Welcome, <b>Admin</b>!<br>
                         <span style="color:green; font-weight:bold;">B$ <span id="user-bux">0</span></span><br>
-                        <div id="streak-info" style="font-size:9px; color:#8a49a8; margin:5px 0;"></div>
+                        <div id="streak-disp" style="font-size:9px; color:#8a49a8; margin:5px 0;"></div>
                         <button class="btn" onclick="logout()">Logout</button>
                     </div>
                 </div>
 
                 <div class="box">
-                    <div class="box-header">Users Chip Tray</div>
-                    <div style="background:#fff; border:1px solid #ccc; padding:3px; display:flex; justify-content:space-between;">
-                        Admin_Krew <button disabled>X</button>
+                    <div class="box-header">Users Online</div>
+                    <div style="background:#fff; border:1px solid #ccc; padding:3px; display:flex; justify-content:space-between; margin-bottom:2px;">
+                        Admin_Krew <span style="color:green;">●</span>
                     </div>
-                    <button class="btn" style="width:100%; margin-top:5px;">+ New Link</button>
+                    <div style="background:#fff; border:1px solid #ccc; padding:3px; display:flex; justify-content:space-between;">
+                        Build_Man <span style="color:green;">●</span>
+                    </div>
                 </div>
             </aside>
 
             <main>
                 <div class="box">
-                    <div class="box-header">Online Social Hangout - BLYPEME</div>
-                    <div class="video-box">
-                        <div class="speech-bubble">I hear this is all FREE?!</div>
-                        <div style="color:white; font-size:40px;">▶</div>
+                    <div class="box-header">BLYPEME TV</div>
+                    <div class="hero-video">
+                        <div class="speech">Join the fun!</div>
                     </div>
                 </div>
 
                 <div class="box">
                     <div class="box-header">Featured Experience</div>
                     <div style="display:flex; gap:15px;">
-                        <div style="width:250px; height:150px; background:#333; display:flex; align-items:center; justify-content:center; color:#555;">[ Preview ]</div>
+                        <div style="width:180px; height:120px; background:#444; border:1px solid #000;"></div>
                         <div>
                             <h3 id="feat-title" style="margin:0;">Frozen Peak Obby</h3>
-                            <p style="font-size:10px;">Created by: ArcticBuilder</p>
-                            <a href="games.html" class="play-btn">Play This</a>
-                            <p style="font-size:9px; color:#666;">Visited: 23,013 times</p>
+                            <p style="font-size:10px; color:#666;">Experience the coldest challenge on BLYPEME!</p>
+                            <a href="games.html" class="play-btn">Play Now</a>
                         </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Recent News</div>
+                    <div id="news-feed">
+                        <b>Jan 16:</b> Physics Update v2.1<br>
+                        <b>Jan 12:</b> Winter Fest Launch!<br>
                     </div>
                 </div>
             </main>
@@ -142,29 +144,23 @@
             <aside>
                 <div class="box">
                     <div class="box-header">BLYPEME Facts</div>
-                    <div id="facts-area" style="line-height:1.6; font-size:10px;">
-                        <b>Average bid:</b> 610 Tallyz<br>
-                        <b>623 bombastic items</b> available in the catalog.
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="box-header">Recent News</div>
-                    <div id="news-feed" style="font-size:10px;">
-                        <b>Jan 16:</b> Physics Update v2.1<br>
-                        <b>Jan 12:</b> Winter Fest Launch!<br>
+                    <div id="facts-area" style="font-size:10px;">
+                        Average bid: 610 Tallyz<br>
+                        623 items in catalog.
                     </div>
                 </div>
 
                 <div class="box">
                     <div class="box-header">Krew's Korner</div>
-                    <p id="tweet-area" style="font-style:italic; text-align:center; font-size:10px;">"Forge your own destiny today!"</p>
+                    <p id="tweet-area" style="font-style:italic; text-align:center; font-size:10px;">
+                        "Forge your own destiny today!"
+                    </p>
                 </div>
             </aside>
         </div>
 
         <div class="footer">
-            BLYPEME Corporation © 2026. All Rights Reserved.
+            BLYPEME Corporation © 2026. This is a simulation of a 2009-era building game.
         </div>
     </div>
 
@@ -172,7 +168,6 @@
         // --- SMART FORMATTING ---
         function formatBux(num) {
             num = parseInt(num);
-            if (isNaN(num)) return "0";
             if (num >= 1e12) return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
             if (num >= 1e9) return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
             if (num >= 1e6) return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -180,72 +175,61 @@
             return num.toString();
         }
 
-        // --- AUTH LOGIC ---
-        function attemptLogin() {
-            const u = document.getElementById('user-input').value;
-            const p = document.getElementById('pass-input').value;
-            if (u.toLowerCase() === "admin" && p === "1234") {
+        // --- AUTH ---
+        function login() {
+            if(document.getElementById('u-in').value.toLowerCase() === 'admin' && document.getElementById('p-in').value === '1234') {
                 localStorage.setItem("isAdmin", "true");
                 if(!localStorage.getItem("blypoBux")) localStorage.setItem("blypoBux", "500");
                 location.reload();
-            } else {
-                alert("Invalid Character Name or Password.");
-            }
+            } else { alert("Login failed!"); }
         }
 
         function logout() {
             localStorage.removeItem("isAdmin");
-            window.location.href = "index.html";
-        }
-
-        // --- DAILY REWARDS ---
-        function checkDailyReward() {
-            if (localStorage.getItem("isAdmin") !== "true") return;
-            const today = new Date().toDateString();
-            const lastLogin = localStorage.getItem("lastLoginDate");
-            let streak = parseInt(localStorage.getItem("loginStreak") || 0);
-            let balance = parseInt(localStorage.getItem("blypoBux") || 0);
-
-            if (lastLogin !== today) {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                streak = (lastLogin === yesterday.toDateString()) ? streak + 1 : 1;
-                balance += 10;
-                localStorage.setItem("blypoBux", balance);
-                localStorage.setItem("lastLoginDate", today);
-                localStorage.setItem("loginStreak", streak);
-                alert("Daily Reward! You earned B$ 10.\nCurrent Streak: " + streak + " Days!");
-            }
+            location.reload();
         }
 
         // --- INITIALIZE ---
         window.onload = function() {
-            // Check Global Alerts
-            const msg = localStorage.getItem("globalAlert");
-            if (msg) { alert("SYSTEM ALERT: " + msg); localStorage.removeItem("globalAlert"); }
+            // Check Global Alerts from Admin
+            const alertMsg = localStorage.getItem("globalAlert");
+            if(alertMsg) {
+                alert("SYSTEM MESSAGE: " + alertMsg);
+                localStorage.removeItem("globalAlert");
+            }
 
-            if (localStorage.getItem("isAdmin") === "true") {
-                checkDailyReward();
+            if(localStorage.getItem("isAdmin") === "true") {
                 document.getElementById('logged-out-view').style.display = 'none';
                 document.getElementById('logged-in-view').style.display = 'block';
                 
-                const rawBux = localStorage.getItem("blypoBux") || 0;
-                document.getElementById('user-bux').innerText = formatBux(rawBux);
-                
-                const streak = localStorage.getItem("loginStreak") || 1;
-                document.getElementById('streak-info').innerText = "🔥 " + streak + " Day Streak";
+                // Balance Update
+                const bux = localStorage.getItem("blypoBux") || 0;
+                document.getElementById('user-bux').innerText = formatBux(bux);
 
-                // Add Admin Tab
+                // Admin Nav Link
                 const nav = document.getElementById('main-nav');
                 if(!nav.innerHTML.includes("admin.html")) nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
 
-                // Load Admin Content Overrides
+                // Daily Reward System
+                const today = new Date().toDateString();
+                if(localStorage.getItem("lastLogin") !== today) {
+                    let streak = parseInt(localStorage.getItem("loginStreak") || 0) + 1;
+                    let currentBux = parseInt(localStorage.getItem("blypoBux") || 0);
+                    localStorage.setItem("blypoBux", currentBux + 10);
+                    localStorage.setItem("lastLogin", today);
+                    localStorage.setItem("loginStreak", streak);
+                    alert("Daily Reward: + B$ 10! Streak: " + streak + " days.");
+                    location.reload();
+                }
+                document.getElementById('streak-disp').innerText = "🔥 " + localStorage.getItem("loginStreak") + " Day Streak";
+
+                // Admin Overrides (Content from Admin Panel)
                 if(localStorage.getItem("admin_featGame")) document.getElementById('feat-title').innerText = localStorage.getItem("admin_featGame");
                 if(localStorage.getItem("admin_facts")) document.getElementById('facts-area').innerText = localStorage.getItem("admin_facts");
                 if(localStorage.getItem("admin_news")) document.getElementById('news-feed').innerHTML = localStorage.getItem("admin_news");
                 if(localStorage.getItem("admin_tweet")) document.getElementById('tweet-area').innerText = localStorage.getItem("admin_tweet");
             }
-        };
+        }
     </script>
 </body>
 </html>
