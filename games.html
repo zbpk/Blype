@@ -2,77 +2,201 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPE - Games</title>
+    <title>BLYPEME - Games</title>
     <style>
-        body { background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%); background-attachment: fixed; font-family: 'Verdana', sans-serif; margin: 0; }
-        .site-wrapper { width: 900px; margin: 0 auto; background: rgba(255,255,255,0.8); min-height: 100vh; }
-        .sub-nav { background-color: #8a49a8; padding: 10px 0; color: white; text-align: center; border-bottom: 3px solid #5a2d6d; }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 12px; font-weight: bold; font-size: 12px; }
-        
-        .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; }
-        .game-card { background: white; border: 1px solid #aaa; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .game-card:hover { border-color: #8a49a8; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .game-thumb { width: 100%; height: 120px; background: #333; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; }
-        
-        .play-btn { background: #0080ff; color: white; border: none; padding: 5px 15px; font-weight: bold; cursor: pointer; border-radius: 3px; }
-
-        /* LOADING MODAL */
-        #loading-screen { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 1000; color: white; text-align: center; padding-top: 20%;
+        body {
+            background: #ade8ff;
+            font-family: 'Verdana', sans-serif;
+            margin: 0; padding: 0;
+            text-align: center;
         }
-        .spinner { border: 8px solid #f3f3f3; border-top: 8px solid #8a49a8; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
+
+        /* UNIFIED HEADER */
+        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
+        .banner-img { width: 100%; }
+
+        .sub-nav {
+            background-color: #8a49a8;
+            padding: 8px 0;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
+        }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .sub-nav a:hover { text-decoration: underline; }
+
+        /* MAIN GRID */
+        .main-container {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+            padding: 20px 0;
+            text-align: left;
+        }
+
+        .box { 
+            background: #f0f0f0; 
+            border: 1px solid #a4a4a4; 
+            margin-bottom: 15px; 
+            padding: 10px;
+            font-size: 11px;
+        }
+        .box-header {
+            background: #e9e9e9;
+            border-bottom: 1px solid #a4a4a4;
+            padding: 4px;
+            font-weight: bold;
+            margin: -10px -10px 10px -10px;
+            color: #333;
+        }
+
+        /* GAMES GRID */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+        .game-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .game-card:hover { border-color: #8a49a8; background: #f9f9f9; }
+        .game-thumb {
+            width: 100%;
+            height: 100px;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-weight: bold;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+        .game-title { font-weight: bold; font-size: 11px; display: block; color: #0000ee; }
+        .game-stats { font-size: 9px; color: #666; margin-top: 3px; }
+
+        .search-input { width: 85%; padding: 3px; font-size: 10px; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <h1 id="loading-game-name">Launching Game...</h1>
-        <p>Connecting to BLYPE Servers...</p>
-        <button onclick="document.getElementById('loading-screen').style.display='none'" style="margin-top:20px;">Cancel</button>
-    </div>
 
     <div class="site-wrapper">
-        <div class="sub-nav">
-            <a href="index.html">Home</a> | <a href="games.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a> | <a href="settings.html">Settings</a>
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" alt="BLYPE" class="banner-img">
         </div>
 
-        <h2 style="padding: 20px; margin: 0;">Popular Experiences</h2>
-        
-        <div class="games-grid">
-            <div class="game-card" onclick="playGame('Frozen Peak Obby')">
-                <div class="game-thumb">FROZEN PEAK</div>
-                <b>Frozen Peak Obby</b><br>
-                <small>By ArcticBuilder</small><br><br>
-                <button class="play-btn">Play</button>
-            </div>
+        <div class="sub-nav" id="main-nav">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="marketplace.html">Marketplace</a> | 
+            <a href="character.html">Character</a> | 
+            <a href="forum.html">Forum</a> | 
+            <a href="help.html">Help</a>
+        </div>
 
-            <div class="game-card" onclick="playGame('Blype City RP')">
-                <div class="game-thumb">CITY LIFE</div>
-                <b>Blype City RP</b><br>
-                <small>By MayorVibe</small><br><br>
-                <button class="play-btn">Play</button>
-            </div>
+        <div class="main-container">
+            <aside>
+                <div class="box">
+                    <div class="box-header">Search Games</div>
+                    <input type="text" class="search-input" placeholder="Find a place...">
+                </div>
 
-            <div class="game-card" onclick="playGame('Sword Fight HQ')">
-                <div class="game-thumb">ARENA</div>
-                <b>Sword Fight HQ</b><br>
-                <small>By KnightBuild</small><br><br>
-                <button class="play-btn">Play</button>
-            </div>
+                <div class="box">
+                    <div class="box-header">Categories</div>
+                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+                        <li><a href="#">Featured</a></li>
+                        <li><a href="#">Top Rated</a></li>
+                        <li><a href="#">Obbies</a></li>
+                        <li><a href="#">Roleplay</a></li>
+                        <li><a href="#">Combat</a></li>
+                    </ul>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Statistics</div>
+                    Currently Playing: <b>12,402</b><br>
+                    Total Places: <b>84,291</b>
+                </div>
+            </aside>
+
+            <main>
+                <div class="box">
+                    <div class="box-header">All Experiences</div>
+                    <div class="games-grid">
+                        
+                        <div class="game-card" onclick="location.href='#'">
+                            <div class="game-thumb" style="background: linear-gradient(45deg, #1e3c72, #2a5298);">PREVIEW</div>
+                            <span class="game-title">Frozen Peak Obby</span>
+                            <div class="game-stats">
+                                Creator: ArcticBuilder<br>
+                                Plays: <b id="play-1">0</b>
+                            </div>
+                        </div>
+
+                        <div class="game-card" onclick="location.href='#'">
+                            <div class="game-thumb" style="background: linear-gradient(45deg, #d4145a, #fbb03b);">PREVIEW</div>
+                            <span class="game-title">Mega Fun Park</span>
+                            <div class="game-stats">
+                                Creator: Krew_Member<br>
+                                Plays: <b id="play-2">0</b>
+                            </div>
+                        </div>
+
+                        <div class="game-card" onclick="location.href='#'">
+                            <div class="game-thumb" style="background: linear-gradient(45deg, #009245, #fcee21);">PREVIEW</div>
+                            <span class="game-title">Sword Fighters X</span>
+                            <div class="game-stats">
+                                Creator: BladeMaster<br>
+                                Plays: <b id="play-3">0</b>
+                            </div>
+                        </div>
+
+                        <div class="game-card" onclick="location.href='#'">
+                            <div class="game-thumb" style="background: #222;">PREVIEW</div>
+                            <span class="game-title">The Void Experiment</span>
+                            <div class="game-stats">
+                                Creator: Unknown<br>
+                                Plays: <b id="play-4">0</b>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
-        function playGame(name) {
-            document.getElementById('loading-game-name').innerText = "Launching " + name + "...";
-            document.getElementById('loading-screen').style.display = 'block';
-            setTimeout(() => {
-                alert("This experience is currently under maintenance. Try again later!");
-                document.getElementById('loading-screen').style.display = 'none';
-            }, 3000);
+        // --- SMART FORMATTING ENGINE ---
+        function formatVal(num) {
+            num = parseInt(num);
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+            return num.toString();
         }
+
+        window.onload = function() {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+            if (isAdmin) {
+                const nav = document.getElementById('main-nav');
+                if(!nav.innerHTML.includes("admin.html")) nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
+            }
+
+            // Fill with random "Big Numbers" to show off formatting
+            document.getElementById('play-1').innerText = formatVal(12500000); // 12.5M
+            document.getElementById('play-2').innerText = formatVal(500200);   // 500.2K
+            document.getElementById('play-3').innerText = formatVal(1200000000); // 1.2B
+            document.getElementById('play-4').innerText = formatVal(4500);     // 4.5K
+        };
     </script>
 </body>
 </html>
