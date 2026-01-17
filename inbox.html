@@ -7,52 +7,50 @@
         body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
         .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        /* HEADER */
         .header { background: #005596; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
         .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
         .nav a { margin-right: 15px; text-decoration: none; color: blue; }
 
         .content { padding: 20px; }
-        .tab-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #005596; padding-bottom: 5px; }
+        .tab-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #005596; padding-bottom: 5px; color: #005596; }
 
-        /* REQUESTS & MESSAGES */
-        .box-item { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; background: #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
-        .box-item:hover { background: #f0f8ff; }
-        
+        .box-item { border: 1px solid #ccc; padding: 12px; margin-bottom: 10px; background: #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
         .msg-content { flex-grow: 1; margin-right: 20px; }
-        .msg-sender { font-weight: bold; color: #005596; font-size: 13px; display: block; margin-bottom: 5px; }
-        .msg-text { font-size: 12px; color: #333; }
+        .msg-sender { font-weight: bold; color: #333; font-size: 13px; display: block; margin-bottom: 3px; }
+        .msg-text { font-size: 12px; color: #444; font-style: italic; }
         .msg-date { font-size: 10px; color: #999; margin-top: 5px; }
 
-        /* BUTTONS */
-        .btn { padding: 5px 15px; border: none; cursor: pointer; font-weight: bold; border-radius: 3px; font-size: 11px; }
+        .btn { padding: 5px 12px; border: none; cursor: pointer; font-weight: bold; border-radius: 3px; font-size: 11px; }
         .btn-acc { background: #007a3d; color: white; }
         .btn-dec { background: #d92525; color: white; margin-left: 5px; }
-        .btn-view { background: #005596; color: white; }
-
-        .empty-hint { color: #999; font-style: italic; font-size: 13px; padding: 20px; text-align: center; }
+        .btn-view { background: #005596; color: white; margin-bottom: 5px; }
+        .btn-del { background: #888; color: white; }
+        
+        .action-group { display: flex; flex-direction: column; min-width: 90px; }
+        .empty-hint { color: #999; font-style: italic; font-size: 12px; padding: 15px; text-align: center; border: 1px dashed #ccc; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="header">MY INBOX</div>
+        <div class="header">MY MESSAGES</div>
         <div class="nav">
-            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="settings.html">Settings</a>
+            <a href="index.html">Home</a> | <a href="people.html">People</a>
         </div>
 
         <div class="content">
             <div class="tab-header">Friend Requests</div>
-            <div id="request-list">
-                <div class="empty-hint">Loading requests...</div>
-            </div>
+            <div id="request-list"></div>
 
-            <br><br>
+            <br>
 
-            <div class="tab-header">Messages</div>
-            <div id="message-list">
-                <div class="empty-hint">Loading messages...</div>
-            </div>
+            <div class="tab-header">Inbox (Received)</div>
+            <div id="message-list"></div>
+
+            <br>
+
+            <div class="tab-header">Sent Messages</div>
+            <div id="sent-list"></div>
         </div>
     </div>
 
@@ -63,78 +61,78 @@
         };
 
         function loadInbox() {
-            if (!BLYPE.me) {
-                document.querySelector('.content').innerHTML = "<h1>Please log in to view your inbox.</h1>";
-                return;
-            }
-
-            // 1. HANDLE FRIEND REQUESTS
+            if (!BLYPE.me) return;
+            const allMessages = JSON.parse(localStorage.getItem("blypo_messages") || "[]");
             const requests = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
-            const reqList = document.getElementById('request-list');
+
+            // --- RENDER REQUESTS ---
             const myReqs = requests.filter(r => r.to === BLYPE.me);
-
-            if (myReqs.length === 0) {
-                reqList.innerHTML = "<div class='empty-hint'>You have no pending friend requests.</div>";
-            } else {
-                reqList.innerHTML = myReqs.map(r => `
-                    <div class="box-item">
-                        <div class="msg-content">
-                            <span class="msg-sender">${r.from}</span>
-                            <span class="msg-text">sent you a friend request!</span>
-                        </div>
-                        <div>
-                            <button class="btn btn-acc" onclick="handleFriend('${r.from}', true)">Accept</button>
-                            <button class="btn btn-dec" onclick="handleFriend('${r.from}', false)">Decline</button>
-                        </div>
+            document.getElementById('request-list').innerHTML = myReqs.length ? myReqs.map(r => `
+                <div class="box-item">
+                    <div class="msg-content"><b>${r.from}</b> wants to be your friend!</div>
+                    <div>
+                        <button class="btn btn-acc" onclick="handleFriend('${r.from}', true)">Accept</button>
+                        <button class="btn btn-dec" onclick="handleFriend('${r.from}', false)">Decline</button>
                     </div>
-                `).join('');
-            }
+                </div>
+            `).join('') : "<div class='empty-hint'>No pending requests.</div>";
 
-            // 2. HANDLE MESSAGES
-            const messages = JSON.parse(localStorage.getItem("blypo_messages") || "[]");
-            const msgList = document.getElementById('message-list');
-            const myMsgs = messages.filter(m => m.to === BLYPE.me);
-
-            if (myMsgs.length === 0) {
-                msgList.innerHTML = "<div class='empty-hint'>Your message folder is empty.</div>";
-            } else {
-                msgList.innerHTML = myMsgs.reverse().map(m => `
-                    <div class="box-item">
-                        <div class="msg-content">
-                            <span class="msg-sender">From: ${m.from}</span>
-                            <div class="msg-text">"${m.content}"</div>
-                            <div class="msg-date">${m.date}</div>
-                        </div>
-                        <button class="btn btn-view" onclick="viewProfile('${m.from}')">Reply</button>
+            // --- RENDER RECEIVED MESSAGES ---
+            const received = allMessages.filter(m => m.to === BLYPE.me);
+            document.getElementById('message-list').innerHTML = received.length ? received.reverse().map(m => `
+                <div class="box-item">
+                    <div class="msg-content">
+                        <span class="msg-sender">From: ${m.from}</span>
+                        <div class="msg-text">"${m.content}"</div>
+                        <div class="msg-date">${m.date}</div>
                     </div>
-                `).join('');
-            }
+                    <div class="action-group">
+                        <button class="btn btn-view" onclick="go('${m.from}')">Reply</button>
+                        <button class="btn btn-del" onclick="deleteMsg('${m.date}')">Delete</button>
+                    </div>
+                </div>
+            `).join('') : "<div class='empty-hint'>No messages received.</div>";
+
+            // --- RENDER SENT MESSAGES ---
+            const sent = allMessages.filter(m => m.from === BLYPE.me);
+            document.getElementById('sent-list').innerHTML = sent.length ? sent.reverse().map(m => `
+                <div class="box-item" style="background: #fdfdfd; border-left: 4px solid #005596;">
+                    <div class="msg-content">
+                        <span class="msg-sender">To: ${m.to}</span>
+                        <div class="msg-text">"${m.content}"</div>
+                        <div class="msg-date">${m.date}</div>
+                    </div>
+                    <div class="action-group">
+                        <button class="btn btn-view" onclick="go('${m.to}')">Profile</button>
+                        <button class="btn btn-del" onclick="deleteMsg('${m.date}')">Delete</button>
+                    </div>
+                </div>
+            `).join('') : "<div class='empty-hint'>You haven't sent any messages yet.</div>";
         }
 
-        function handleFriend(sender, approved) {
-            let requests = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
-            
-            if (approved) {
-                // Update Both User Files
-                if (!BLYPE.db[BLYPE.me].friends) BLYPE.db[BLYPE.me].friends = [];
-                if (!BLYPE.db[sender].friends) BLYPE.db[sender].friends = [];
-                
-                // Add if not already there
-                if (!BLYPE.db[BLYPE.me].friends.includes(sender)) BLYPE.db[BLYPE.me].friends.push(sender);
-                if (!BLYPE.db[sender].friends.includes(BLYPE.me)) BLYPE.db[sender].friends.push(BLYPE.me);
-                
-                localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
-                alert("You are now friends with " + sender + "!");
-            }
-
-            // Remove the request record
-            requests = requests.filter(r => !(r.from === sender && r.to === BLYPE.me));
-            localStorage.setItem("blypo_requests", JSON.stringify(requests));
-            
+        function deleteMsg(dateId) {
+            if (!confirm("Delete this message?")) return;
+            let msgs = JSON.parse(localStorage.getItem("blypo_messages") || "[]");
+            msgs = msgs.filter(m => m.date !== dateId);
+            localStorage.setItem("blypo_messages", JSON.stringify(msgs));
             loadInbox();
         }
 
-        function viewProfile(name) {
+        function handleFriend(sender, approved) {
+            let reqs = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
+            if (approved) {
+                if (!BLYPE.db[BLYPE.me].friends) BLYPE.db[BLYPE.me].friends = [];
+                if (!BLYPE.db[sender].friends) BLYPE.db[sender].friends = [];
+                BLYPE.db[BLYPE.me].friends.push(sender);
+                BLYPE.db[sender].friends.push(BLYPE.me);
+                localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
+            }
+            reqs = reqs.filter(r => !(r.from === sender && r.to === BLYPE.me));
+            localStorage.setItem("blypo_requests", JSON.stringify(reqs));
+            loadInbox();
+        }
+
+        function go(name) {
             localStorage.setItem("profileTarget", name);
             window.location.href = "profile.html";
         }
