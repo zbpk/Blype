@@ -7,149 +7,147 @@
         body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
         .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        /* HEADER */
         .header { background: #005596; color: white; padding: 15px; font-weight: bold; font-size: 18px; display: flex; justify-content: space-between; }
         .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
         .nav a { margin-right: 15px; text-decoration: none; color: blue; }
 
         .profile-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; padding: 20px; }
 
-        /* LEFT COLUMN: AVATAR */
-        .profile-card { border: 1px solid #ccc; background: #f9f9f9; padding: 15px; text-align: center; }
-        .avatar-display { 
-            width: 250px; height: 320px; background: #fff; border: 1px inset #eee; 
-            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
-            font-size: 80px; color: #ccc; overflow: hidden;
-        }
-        .avatar-display img { max-width: 90%; }
+        /* LEFT COLUMN */
+        .avatar-card { border: 1px solid #ccc; background: #f9f9f9; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .avatar-display { width: 250px; height: 300px; background: #fff; border: 1px inset #eee; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
 
-        /* RIGHT COLUMN: INFO */
-        .info-section h1 { margin: 0; font-size: 24px; color: #333; }
-        .user-id { font-size: 11px; color: #999; margin-bottom: 10px; }
+        /* BADGES SECTION */
+        .section-title { font-size: 14px; font-weight: bold; border-bottom: 1px solid #ccc; margin: 20px 0 10px; padding-bottom: 5px; color: #333; }
+        .badge-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .badge-icon { 
+            width: 60px; height: 65px; background: #eee; border: 1px solid #ccc; 
+            text-align: center; font-size: 9px; padding-top: 5px; border-radius: 4px;
+        }
+        .badge-img { font-size: 24px; display: block; margin-bottom: 2px; }
+
+        /* FRIENDS SECTION */
+        .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .friend-box { border: 1px solid #eee; padding: 5px; text-align: center; font-size: 10px; cursor: pointer; background: #fff; }
+        .friend-box:hover { border-color: #005596; }
+        .friend-img { width: 40px; height: 40px; background: #ddd; margin: 0 auto 5px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        /* INFO SECTION */
+        .info-header h1 { margin: 0; font-size: 24px; }
+        .status-box { background: #fffdf0; border: 1px solid #e6db55; padding: 10px; margin: 10px 0; font-style: italic; font-size: 13px; }
         
-        .status-marquee { 
-            background: #fffdf0; border: 1px solid #e6db55; padding: 10px; 
-            margin: 15px 0; font-style: italic; font-size: 13px; color: #444;
-        }
-
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-box { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; font-size: 12px; }
-        .stat-box b { color: #005596; }
-
-        /* INVENTORY PREVIEW */
-        .inventory-preview { border: 1px solid #ccc; padding: 15px; }
-        .inventory-preview h3 { margin-top: 0; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .item-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .item-slot { border: 1px solid #eee; padding: 5px; text-align: center; font-size: 10px; background: #fff; }
-        .item-slot img { width: 50px; height: 50px; display: block; margin: 0 auto 5px; }
-
-        /* BADGES */
-        .badge { padding: 3px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; color: white; margin-left: 10px; vertical-align: middle; }
-        .admin-badge { background: #d92525; }
-        .member-badge { background: #005596; }
+        .item-slot img { width: 50px; height: 50px; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
         <div class="header">
-            <span id="page-title">PLAYER PROFILE</span>
-            <span id="online-status" style="font-size: 12px; color: #00ff00;">● Online</span>
+            <span>PLAYER PROFILE</span>
+            <span style="font-size:12px;">BLYPEME ver 2.0</span>
         </div>
         <div class="nav">
-            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="games.html">Games</a>
+            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="marketplace.html">Shop</a>
         </div>
 
         <div class="profile-layout">
             <div class="left-col">
-                <div class="profile-card">
-                    <div class="avatar-display" id="avatar-render">👤</div>
-                    <button style="width: 100%; padding: 10px; font-weight: bold; cursor: pointer;">Send Friend Request</button>
-                    <button style="width: 100%; padding: 10px; margin-top: 5px; cursor: pointer;">Message Player</button>
+                <div class="avatar-card">
+                    <div class="avatar-display">👤</div>
+                    <button style="width:100%; padding:8px; font-weight:bold; cursor:pointer;">Add Friend</button>
                 </div>
+
+                <div class="section-title">Friends (<span id="friend-count">0</span>)</div>
+                <div class="friends-grid" id="friends-list">
+                    </div>
             </div>
 
-            <div class="info-section">
-                <h1 id="username-display">Loading... <span id="rank-badge"></span></h1>
-                <div class="user-id">User ID: <span id="id-display">00000</span></div>
-
-                <div class="status-marquee" id="status-display">
-                    "This user hasn't set a status yet."
+            <div class="right-col">
+                <div class="info-header">
+                    <h1 id="p-username">User</h1>
+                    <div class="status-box" id="p-status">"Exploring BLYPEME!"</div>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-box">Blypo-Bux: <b id="bux-display">0</b></div>
-                    <div class="stat-box">Join Date: <b>Jan 16, 2026</b></div>
-                    <div class="stat-box">Forum Posts: <b>0</b></div>
-                    <div class="stat-box">Place Visits: <b>0</b></div>
-                </div>
+                <div class="section-title">Badges</div>
+                <div class="badge-list" id="badge-ribbon">
+                    </div>
 
-                <div class="inventory-preview">
-                    <h3>Inventory</h3>
-                    <div class="item-grid" id="inventory-grid">
-                        </div>
-                </div>
+                <div class="section-title">Inventory</div>
+                <div class="inv-grid" id="p-inv">
+                    </div>
             </div>
         </div>
     </div>
 
     <script>
-        function initProfile() {
-            // 1. Identify Target (Who are we looking at?)
-            const targetName = localStorage.getItem("profileTarget");
+        function loadProfile() {
+            const target = localStorage.getItem("profileTarget");
             const db = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+            if (!target || !db[target]) return;
 
-            if (!targetName || !db[targetName]) {
-                document.getElementById('username-display').innerText = "User Not Found";
-                return;
-            }
-
-            const user = db[targetName];
-
-            // 2. Load Text Data
-            document.getElementById('username-display').childNodes[0].nodeValue = targetName + " ";
-            document.getElementById('id-display').innerText = user.id || "N/A";
-            document.getElementById('bux-display').innerText = (user.bux || 0).toLocaleString();
-
-            // 3. Load Badge
-            const badgeSpan = document.getElementById('rank-badge');
-            if (user.isAdmin) {
-                badgeSpan.className = "badge admin-badge";
-                badgeSpan.innerText = "ADMINISTRATOR";
-            } else {
-                badgeSpan.className = "badge member-badge";
-                badgeSpan.innerText = "MEMBER";
-            }
-
-            // 4. Load Inventory (Instruction-compliant logic)
-            const grid = document.getElementById('inventory-grid');
-            grid.innerHTML = "";
-
-            if (user.inventory && user.inventory.length > 0) {
-                user.inventory.forEach(itemName => {
-                    const slot = document.createElement('div');
-                    slot.className = "item-slot";
-                    
-                    // Logic: Strip spaces + Front.png (e.g., "Brown Shirt" -> "BrownShirtFront.png")
-                    const imgFile = itemName.replace(/\s+/g, '') + "Front.png";
-                    
-                    slot.innerHTML = `
-                        <img src="${imgFile}" onerror="this.src='https://via.placeholder.com/50/ccc/fff?text=Item'">
-                        <b>${itemName}</b>
-                    `;
-                    grid.appendChild(slot);
+            const user = db[target];
+            document.getElementById('p-username').innerText = target;
+            
+            // 1. RENDER INVENTORY
+            const invGrid = document.getElementById('p-inv');
+            invGrid.innerHTML = "";
+            const itemsOwned = user.inventory ? user.inventory.length : 0;
+            if(user.inventory) {
+                user.inventory.forEach(item => {
+                    const img = item.replace(/\s+/g, '') + "Front.png";
+                    invGrid.innerHTML += `<div class="item-slot"><img src="${img}" onerror="this.src='https://via.placeholder.com/40'"><b>${item}</b></div>`;
                 });
-            } else {
-                grid.innerHTML = "<p style='grid-column: span 4; font-size:11px; color:#999;'>This user's inventory is empty.</p>";
             }
+
+            // 2. RENDER FRIENDS
+            const friendsList = document.getElementById('friends-list');
+            const friends = user.friends || []; // Assumes an array of names
+            document.getElementById('friend-count').innerText = friends.length;
+            friendsList.innerHTML = friends.length ? "" : "<p style='font-size:10px; color:#999;'>No friends yet.</p>";
+            friends.forEach(fName => {
+                friendsList.innerHTML += `
+                    <div class="friend-box" onclick="viewOther('${fName}')">
+                        <div class="friend-img">👤</div>
+                        ${fName}
+                    </div>`;
+            });
+
+            // 3. LIVE BADGE LOGIC
+            const ribbon = document.getElementById('badge-ribbon');
+            ribbon.innerHTML = "";
+
+            const badges = [];
+            // Admin Badge
+            if (user.isAdmin) badges.push({ name: "Admin", img: "🛡️" });
+            
+            // Friend Badges
+            if (friends.length >= 1000) badges.push({ name: "1K Friends", img: "👑" });
+            else if (friends.length >= 10) badges.push({ name: "Friendly", img: "🤝" });
+
+            // Store Item Badges
+            if (itemsOwned >= 100) badges.push({ name: "Collector", img: "🛍️" });
+            
+            // Placeholder Badges (Simulated stats)
+            if (user.visited) badges.push({ name: "Traveler", img: "🌎" });
+            if (user.madePlace) badges.push({ name: "Builder", img: "🔨" });
+
+            badges.forEach(b => {
+                ribbon.innerHTML += `
+                    <div class="badge-icon">
+                        <span class="badge-img">${b.img}</span>
+                        <b>${b.name}</b>
+                    </div>`;
+            });
         }
 
-        // Live refresh if admin edits this user in another tab
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'blypo_users') initProfile();
-        });
+        function viewOther(name) {
+            localStorage.setItem("profileTarget", name);
+            location.reload();
+        }
 
-        window.onload = initProfile;
+        window.onload = loadProfile;
     </script>
 </body>
 </html>
