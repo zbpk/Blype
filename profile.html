@@ -1,54 +1,207 @@
-const BLYPE = {
-    viewer: localStorage.getItem("currentUser"),
-    target: localStorage.getItem("profileTarget"),
-    db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
-};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPEME - Profile</title>
+    <style>
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
+        
+        /* HEADER */
+        .header { background: #005596; color: white; padding: 15px; font-weight: bold; font-size: 18px; display: flex; justify-content: space-between; }
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
 
-function loadProfile() {
-    const user = BLYPE.db[BLYPE.target];
-    if (!user) return;
+        .profile-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; padding: 20px; }
 
-    document.getElementById('p-username').innerText = BLYPE.target;
+        /* LEFT COLUMN */
+        .avatar-card { border: 1px solid #ccc; background: #f9f9f9; padding: 15px; text-align: center; }
+        .avatar-display { width: 250px; height: 300px; background: #fff; border: 1px inset #eee; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
 
-    // Load Friend Requests Database
-    let requests = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
-    const viewerData = BLYPE.db[BLYPE.viewer] || {};
-    const viewerFriends = viewerData.friends || [];
-    const actionDiv = document.getElementById('social-actions');
+        /* BUTTONS */
+        .social-btn { width: 100%; padding: 10px; font-weight: bold; cursor: pointer; margin-top: 5px; border: 1px solid #888; border-radius: 3px; font-size: 12px; }
+        .btn-friend { background: #007a3d; color: white; border-color: #005c2e; }
+        .btn-msg { background: #f4f4f4; color: #333; }
+        .btn-disabled { background: #ccc !important; color: #666 !important; cursor: not-allowed; border-color: #999; }
 
-    // Check if a request is already sent
-    const sentRequest = requests.find(r => r.from === BLYPE.viewer && r.to === BLYPE.target);
-    const receivedRequest = requests.find(r => r.from === BLYPE.target && r.to === BLYPE.viewer);
+        /* MODALS */
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; background: white; border: 2px solid #000; z-index: 1000; padding: 20px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; padding: 5px; box-sizing: border-box; resize: none; }
 
-    if (BLYPE.viewer === BLYPE.target) {
-        actionDiv.innerHTML = `<button class="social-btn btn-disabled">Viewing Your Profile</button>`;
-    } else if (viewerFriends.includes(BLYPE.target)) {
-        actionDiv.innerHTML = `<button class="social-btn btn-disabled">✓ Friends</button>
-                               <button class="social-btn btn-msg" onclick="openMsg()">Message</button>`;
-    } else if (sentRequest) {
-        actionDiv.innerHTML = `<button class="social-btn btn-disabled">Request Pending...</button>`;
-    } else if (receivedRequest) {
-        actionDiv.innerHTML = `<button class="social-btn btn-friend" onclick="acceptFriend('${BLYPE.target}')">Accept Request</button>`;
-    } else {
-        actionDiv.innerHTML = `<button class="social-btn btn-friend" onclick="sendFriendRequest()">Add Friend</button>
-                               <button class="social-btn btn-msg" onclick="openMsg()">Message</button>`;
-    }
+        /* SECTIONS */
+        .section-title { font-size: 14px; font-weight: bold; border-bottom: 1px solid #ccc; margin: 20px 0 10px; padding-bottom: 5px; color: #333; }
+        
+        /* BADGES */
+        .badge-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .badge-icon { width: 65px; height: 75px; background: #f0f0f0; border: 1px solid #ccc; text-align: center; font-size: 9px; padding: 5px; border-radius: 4px; box-sizing: border-box; }
+        .badge-emoji { font-size: 24px; display: block; margin-bottom: 2px; }
 
-    // (Rest of your render logic for friends/badges/inventory remains the same)
-}
+        /* FRIENDS */
+        .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .friend-box { border: 1px solid #eee; padding: 5px; text-align: center; font-size: 10px; cursor: pointer; background: #fff; }
+        .friend-box:hover { background: #f0f8ff; border-color: #005596; }
 
-function sendFriendRequest() {
-    if (!BLYPE.viewer) return alert("Log in first!");
-    let requests = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
-    
-    requests.push({
-        from: BLYPE.viewer,
-        to: BLYPE.target,
-        status: "pending",
-        id: Date.now()
-    });
+        /* INVENTORY */
+        .inv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .item-slot { border: 1px solid #eee; padding: 5px; text-align: center; font-size: 10px; background: #fff; }
+        .item-slot img { width: 50px; height: 50px; display: block; margin: 0 auto 5px; }
+    </style>
+</head>
+<body>
 
-    localStorage.setItem("blypo_requests", JSON.stringify(requests));
-    alert("Friend request sent to " + BLYPE.target + "!");
-    location.reload();
-}
+    <div class="modal-overlay" id="overlay" onclick="closeMsg()"></div>
+    <div class="modal" id="msg-modal">
+        <h3 id="msg-title" style="margin-top:0;">Send Message</h3>
+        <textarea id="msg-text" placeholder="Type your message here..."></textarea>
+        <button class="social-btn btn-friend" onclick="sendMessage()">Send Message</button>
+        <button class="social-btn" onclick="closeMsg()">Cancel</button>
+    </div>
+
+    <div class="site-wrapper">
+        <div class="header">
+            <span>USER PROFILE</span>
+            <span id="online-tag" style="font-size:12px; color:#00ff00;">● Online</span>
+        </div>
+        <div class="nav">
+            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="marketplace.html">Catalog</a> | <a href="inbox.html">Inbox</a>
+        </div>
+
+        <div class="profile-layout">
+            <div class="left-col">
+                <div class="avatar-card">
+                    <div class="avatar-display" id="p-avatar">👤</div>
+                    <div id="social-actions">
+                        </div>
+                </div>
+
+                <div class="section-title">Friends (<span id="friend-count">0</span>)</div>
+                <div class="friends-grid" id="friends-list"></div>
+            </div>
+
+            <div class="right-col">
+                <h1 id="p-username" style="margin:0;">Loading...</h1>
+                <p id="p-id" style="font-size:11px; color:#999; margin: 5px 0 15px 0;">User ID: 00000</p>
+
+                <div class="section-title">Badges</div>
+                <div class="badge-list" id="badge-ribbon"></div>
+
+                <div class="section-title">Statistics</div>
+                <div style="font-size:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f9f9f9; padding:10px; border:1px solid #eee;">
+                    <span>Blypo-Bux: <b id="p-bux">0</b></span>
+                    <span>Join Date: <b>Jan 16, 2026</b></span>
+                </div>
+
+                <div class="section-title">Inventory</div>
+                <div class="inv-grid" id="p-inv"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BLYPE = {
+            me: localStorage.getItem("currentUser"),
+            target: localStorage.getItem("profileTarget"),
+            users: JSON.parse(localStorage.getItem("blypo_users") || "{}"),
+            requests: JSON.parse(localStorage.getItem("blypo_requests") || "[]")
+        };
+
+        function init() {
+            const user = BLYPE.users[BLYPE.target];
+            if (!user) {
+                document.body.innerHTML = "<h1>User Not Found</h1><a href='index.html'>Home</a>";
+                return;
+            }
+
+            // 1. Basic Info
+            document.getElementById('p-username').innerText = BLYPE.target;
+            document.getElementById('p-id').innerText = "User ID: " + (user.id || "Unknown");
+            document.getElementById('p-bux').innerText = (user.bux || 0).toLocaleString();
+            document.getElementById('msg-title').innerText = "Send Message to " + BLYPE.target;
+
+            // 2. Friend Button Logic (The "Approval" System)
+            const myFriends = BLYPE.users[BLYPE.me]?.friends || [];
+            const actionDiv = document.getElementById('social-actions');
+            
+            const sentReq = BLYPE.requests.find(r => r.from === BLYPE.me && r.to === BLYPE.target);
+            const gotReq = BLYPE.requests.find(r => r.from === BLYPE.target && r.to === BLYPE.me);
+
+            if (BLYPE.me === BLYPE.target) {
+                actionDiv.innerHTML = `<button class="social-btn btn-disabled">This is you!</button>`;
+            } else if (myFriends.includes(BLYPE.target)) {
+                actionDiv.innerHTML = `<button class="social-btn btn-disabled">✓ Friends</button>
+                                       <button class="social-btn btn-msg" onclick="openMsg()">Message</button>`;
+            } else if (sentReq) {
+                actionDiv.innerHTML = `<button class="social-btn btn-disabled">Pending Approval...</button>`;
+            } else if (gotReq) {
+                actionDiv.innerHTML = `<button class="social-btn btn-friend" onclick="window.location.href='inbox.html'">Accept Request</button>`;
+            } else {
+                actionDiv.innerHTML = `<button class="social-btn btn-friend" onclick="sendRequest()">Add Friend</button>
+                                       <button class="social-btn btn-msg" onclick="openMsg()">Message</button>`;
+            }
+
+            // 3. Friends List
+            const fGrid = document.getElementById('friends-list');
+            const friends = user.friends || [];
+            document.getElementById('friend-count').innerText = friends.length;
+            fGrid.innerHTML = friends.map(f => `
+                <div class="friend-box" onclick="view('${f}')">
+                    <div style="font-size:20px;">👤</div>${f}
+                </div>`).join('') || "<p style='font-size:10px; color:#999;'>No friends yet.</p>";
+
+            // 4. Badges (The Automatic Scanner)
+            const ribbon = document.getElementById('badge-ribbon');
+            let badgeHTML = "";
+            if (user.isAdmin) badgeHTML += `<div class="badge-icon"><span class="badge-emoji">🛡️</span><b>Admin</b></div>`;
+            if (friends.length >= 1000) badgeHTML += `<div class="badge-icon"><span class="badge-emoji">👑</span><b>1K Friends</b></div>`;
+            else if (friends.length >= 10) badgeHTML += `<div class="badge-icon"><span class="badge-emoji">🤝</span><b>Friendly</b></div>`;
+            if ((user.inventory || []).length >= 100) badgeHTML += `<div class="badge-icon"><span class="badge-emoji">🛍️</span><b>Collector</b></div>`;
+            ribbon.innerHTML = badgeHTML || "<p style='font-size:10px; color:#999;'>No badges earned yet.</p>";
+
+            // 5. Inventory (Instruction Compliant)
+            const invGrid = document.getElementById('p-inv');
+            invGrid.innerHTML = (user.inventory || []).map(item => {
+                const img = item.replace(/\s+/g, '') + "Front.png";
+                return `<div class="item-slot"><img src="${img}" onerror="this.src='https://via.placeholder.com/40?text=Item'"><b>${item}</b></div>`;
+            }).join('') || "<p style='font-size:10px; color:#999;'>Empty inventory.</p>";
+        }
+
+        // --- SOCIAL LOGIC ---
+        function sendRequest() {
+            if (!BLYPE.me) return alert("Log in to send requests!");
+            BLYPE.requests.push({ from: BLYPE.me, to: BLYPE.target, status: "pending", id: Date.now() });
+            localStorage.setItem("blypo_requests", JSON.stringify(BLYPE.requests));
+            alert("Request sent!");
+            location.reload();
+        }
+
+        function openMsg() { 
+            if (!BLYPE.me) return alert("Log in to message!");
+            document.getElementById('msg-modal').style.display = 'block'; 
+            document.getElementById('overlay').style.display = 'block'; 
+        }
+
+        function closeMsg() { 
+            document.getElementById('msg-modal').style.display = 'none'; 
+            document.getElementById('overlay').style.display = 'none'; 
+        }
+
+        function sendMessage() {
+            const text = document.getElementById('msg-text').value.trim();
+            if (!text) return;
+            let inbox = JSON.parse(localStorage.getItem("blypo_messages") || "[]");
+            inbox.push({ from: BLYPE.me, to: BLYPE.target, content: text, date: new Date().toLocaleString() });
+            localStorage.setItem("blypo_messages", JSON.stringify(inbox));
+            alert("Message sent!");
+            closeMsg();
+        }
+
+        function view(name) {
+            localStorage.setItem("profileTarget", name);
+            location.reload();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
