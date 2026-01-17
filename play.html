@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPEME - Playing Game</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Verdana', sans-serif; margin: 0; overflow: hidden; }
+        #loading-screen { position: absolute; width: 100%; height: 100%; background: #005596; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+        .progress-bar { width: 300px; height: 20px; background: #fff; border: 2px solid #000; margin-top: 20px; }
+        #progress-fill { width: 0%; height: 100%; background: #00ff00; }
+        
+        #game-world { width: 100vw; height: 100vh; background: #87ceeb; display: none; flex-direction: column; align-items: center; justify-content: flex-end; }
+        .ground { width: 100%; height: 20%; background: #228b22; }
+        .player-model { font-size: 80px; margin-bottom: -10px; transition: 0.5s; }
+        .game-ui { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 10px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <h1 id="load-title">Loading Game...</h1>
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <p id="load-status">Requesting Server...</p>
+    </div>
+
+    <div id="game-world">
+        <div class="game-ui">
+            <b>Playing:</b> <span id="game-name">...</span><br>
+            <b>Player:</b> <span id="player-name">Guest</span>
+        </div>
+        <div class="player-model" id="char">👤</div>
+        <div class="ground"></div>
+        <button style="position:absolute; bottom:20px; right:20px;" onclick="window.location.href='games.html'">Leave Game</button>
+    </div>
+
+    <script>
+        const game = localStorage.getItem("currentGame") || "Unknown Game";
+        const user = localStorage.getItem("currentUser") || "Guest";
+
+        function startLoading() {
+            document.getElementById('load-title').innerText = "Joining " + game + "...";
+            document.getElementById('game-name').innerText = game;
+            document.getElementById('player-name').innerText = user;
+
+            let progress = 0;
+            const bar = document.getElementById('progress-fill');
+            const status = document.getElementById('load-status');
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                bar.style.width = progress + "%";
+
+                if (progress < 30) status.innerText = "Connecting to Server...";
+                else if (progress < 60) status.innerText = "Loading Bricks...";
+                else if (progress < 90) status.innerText = "Spawning " + user + "...";
+                else {
+                    clearInterval(interval);
+                    setTimeout(entryGame, 500);
+                }
+            }, 300);
+        }
+
+        function entryGame() {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('game-world').style.display = 'flex';
+            
+            // Simple "Character Fall" Animation
+            const char = document.getElementById('char');
+            char.style.transform = "translateY(-500px)";
+            setTimeout(() => {
+                char.style.transform = "translateY(0)";
+            }, 100);
+        }
+
+        window.onload = startLoading;
+    </script>
+</body>
+</html>
