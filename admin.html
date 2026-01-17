@@ -2,175 +2,197 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Console</title>
+    <title>BLYPEME - Super Admin Console</title>
     <script>
+        // Security Gate
         if (localStorage.getItem("isAdmin") !== "true") window.location.replace("index.html");
     </script>
     <style>
         :root {
-            --god-black: #050505; --god-gold: #ffd700; --god-red: #ff3333;
-            --god-blue: #008cff; --god-green: #00ff44;
+            --classic-grey: #d4d0c8;
+            --classic-dark: #808080;
+            --win-blue: #000080;
         }
 
-        body { background: #111; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 0; color: #eee; }
-        .site-wrapper { width: 1100px; margin: 0 auto; border: 2px solid var(--god-gold); background: #1a1a1a; min-height: 100vh; }
+        body { background: #3a6ea5; font-family: 'Tahoma', sans-serif; margin: 0; padding: 20px; }
         
-        /* HEADER */
-        .admin-header { background: var(--god-black); padding: 25px; border-bottom: 3px solid var(--god-gold); }
-        .admin-header h1 { margin: 0; font-size: 28px; color: var(--god-gold); text-shadow: 0 0 10px var(--god-gold); }
-
-        .sub-nav { background: #222; padding: 12px; font-size: 12px; display: flex; justify-content: space-between; }
-        .sub-nav a { color: var(--god-blue); text-decoration: none; font-weight: bold; }
-
-        /* ACCORDION */
-        .admin-section { border: 1px solid #333; margin: 15px 20px; background: #252525; }
-        .dropdown-header {
-            background: #333; padding: 15px; font-weight: bold; cursor: pointer;
-            display: flex; justify-content: space-between; color: var(--god-gold);
-            border-bottom: 1px solid #444;
+        /* THE "WINDOW" LOOK */
+        .window { 
+            width: 900px; margin: 0 auto; background: var(--classic-grey); 
+            border: 2px solid #fff; border-right-color: #404040; border-bottom-color: #404040;
+            box-shadow: 2px 2px 0 #000;
         }
-        .content { display: none; padding: 25px; background: #1e1e1e; }
-        .content.active { display: block; }
+        .title-bar { 
+            background: var(--win-blue); color: white; padding: 4px; font-weight: bold; 
+            font-size: 13px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .close-btn { background: var(--classic-grey); border: 1px solid #fff; width: 16px; height: 14px; color: #000; font-size: 9px; text-align: center; line-height: 12px; cursor: pointer; }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        label { display: block; font-size: 10px; color: #888; margin-bottom: 8px; text-transform: uppercase; }
-        input, textarea, select { background: #000; color: var(--god-green); border: 1px solid #444; padding: 10px; width: 100%; box-sizing: border-box; margin-bottom: 15px; }
+        .menu-bar { padding: 4px; border-bottom: 1px solid var(--classic-dark); font-size: 11px; }
+        .menu-bar span { margin-right: 15px; cursor: pointer; }
 
-        .btn { padding: 12px; border: none; font-weight: bold; cursor: pointer; border-radius: 2px; text-transform: uppercase; width: 100%; }
-        .btn-gold { background: var(--god-gold); color: #000; }
-        .btn-blue { background: var(--god-blue); color: #fff; }
+        /* CONTENT GRID */
+        .layout { display: grid; grid-template-columns: 250px 1fr; gap: 10px; padding: 10px; }
 
-        .console { background: #000; color: var(--god-green); padding: 15px; font-size: 11px; height: 120px; overflow-y: scroll; border: 1px solid #333; margin: 20px; }
+        /* PLAYER LIST BOX */
+        .player-box { background: #fff; border: 2px inset #eee; height: 400px; overflow-y: scroll; padding: 5px; }
+        .player-item { padding: 5px; border-bottom: 1px solid #eee; font-size: 12px; display: flex; justify-content: space-between; }
+        .player-item:hover { background: #000080; color: white; cursor: pointer; }
+
+        /* COMMAND PANEL */
+        .control-panel { background: #fff; border: 2px inset #eee; padding: 15px; text-align: left; }
+        
+        h3 { margin-top: 0; font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .cmd-group { margin-bottom: 20px; }
+        .cmd-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+
+        /* CLASSIC BUTTONS */
+        button { 
+            background: var(--classic-grey); border: 2px solid #fff; border-right-color: #404040; 
+            border-bottom-color: #404040; padding: 4px 10px; font-size: 11px; cursor: pointer;
+        }
+        button:active { border: 2px inset #404040; padding: 5px 9px 3px 11px; }
+        .btn-red { color: #800000; font-weight: bold; }
+
+        input { border: 2px inset #eee; padding: 4px; font-size: 11px; width: 100%; box-sizing: border-box; }
+
+        .status-bar { border-top: 1px solid var(--classic-dark); padding: 3px; font-size: 11px; background: var(--classic-grey); display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
-<div class="site-wrapper">
-    <div class="admin-header">
-        <h1>ADMIN CONSOLE</h1>
-        <div style="font-size:11px; color:#666;">KERNEL_ACCESS: LEVEL_10 | DATABASE: BLYPEME_PROD</div>
+<div class="window">
+    <div class="title-bar">
+        <span>BLYPEME Admin Console (Logged in as: ADMIN)</span>
+        <div class="close-btn" onclick="window.location.href='index.html'">X</div>
+    </div>
+    
+    <div class="menu-bar">
+        <span>File</span> <span>Edit</span> <span>Database</span> <span onclick="refreshPlayers()">Refresh_Players</span> <span style="color:red" onclick="toggleSlock()">[SLOCK: OFF]</span>
     </div>
 
-    <div class="sub-nav">
-        <a href="index.html">← RETURN TO SITE</a>
-        <div id="clock">00:00:00</div>
-    </div>
+    <div class="layout">
+        <div class="player-box" id="player-list">
+            </div>
 
-    <div class="admin-section">
-        <div class="dropdown-header" onclick="toggle(this)">📦 ITEM & ASSET INJECTION <span>[+]</span></div>
-        <div class="content">
-            <div class="grid-2">
-                <div>
-                    <label>Target Username</label>
-                    <input type="text" id="target-player" placeholder="Enter username...">
-                    
-                    <label>Select Item to Grant</label>
-                    <select id="item-to-give">
-                        <option value="brown-shirt|Brown Shirt">Brown Shirt (Common)</option>
-                        <option value="gold-crown|Golden Crown">Golden Crown (Legendary)</option>
-                        <option value="void-star|The Void Star">The Void Star (Artifact)</option>
-                        <option value="admin-cape|Admin Cape">Admin Cape (Dev-Only)</option>
-                        <option value="ban-hammer|Ban Hammer">Ban Hammer (God-Item)</option>
-                    </select>
-                    <button class="btn btn-gold" onclick="injectItem()">INJECT ITEM TO INVENTORY</button>
+        <div class="control-panel">
+            <div class="cmd-group">
+                <h3>Selected Target: <span id="target-name" style="color:blue;">None</span></h3>
+                <input type="text" id="custom-reason" placeholder="Action Reason (Ban/Kick/Warning)...">
+                
+                <div class="cmd-row">
+                    <button class="btn-red" onclick="modAction('ban')">BAN</button>
+                    <button class="btn-red" onclick="modAction('kick')">KICK</button>
+                    <button onclick="modAction('warn')">WARN</button>
+                    <button onclick="modAction('kill')">KILL</button>
+                    <button onclick="modAction('respawn')">RESPAWN</button>
                 </div>
-                <div>
-                    <label>Quick B$ Gift</label>
-                    <input type="number" id="quick-bux" placeholder="Amount...">
-                    <button class="btn btn-blue" onclick="giftBux()">GRANT CURRENCY</button>
+            </div>
+
+            <div class="cmd-group">
+                <h3>Visual Effects (Aesthetics)</h3>
+                <div class="cmd-row">
+                    <button onclick="effect('fire')">FIRE</button>
+                    <button onclick="effect('sparkles')">SPARKLES</button>
+                    <button onclick="effect('smoke')">SMOKE</button>
+                    <button onclick="effect('ff')">FORCEFIELD</button>
+                    <button onclick="effect('unff')">REMOVE ALL</button>
+                </div>
+            </div>
+
+            <div class="cmd-group">
+                <h3>Asset Injection</h3>
+                <div class="cmd-row">
+                    <button onclick="giveAsset('B$ 1000')">GIVE 1K B$</button>
+                    <button onclick="giveAsset('Admin Cape')">GIVE CAPE</button>
+                    <button onclick="giveAsset('Crown')">GIVE CROWN</button>
+                </div>
+            </div>
+
+            <div class="cmd-group">
+                <h3>Global Message</h3>
+                <input type="text" id="m-text" placeholder="Message text...">
+                <div class="cmd-row">
+                    <button style="width:100%" onclick="sendGlobal()">ANNOUNCE TO SERVER</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="admin-section">
-        <div class="dropdown-header" onclick="toggle(this)">🌐 SITE-WIDE COMMANDS <span>[+]</span></div>
-        <div class="content">
-            <label>Site Broadcast</label>
-            <input type="text" id="alert-msg" placeholder="Warning: Server restart in 5 minutes...">
-            <button class="btn btn-blue" onclick="broadcast()">SEND ALERT</button>
-        </div>
+    <div class="status-bar">
+        <span id="sys-status">Ready.</span>
+        <span id="user-count">Users: 0</span>
     </div>
-
-    <div class="console" id="log">SYSTEM READY...</div>
 </div>
 
 <script>
-    function toggle(header) {
-        const content = header.nextElementSibling;
-        content.classList.toggle('active');
-        header.querySelector('span').innerText = content.classList.contains('active') ? '[-]' : '[+]';
+    let selectedUser = "";
+
+    function refreshPlayers() {
+        const users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        const list = document.getElementById('player-list');
+        list.innerHTML = "";
+        let count = 0;
+
+        for (let u in users) {
+            count++;
+            const div = document.createElement('div');
+            div.className = "player-item";
+            div.innerHTML = `<span>${u}</span> <span style="font-size:9px; color:gray;">B$: ${users[u].bux}</span>`;
+            div.onclick = () => selectUser(u);
+            list.appendChild(div);
+        }
+        document.getElementById('user-count').innerText = "Users: " + count;
     }
 
-    function log(msg) {
-        const l = document.getElementById('log');
-        l.innerHTML += `<br>> ${msg}`;
-        l.scrollTop = l.scrollHeight;
+    function selectUser(name) {
+        selectedUser = name;
+        document.getElementById('target-name').innerText = name;
+        setStatus(`Focused on user: ${name}`);
     }
 
-    // --- ITEM INJECTION LOGIC ---
-    function injectItem() {
-        const target = document.getElementById('target-player').value.trim();
-        const itemData = document.getElementById('item-to-give').value.split('|');
-        const itemId = itemData[0];
-        const itemName = itemData[1];
+    function setStatus(msg) {
+        document.getElementById('sys-status').innerText = msg;
+    }
 
-        if (!target) return alert("Identify target user.");
-
-        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-
-        if (users[target]) {
-            // Check for inventory property, create if missing
-            if (!users[target].inventory) users[target].inventory = [];
-            
-            // Add item if they don't have it
-            if (!users[target].inventory.some(i => i.id === itemId)) {
-                users[target].inventory.push({id: itemId, name: itemName});
-                localStorage.setItem("blypo_users", JSON.stringify(users));
-                
-                // If it's you, update current session inventory too
-                if (localStorage.getItem("currentUser") === target) {
-                    let myItems = JSON.parse(localStorage.getItem("ownedItems") || "[]");
-                    myItems.push({id: itemId, name: itemName});
-                    localStorage.setItem("ownedItems", JSON.stringify(myItems));
-                }
-                
-                log(`INJECTOR: Granted [${itemName}] to user ${target}.`);
-                alert(`Successfully injected ${itemName}!`);
-            } else {
-                alert("User already owns this item.");
+    function modAction(type) {
+        if(!selectedUser) return alert("Select a player first!");
+        
+        if(type === 'ban') {
+            let blacklist = JSON.parse(localStorage.getItem("blypo_blacklist") || "[]");
+            if(!blacklist.includes(selectedUser)) {
+                blacklist.push(selectedUser);
+                localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
+                setStatus(`TERMINATED: ${selectedUser}`);
             }
         } else {
-            alert("Player not found in database.");
+            setStatus(`CMD: ${type.toUpperCase()} executed on ${selectedUser}`);
         }
+        alert(`Command [${type}] sent to server for ${selectedUser}`);
     }
 
-    function giftBux() {
-        const target = document.getElementById('target-player').value.trim();
-        const amt = parseInt(document.getElementById('quick-bux').value);
-        if(!target || isNaN(amt)) return alert("Invalid Input.");
-
-        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-        if(users[target]) {
-            users[target].bux += amt;
-            localStorage.setItem("blypo_users", JSON.stringify(users));
-            if(localStorage.getItem("currentUser") === target) localStorage.setItem("blypoBux", users[target].bux);
-            log(`ECON: Gifted ${amt} B$ to ${target}.`);
-            alert("Currency Granted.");
-        }
+    function effect(type) {
+        if(!selectedUser) return alert("Select a player!");
+        setStatus(`VISUAL: Applied ${type} to ${selectedUser}`);
     }
 
-    function broadcast() {
-        const m = document.getElementById('alert-msg').value;
-        localStorage.setItem("globalAlert", m);
-        log(`BROADCAST: ${m}`);
+    function giveAsset(item) {
+        if(!selectedUser) return alert("Select a player!");
+        setStatus(`ECONOMY: Granted ${item} to ${selectedUser}`);
     }
 
-    setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }, 1000);
+    function sendGlobal() {
+        const msg = document.getElementById('m-text').value;
+        localStorage.setItem("globalAlert", msg);
+        setStatus("GLOBAL: Announcement sent.");
+    }
 
-    window.onload = () => log("Admin Console Authorized.");
+    function toggleSlock() {
+        alert("SERVER LOCK (SLOCK) ACTIVATED. No new players can join.");
+        setStatus("SYSTEM: Server is now locked.");
+    }
+
+    window.onload = refreshPlayers;
 </script>
 
 </body>
