@@ -4,152 +4,41 @@
     <meta charset="UTF-8">
     <title>BLYPEME - Games</title>
     <style>
-        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; }
         .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
-        
-        /* HEADER */
-        .header { background: #007a3d; color: white; padding: 15px; font-weight: bold; font-size: 18px; display: flex; justify-content: space-between; }
+        .header { background: #005596; color: white; padding: 15px; font-weight: bold; }
         .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
         .nav a { margin-right: 15px; text-decoration: none; color: blue; }
-
-        .game-container { padding: 20px; }
         
-        /* SEARCH & FILTER */
-        .filter-bar { background: #f0f0f0; padding: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 12px; }
-
-        /* GAME GRID */
-        .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        
-        .game-card { 
-            border: 1px solid #ccc; padding: 10px; background: #fff; cursor: pointer; transition: 0.2s; 
-            position: relative; overflow: hidden;
-        }
-        .game-card:hover { border-color: #007a3d; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        
-        .game-thumb { 
-            width: 100%; height: 150px; background: #eee; margin-bottom: 10px; 
-            display: flex; align-items: center; justify-content: center; font-size: 40px;
-            border: 1px solid #ddd;
-        }
-        
-        .game-title { font-weight: bold; font-size: 14px; color: #333; display: block; }
-        .game-creator { font-size: 10px; color: #777; }
-        
-        .player-count { 
-            font-size: 10px; color: #007a3d; font-weight: bold; margin-top: 5px; 
-            display: flex; align-items: center; gap: 4px;
-        }
-        .online-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; display: inline-block; }
-
-        /* PLAY OVERLAY (Simulated Loading) */
-        #play-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); color: white; z-index: 1000;
-            flex-direction: column; align-items: center; justify-content: center;
-        }
-        .loading-bar { width: 300px; height: 10px; background: #333; border-radius: 5px; margin-top: 20px; overflow: hidden; }
-        .progress { width: 0%; height: 100%; background: #00ff00; transition: width 0.1s; }
+        .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; }
+        .game-card { border: 1px solid #ccc; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .game-card:hover { border-color: #005596; background: #f0f8ff; }
+        .game-thumb { width: 100%; height: 120px; background: #ddd; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #777; }
     </style>
 </head>
 <body>
-
-    <div id="play-overlay">
-        <h1 id="loading-title">Joining Game...</h1>
-        <p id="loading-status">Requesting Server...</p>
-        <div class="loading-bar"><div class="progress" id="progress-bar"></div></div>
-    </div>
-
     <div class="site-wrapper">
-        <div class="header">
-            <span>GAMES</span>
-            <span id="user-bux" style="font-size: 12px; font-weight: normal;">B$: 0</span>
-        </div>
+        <div class="header">GAMES</div>
         <div class="nav">
-            <a href="index.html">Home</a> | <a href="games.html"><b>Games</b></a> | <a href="marketplace.html">Marketplace</a> | <a href="forum.html">Forum</a>
+            <a href="index.html">Home</a> | <a href="catalog.html">Catalog</a>
         </div>
-
-        <div class="game-container">
-            <div class="filter-bar">
-                <span>Showing: <b>All Games</b></span>
-                <span>Sorted by: <b>Popularity</b></span>
+        <div class="games-grid">
+            <div class="game-card" onclick="playGame('Happy Home')">
+                <div class="game-thumb">🏠</div>
+                <b>Happy Home</b><br><span style="font-size:10px;">By Admin</span>
             </div>
-
-            <div class="game-grid" id="game-list">
-                <div class="game-card" onclick="joinGame('Blypo City', 'Admin_Krew')">
-                    <div class="game-thumb">🏙️</div>
-                    <span class="game-title">Blypo City [RP]</span>
-                    <span class="game-creator">By Admin_Krew</span>
-                    <div class="player-count"><span class="online-dot"></span> 12 Players Online</div>
-                </div>
-
-                <div class="game-card" onclick="joinGame('Sword Fight on the Heights', 'Sam')">
-                    <div class="game-thumb">⚔️</div>
-                    <span class="game-title">Sword Fight on the Heights</span>
-                    <span class="game-creator">By Sam</span>
-                    <div class="player-count"><span class="online-dot"></span> 4 Players Online</div>
-                </div>
-
-                <div class="game-card" onclick="joinGame('Base Wars', 'Blypeme_Dev')">
-                    <div class="game-thumb">🛡️</div>
-                    <span class="game-title">Base Wars</span>
-                    <span class="game-creator">By Blypeme_Dev</span>
-                    <div class="player-count"><span class="online-dot"></span> 0 Players Online</div>
-                </div>
+            <div class="game-card" onclick="playGame('Brick Battle')">
+                <div class="game-thumb">⚔️</div>
+                <b>Brick Battle</b><br><span style="font-size:10px;">By Bill</span>
             </div>
         </div>
     </div>
 
     <script>
-        const BLYPE = {
-            session: localStorage.getItem("currentUser"),
-            db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
-        };
-
-        function initGames() {
-            if (BLYPE.session && BLYPE.db[BLYPE.session]) {
-                document.getElementById('user-bux').innerText = "B$: " + BLYPE.db[BLYPE.session].bux.toLocaleString();
-            }
+        function playGame(title) {
+            localStorage.setItem("currentGame", title);
+            window.location.href = "play.html";
         }
-
-        function joinGame(gameName, creator) {
-            if (!BLYPE.session) return alert("You must be logged in to play!");
-
-            const overlay = document.getElementById('play-overlay');
-            const progress = document.getElementById('progress-bar');
-            const status = document.getElementById('loading-status');
-            document.getElementById('loading-title').innerText = "Joining " + gameName;
-
-            overlay.style.display = 'flex';
-            let width = 0;
-
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    finishLoading(gameName);
-                } else {
-                    width += Math.random() * 5;
-                    progress.style.width = width + '%';
-                    if (width > 30) status.innerText = "Authenticating user...";
-                    if (width > 60) status.innerText = "Downloading assets...";
-                    if (width > 80) status.innerText = "Loading world...";
-                }
-            }, 100);
-        }
-
-        function finishLoading(gameName) {
-            // Reward the player for "playing"
-            const reward = 10;
-            if (BLYPE.session && BLYPE.db[BLYPE.session]) {
-                BLYPE.db[BLYPE.session].bux += reward;
-                localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
-                localStorage.setItem("blypoBux", BLYPE.db[BLYPE.session].bux);
-            }
-
-            alert(`You played ${gameName} and earned ${reward} B$!`);
-            location.reload(); // Returns to games list
-        }
-
-        window.onload = initGames;
     </script>
 </body>
 </html>
