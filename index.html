@@ -24,9 +24,13 @@
         .content { padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
 
         /* HERO BOXES */
-        .hero-box { border: 1px solid #ccc; padding: 20px; background: #f9f9f9; margin-bottom: 20px; }
+        .hero-box { border: 1px solid #ccc; padding: 20px; background: #f9f9f9; margin-bottom: 20px; position: relative; }
         .login-box { border: 1px solid #ccc; padding: 20px; background: #eee; }
         
+        /* CLOSE BUTTON */
+        .close-btn { position: absolute; top: 5px; right: 10px; cursor: pointer; font-family: Arial, sans-serif; font-weight: bold; color: #999; font-size: 14px; }
+        .close-btn:hover { color: #d92525; }
+
         input { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; border: 1px solid #ccc; }
         .btn { width: 100%; padding: 10px; background: #005596; color: white; border: none; font-weight: bold; cursor: pointer; }
         .btn-reg { background: #007a3d; margin-top: 5px; }
@@ -59,15 +63,18 @@
 
         <div class="content">
             <div class="main-column">
+                
                 <div id="logged-out-hero" class="hero-box">
+                    <span class="close-btn" onclick="closeBanner('logged-out-hero', 5)">x</span>
                     <h1>Imagine Anything.</h1>
                     <p>BLYPEME is a user-generated gaming platform where you can create worlds and play with friends.</p>
-                    <div style="width:100%; height:200px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-weight:bold;">
+                    <div style="width:100%; height:150px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-weight:bold;">
                         [2011 ERA BANNER ART]
                     </div>
                 </div>
 
                 <div id="user-dash" class="hero-box">
+                    <span class="close-btn" onclick="closeBanner('user-dash', 5)">x</span>
                     <div class="avatar-preview">👤</div>
                     <h2 id="welcome-name" style="margin:0;">Hello, User!</h2>
                     <p style="font-size:12px; margin-top:5px;">Your Balance: <b id="dash-bux">0</b> B$</p>
@@ -102,43 +109,42 @@
     </div>
 
     <script>
-        // MASTER DATABASE LOGIC
-        function getUsers() {
-            return JSON.parse(localStorage.getItem("blypo_users") || "{}");
-        }
+        // --- DATA LOAD ---
+        function getUsers() { return JSON.parse(localStorage.getItem("blypo_users") || "{}"); }
 
         function updateLiveUI() {
             const users = getUsers();
             const currentUser = localStorage.getItem("currentUser");
             const alertMsg = localStorage.getItem("globalAlert");
 
-            // 1. Update Red Bar
+            // 1. Red Bar
             const bar = document.getElementById('red-alert-bar');
             if (alertMsg && alertMsg !== "") {
-                bar.innerText = alertMsg;
-                bar.style.display = "block";
-            } else {
-                bar.style.display = "none";
-            }
+                bar.innerText = alertMsg; bar.style.display = "block";
+            } else { bar.style.display = "none"; }
 
-            // 2. Update Auth State
+            // 2. Banner Timers (5 Hour logic)
+            checkBannerExpiry('logged-out-hero');
+            checkBannerExpiry('user-dash');
+
+            // 3. Auth Logic
             if (currentUser && users[currentUser]) {
                 const data = users[currentUser];
+                if (!localStorage.getItem('user-dash_expiry')) {
+                    document.getElementById('user-dash').style.display = "block";
+                }
                 document.getElementById('logged-out-hero').style.display = "none";
                 document.getElementById('auth-ui').style.display = "none";
-                document.getElementById('user-dash').style.display = "block";
                 
                 document.getElementById('welcome-name').innerText = "Hello, " + currentUser + "!";
                 document.getElementById('dash-bux').innerText = (data.bux || 0).toLocaleString();
                 document.getElementById('header-auth').innerText = currentUser + " (" + (data.bux || 0) + " B$)";
                 
-                // Show admin link if they have the flag
-                if (data.isAdmin === true) {
-                    document.getElementById('admin-link').style.display = "inline";
-                }
+                if (data.isAdmin === true) document.getElementById('admin-link').style.display = "inline";
             } else {
-                // Not logged in
-                document.getElementById('logged-out-hero').style.display = "block";
+                if (!localStorage.getItem('logged-out-hero_expiry')) {
+                    document.getElementById('logged-out-hero').style.display = "block";
+                }
                 document.getElementById('auth-ui').style.display = "block";
                 document.getElementById('user-dash').style.display = "none";
                 document.getElementById('header-auth').innerText = "Welcome, Guest!";
@@ -147,40 +153,44 @@
             document.getElementById('total-accounts').innerText = Object.keys(users).length;
         }
 
+        // --- BANNER TIMER LOGIC ---
+        function closeBanner(id, hours) {
+            document.getElementById(id).style.display = 'none';
+            const expiryTime = new Date().getTime() + (hours * 60 * 60 * 1000);
+            localStorage.setItem(id + "_expiry", expiryTime);
+        }
+
+        function checkBannerExpiry(id) {
+            const expiry = localStorage.getItem(id + "_expiry");
+            const now = new Date().getTime();
+            if (expiry && now < expiry) {
+                document.getElementById(id).style.display = 'none';
+            } else {
+                localStorage.removeItem(id + "_expiry");
+            }
+        }
+
+        // --- ACCOUNT LOGIC ---
         function register() {
             const u = document.getElementById('user-in').value.trim();
             const p = document.getElementById('pass-in').value.trim();
             if (!u || !p) return alert("Enter details!");
-
             const users = getUsers();
             if (users[u]) return alert("Username taken!");
-
-            // Create new user object
-            users[u] = { 
-                password: p, 
-                bux: 500, 
-                isAdmin: (u.toLowerCase() === "admin"), 
-                inventory: ["Brown Shirt"],
-                id: Math.floor(Math.random() * 90000) + 10000
-            };
-
+            users[u] = { password: p, bux: 500, isAdmin: (u.toLowerCase() === "admin"), inventory: ["Brown Shirt"], id: Math.floor(Math.random() * 90000) + 10000 };
             localStorage.setItem("blypo_users", JSON.stringify(users));
-            alert("Account for " + u + " created! Please login.");
-            updateLiveUI();
+            alert("Account created!"); updateLiveUI();
         }
 
         function login() {
             const u = document.getElementById('user-in').value.trim();
             const p = document.getElementById('pass-in').value.trim();
             const users = getUsers();
-
             if (users[u] && users[u].password === p) {
                 localStorage.setItem("currentUser", u);
                 localStorage.setItem("isAdmin", users[u].isAdmin);
                 location.reload();
-            } else {
-                alert("Invalid Login!");
-            }
+            } else { alert("Invalid Login!"); }
         }
 
         function logout() {
@@ -189,13 +199,7 @@
             location.reload();
         }
 
-        // AUTO-SYNC: If Admin panel adds Bux or a new user, this page updates instantly
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'blypo_users' || e.key === 'globalAlert') {
-                updateLiveUI();
-            }
-        });
-
+        window.addEventListener('storage', () => updateLiveUI());
         window.onload = updateLiveUI;
     </script>
 </body>
