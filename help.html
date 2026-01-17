@@ -2,97 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - Help</title>
+    <title>BLYPEME - Help & Support</title>
     <style>
         body {
-            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
-            background-attachment: fixed;
+            background: #ade8ff;
             font-family: 'Verdana', sans-serif;
             margin: 0; padding: 0;
-            min-height: 100vh;
+            text-align: center;
         }
 
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-        }
+        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
 
-        .banner-container {
-            background: #fff;
-            border-bottom: 1px solid #000;
-        }
-        .banner-img {
-            width: 900px;
-            display: block;
-        }
+        /* UNIFIED HEADER */
+        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
+        .banner-img { width: 100%; }
 
         .sub-nav {
             background-color: #8a49a8;
             padding: 8px 0;
             color: white;
             font-size: 11px;
-            text-align: center;
-            border-bottom: 2px solid #5a2d6d;
-            width: 900px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
         }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .sub-nav a:hover { text-decoration: underline; }
 
+        /* MAIN GRID */
         .main-container {
             display: grid;
             grid-template-columns: 200px 1fr;
             gap: 15px;
-            margin-top: 15px;
+            padding: 20px 0;
+            text-align: left;
         }
 
-        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        .box { 
+            background: #f0f0f0; 
+            border: 1px solid #a4a4a4; 
+            margin-bottom: 15px; 
+            padding: 10px;
+            font-size: 11px;
+        }
         .box-header {
-            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
-            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+            background: #e9e9e9;
+            border-bottom: 1px solid #a4a4a4;
+            padding: 4px;
+            font-weight: bold;
+            margin: -10px -10px 10px -10px;
+            color: #333;
         }
 
-        /* HELP TOPICS */
-        .help-topic { margin-bottom: 20px; }
-        .help-topic h3 { font-size: 14px; color: #8a49a8; margin-bottom: 5px; }
-        .help-topic p { font-size: 12px; line-height: 1.5; color: #333; }
+        /* HELP CONTENT */
+        .help-q { font-weight: bold; color: #8a49a8; display: block; margin-top: 10px; font-size: 12px; }
+        .help-a { display: block; margin-bottom: 10px; padding-left: 5px; border-left: 2px solid #ccc; margin-top: 3px; }
         
-        .faq-list { font-size: 11px; padding-left: 20px; }
-        .faq-list li { margin-bottom: 8px; }
-        .faq-list a { color: #0080ff; text-decoration: none; }
-        .faq-list a:hover { text-decoration: underline; }
+        .contact-btn {
+            background: #0080ff; color: white; border: 1px solid #003366;
+            padding: 5px 10px; font-weight: bold; cursor: pointer; width: 100%;
+            font-size: 10px; margin-top: 5px;
+        }
 
-        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
-
-        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+        .admin-note { background: #fffbe6; border: 1px solid #ffe58f; padding: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container">
-            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" alt="BLYPE" class="banner-img">
         </div>
 
-        <div class="sub-nav">
-            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        <div class="sub-nav" id="main-nav">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="marketplace.html">Marketplace</a> | 
+            <a href="character.html">Character</a> | 
+            <a href="forum.html">Forum</a> | 
+            <a href="help.html">Help</a>
         </div>
 
         <div class="main-container">
             <aside>
                 <div class="box">
-                    <div class="box-header">Help Center</div>
-                    <ul style="font-size: 10px; list-style: none; padding: 0; line-height: 2;">
-                        <li><a href="#">General FAQ</a></li>
-                        <li><a href="#">Building Guide</a></li>
-                        <li><a href="#">Account Safety</a></li>
-                        <li><a href="#">Billing & Tallyz</a></li>
-                        <li><a href="#">Rules of Conduct</a></li>
-                    </ul>
+                    <div class="box-header">Support Center</div>
+                    Need a hand? Our staff is online 24/7 to help you build your world.
+                    <button class="contact-btn">Email Support</button>
                 </div>
-                
+
                 <div class="box">
-                    <div class="box-header">Contact Us</div>
-                    <p style="font-size: 10px;">Still stuck? Email our Krew at support@blype.com</p>
+                    <div class="box-header">Safety First</div>
+                    Always keep your password secret! Never give it to someone claiming to be "Admin" in a game.
                 </div>
             </aside>
 
@@ -100,38 +100,44 @@
                 <div class="box">
                     <div class="box-header">Frequently Asked Questions</div>
                     
-                    <div class="help-topic">
-                        <h3>How do I earn Tallyz?</h3>
-                        <p>Tallyz can be earned by creating popular games, selling clothes in the Marketplace, or through daily login bonuses for members!</p>
-                    </div>
+                    <span class="help-q">What are Blypo-Bux?</span>
+                    <span class="help-a">Blypo-Bux are the official currency of BLYPEME. You can use them to buy cool shirts in the Marketplace or gear for your favorite games.</span>
 
-                    <div class="help-topic">
-                        <h3>Is BLYPE free to play?</h3>
-                        <p>Yes! BLYPE is a free online building engine. While you can buy Tallyz for special items, building and playing is 100% free.</p>
-                    </div>
+                    <span class="help-q">How do I change my clothes?</span>
+                    <span class="help-a">Go to the "Character" tab in the navigation bar. There you can see all your owned items and select which ones to wear.</span>
 
-                    <div class="help-topic">
-                        <h3>Safety & Privacy</h3>
-                        <p>We take safety seriously. All chat is filtered, and we have a dedicated team of moderators. Check the <a href="#">Parents' Corner</a> for more details.</p>
-                    </div>
+                    <span class="help-q">How do I make a game?</span>
+                    <span class="help-a">Coming soon! We are working on the BLYPE Studio software so everyone can build their own 3D worlds.</span>
+                </div>
 
-                    <div class="help-topic">
-                        <h3>Technical Issues</h3>
-                        <ul class="faq-list">
-                            <li><a href="#">My character is stuck in a brick!</a></li>
-                            <li><a href="#">The game won't load on my browser.</a></li>
-                            <li><a href="#">How to report a bug to the Krew.</a></li>
-                        </ul>
+                <div class="box" id="admin-help" style="display:none;">
+                    <div class="box-header" style="background:#fffbe6; color:#856404;">Admin Documentation</div>
+                    <div class="admin-note">
+                        <b>Welcome, Master Admin.</b> Here is how to manage the site:<br><br>
+                        • <b>Economy:</b> Use the Admin Panel to set your balance. Smart Formatting will handle display (K, M, B).<br>
+                        • <b>Content:</b> You can change the homepage News and Featured Game directly from your panel.<br>
+                        • <b>Moderation:</b> You have the power to delete forum threads and broadcast site-wide alerts.
                     </div>
                 </div>
             </main>
         </div>
-
-        <div class="footer">
-            Privacy Policy | Advertise | Contact Us | About Us | Jobs
-            <br><br>
-            <b>BLYPE Corporation © 2026</b>
-        </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+            
+            if (isAdmin) {
+                // Show secret admin help
+                document.getElementById('admin-help').style.display = "block";
+                
+                // Add Admin Tab to Nav
+                const nav = document.getElementById('main-nav');
+                if(!nav.innerHTML.includes("admin.html")) {
+                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
+                }
+            }
+        };
+    </script>
 </body>
 </html>
