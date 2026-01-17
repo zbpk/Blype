@@ -7,6 +7,7 @@
         body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
         .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
+        /* HEADER */
         .header { background: #444; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
         .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
         .nav a { margin-right: 15px; text-decoration: none; color: blue; }
@@ -25,6 +26,8 @@
         /* STAFF AREA */
         #staff-settings { border: 2px solid #d92525; display: none; background: #fff5f5; }
         .staff-tag { color: #d92525; font-size: 10px; font-weight: bold; }
+        
+        .success-msg { color: #007a3d; font-size: 12px; font-weight: bold; display: none; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -38,57 +41,56 @@
         <div class="settings-container">
             <div class="settings-section">
                 <h2>Account Info</h2>
-                <label>Username (Cannot be changed)</label>
-                <input type="text" id="set-username" disabled style="background:#f0f0f0;">
+                <label>Username (Static)</label>
+                <input type="text" id="set-username" disabled style="background:#eee; cursor: not-allowed;">
                 
-                <label>Change Password</label>
-                <input type="password" id="set-password" placeholder="Enter new password...">
+                <label>Update Password</label>
+                <input type="password" id="set-password" placeholder="New password...">
                 
-                <button class="btn btn-save" onclick="saveSettings()">Update Account</button>
+                <button class="btn btn-save" onclick="saveSettings()">Save Changes</button>
+                <div id="save-notif" class="success-msg">Settings saved successfully!</div>
             </div>
 
             <div class="settings-section">
                 <h2>Site Preferences</h2>
-                <label>Site Theme</label>
+                <label>Color Theme</label>
                 <select id="set-theme" style="width:100%; padding:8px;">
-                    <option value="classic">Classic Blue (2011)</option>
-                    <option value="dark">Dark Mode</option>
-                    <option value="retro">Old School Green</option>
+                    <option value="classic">2011 Classic (Default)</option>
+                    <option value="dark">Dark Mode (Coming Soon)</option>
                 </select>
-                <p style="font-size:10px; color:#999; margin-top:10px;">Note: Theme changes are saved to this browser session.</p>
             </div>
 
             <div id="staff-settings" class="settings-section">
-                <span class="staff-tag">STAFF ONLY</span>
-                <h2>Global System Toggles</h2>
-                <label>Maintenance Mode</label>
-                <button class="btn" onclick="toggleMaintenance()">Toggle Maintenance (Live)</button>
-                <p style="font-size:10px; margin-top:5px;">This will affect what users see on the Home page.</p>
+                <span class="staff-tag">ADMINISTRATOR OVERRIDE</span>
+                <h2 style="color:#d92525;">Global Site Maintenance</h2>
+                <p style="font-size:12px;">Toggle maintenance mode to alert all users via the Red Bar.</p>
+                <button class="btn" style="background:#d92525;" onclick="toggleMaint()">Toggle Maintenance Mode</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Load the database and session
         const BLYPE = {
             session: localStorage.getItem("currentUser"),
             db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
         };
 
         function initSettings() {
-            if (!BLYPE.session) {
-                alert("You must be logged in to view settings.");
+            if (!BLYPE.session || !BLYPE.db[BLYPE.session]) {
+                alert("Please log in to access settings.");
                 window.location.href = "index.html";
                 return;
             }
 
-            const userData = BLYPE.db[BLYPE.session];
-            
-            // Fill current data
+            const user = BLYPE.db[BLYPE.session];
+
+            // Fill the form
             document.getElementById('set-username').value = BLYPE.session;
-            document.getElementById('set-password').value = userData.password;
+            document.getElementById('set-password').value = user.password;
 
             // Show Admin section if applicable
-            if (userData.isAdmin) {
+            if (user.isAdmin === true) {
                 document.getElementById('staff-settings').style.display = "block";
             }
         }
@@ -97,26 +99,27 @@
             const newPass = document.getElementById('set-password').value.trim();
             
             if (newPass.length < 3) {
-                return alert("Password is too short!");
+                return alert("Password must be at least 3 characters.");
             }
 
-            // Update Database
+            // Write to the global "filing cabinet"
             BLYPE.db[BLYPE.session].password = newPass;
             localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
 
-            alert("Settings saved successfully!");
+            // Show success notification
+            const notif = document.getElementById('save-notif');
+            notif.style.display = "block";
+            setTimeout(() => { notif.style.display = "none"; }, 3000);
         }
 
-        function toggleMaintenance() {
-            const current = localStorage.getItem("maint_mode") === "true";
-            localStorage.setItem("maint_mode", !current);
-            alert("Maintenance Mode is now: " + (!current ? "ON" : "OFF"));
-            
-            // Also update the Global Red Bar
-            if (!current) {
-                localStorage.setItem("globalAlert", "⚠️ SITE IS CURRENTLY UNDER MAINTENANCE ⚠️");
-            } else {
+        function toggleMaint() {
+            const currentAlert = localStorage.getItem("globalAlert");
+            if (currentAlert && currentAlert !== "") {
                 localStorage.setItem("globalAlert", "");
+                alert("Maintenance mode OFF.");
+            } else {
+                localStorage.setItem("globalAlert", "⚠️ SITE MAINTENANCE IN PROGRESS: Expect connectivity issues. ⚠️");
+                alert("Maintenance mode ON. All users will see the Red Bar.");
             }
         }
 
