@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPEME - Character Editor</title>
+    <style>
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: rgba(255,255,255,0.8); min-height: 100vh; border-left: 1px solid #000; border-right: 1px solid #000; }
+        
+        /* NAVBAR */
+        .sub-nav { background-color: #8a49a8; padding: 10px 0; color: white; text-align: center; border-bottom: 1px solid #000; font-size: 11px; font-weight: bold; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+
+        .editor-container { display: grid; grid-template-columns: 350px 1fr; gap: 20px; padding: 20px; text-align: left; }
+
+        /* AVATAR PREVIEW */
+        .avatar-box { background: #fff; border: 1px solid #a4a4a4; padding: 15px; text-align: center; }
+        .avatar-display { 
+            width: 100%; height: 400px; background: #eee; border: 1px solid #ccc; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .wearing-text { font-size: 10px; color: #666; margin-top: 10px; }
+
+        /* INVENTORY */
+        .inventory-box { background: #fff; border: 1px solid #a4a4a4; padding: 15px; }
+        .inventory-header { font-weight: bold; border-bottom: 2px solid #8a49a8; padding-bottom: 5px; margin-bottom: 15px; font-size: 14px; }
+        
+        .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .inv-item { 
+            background: #f9f9f9; border: 1px solid #ccc; padding: 8px; text-align: center; 
+            font-size: 10px; cursor: pointer; transition: 0.1s;
+        }
+        .inv-item:hover { border-color: #8a49a8; background: #f0f0f0; }
+        .inv-item img { max-width: 60px; display: block; margin: 0 auto 5px; }
+
+        .btn-equip { background: #72fb3c; border: 1px solid #27ae60; padding: 3px 8px; font-size: 9px; font-weight: bold; cursor: pointer; margin-top: 5px; width: 100%; }
+        .btn-remove { background: #ff4d4d; color: white; border: 1px solid #900; }
+
+        .balance-tag { background: #fff; padding: 5px 10px; border: 1px solid #ccc; font-weight: bold; font-size: 11px; float: right; }
+    </style>
+</head>
+<body>
+
+<div class="site-wrapper">
+    <div class="sub-nav" id="main-nav">
+        <a href="index.html">Home</a> | <a href="games.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="character.html">Character</a> | <a href="forum.html">Forum</a>
+    </div>
+
+    <div style="padding: 20px;">
+        <div class="balance-tag">Your Balance: <span style="color:green;">B$ <span id="user-bux">0</span></span></div>
+        <h2 style="margin:0;">Character Customizer</h2>
+    </div>
+
+    <div class="editor-container">
+        <div class="avatar-box">
+            <div class="avatar-display" id="avatar-preview">
+                <div id="outfit-layer" style="font-weight: bold; color: #999;">[ NO ITEMS EQUIPPED ]</div>
+            </div>
+            <div class="wearing-text" id="wearing-list">Currently wearing: Nothing</div>
+            <button class="btn-equip btn-remove" style="margin-top:15px; height:30px;" onclick="unequipAll()">Remove All Items</button>
+        </div>
+
+        <div class="inventory-box">
+            <div class="inventory-header">My Wardrobe</div>
+            <div id="inv-grid" class="inventory-grid">
+                </div>
+            <div id="empty-msg" style="display:none; color: #666; font-style: italic; text-align: center; padding: 40px;">
+                Your wardrobe is empty. Go to the Marketplace to buy clothes!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- SMART FORMATTING ---
+    function formatBux(num) {
+        num = parseInt(num);
+        if (num >= 1e12) return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
+        if (num >= 1e9) return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+        if (num >= 1e6) return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (num >= 1e3) return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
+        return num.toString();
+    }
+
+    // --- CHARACTER LOGIC ---
+    function loadCharacter() {
+        const isAdmin = localStorage.getItem("isAdmin") === "true";
+        if (!isAdmin) { window.location.href = "index.html"; return; }
+
+        // Update Balance
+        document.getElementById('user-bux').innerText = formatBux(localStorage.getItem("blypoBux") || 0);
+
+        // Load Admin Tab
+        if(isAdmin) {
+            const nav = document.getElementById('main-nav');
+            if(!nav.innerHTML.includes("admin.html")) nav.innerHTML += ' | <a href="admin.html" style="color:#8a49a8;">Admin</a>';
+        }
+
+        // Load Inventory
+        const owned = JSON.parse(localStorage.getItem("ownedItems") || "[]");
+        const grid = document.getElementById('inv-grid');
+        
+        if (owned.length === 0) {
+            document.getElementById('empty-msg').style.display = "block";
+            return;
+        }
+
+        grid.innerHTML = "";
+        owned.forEach(item => {
+            grid.innerHTML += `
+                <div class="inv-item">
+                    <b>${item.name}</b><br>
+                    <button class="btn-equip" onclick="equipItem('${item.name}')">Wear Item</button>
+                </div>
+            `;
+        });
+
+        // Load current outfit from memory
+        const current = localStorage.getItem("equippedItem") || "Nothing";
+        updateAvatarDisplay(current);
+    }
+
+    function equipItem(name) {
+        localStorage.setItem("equippedItem", name);
+        updateAvatarDisplay(name);
+        alert("You are now wearing: " + name);
+    }
+
+    function unequipAll() {
+        localStorage.removeItem("equippedItem");
+        updateAvatarDisplay("Nothing");
+    }
+
+    function updateAvatarDisplay(name) {
+        const preview = document.getElementById('outfit-layer');
+        const list = document.getElementById('wearing-list');
+        
+        if (name === "Nothing") {
+            preview.innerText = "[ NO ITEMS EQUIPPED ]";
+            list.innerText = "Currently wearing: Nothing";
+        } else {
+            preview.innerHTML = `<span style="color:#8a49a8; font-size:20px;">★</span><br><b>${name}</b>`;
+            list.innerText = "Currently wearing: " + name;
+        }
+    }
+
+    window.onload = loadCharacter;
+</script>
+
+</body>
+</html>
