@@ -1,59 +1,202 @@
-<script>
-    // 1. ALWAYS use "blypo_users" as the master key
-    let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-    let currentUser = localStorage.getItem("currentUser");
-
-    function register() {
-        const u = document.getElementById('user-in').value.trim();
-        const p = document.getElementById('pass-in').value.trim();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BLYPEME - Home</title>
+    <style>
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
         
-        if (!u || !p) return alert("Please enter a username and password!");
-        
-        // Reload users from storage right before checking to prevent overwriting
-        users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-
-        if (users[u]) return alert("That username is already taken!");
-
-        // Create the user object
-        users[u] = { 
-            password: p, 
-            bux: 500, 
-            isAdmin: (u.toLowerCase() === "admin"), 
-            inventory: ["Brown Shirt"],
-            id: Math.floor(Math.random() * 90000) + 10000
-        };
-
-        // SAVE TO THE MASTER KEY
-        localStorage.setItem("blypo_users", JSON.stringify(users));
-        
-        alert("Account for " + u + " created! You can now log in.");
-    }
-
-    function login() {
-        const u = document.getElementById('user-in').value.trim();
-        const p = document.getElementById('pass-in').value.trim();
-        
-        // Reload fresh data
-        users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-
-        if (users[u] && users[u].password === p) {
-            localStorage.setItem("currentUser", u);
-            localStorage.setItem("isAdmin", users[u].isAdmin || "false");
-            
-            // Sync legacy bux key for Marketplace/Shop
-            localStorage.setItem("blypoBux", users[u].bux);
-            
-            location.reload();
-        } else {
-            alert("Invalid Username or Password.");
+        /* SYSTEM RED BAR */
+        #red-alert-bar { 
+            background: #d92525; color: white; padding: 10px; text-align: center; 
+            font-weight: bold; font-size: 13px; display: none; border-bottom: 2px solid #a00;
         }
-    }
 
-    // This makes sure if the Admin changes Bill's Bux, the Home page updates instantly
-    window.addEventListener('storage', (e) => {
-        if (e.key === 'blypo_users') {
-            users = JSON.parse(e.newValue || "{}");
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
+        
+        /* HEADER */
+        .header { background: #005596; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: bold; letter-spacing: -1px; }
+        
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
+
+        .content { padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+
+        /* HERO BOXES */
+        .hero-box { border: 1px solid #ccc; padding: 20px; background: #f9f9f9; margin-bottom: 20px; }
+        .login-box { border: 1px solid #ccc; padding: 20px; background: #eee; }
+        
+        input { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; border: 1px solid #ccc; }
+        .btn { width: 100%; padding: 10px; background: #005596; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-reg { background: #007a3d; margin-top: 5px; }
+
+        /* USER DASHBOARD */
+        #user-dash { display: none; }
+        .avatar-preview { width: 100px; height: 120px; background: #fff; border: 1px solid #ccc; float: left; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        
+        .logout-link { font-size: 10px; color: blue; cursor: pointer; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div id="red-alert-bar"></div>
+
+    <div class="site-wrapper">
+        <div class="header">
+            <div class="logo">BLYPEME</div>
+            <div id="header-auth" style="font-size:12px;">Welcome, Guest!</div>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html"><b>Home</b></a> | 
+            <a href="games.html">Games</a> | 
+            <a href="marketplace.html">Catalog</a> | 
+            <a href="people.html">People</a> |
+            <a href="forum.html">Forum</a> |
+            <a href="admin.html" id="admin-link" style="display:none; color:red; font-weight:bold;">Admin</a>
+        </div>
+
+        <div class="content">
+            <div class="main-column">
+                <div id="logged-out-hero" class="hero-box">
+                    <h1>Imagine Anything.</h1>
+                    <p>BLYPEME is a user-generated gaming platform where you can create worlds and play with friends.</p>
+                    <div style="width:100%; height:200px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-weight:bold;">
+                        [2011 ERA BANNER ART]
+                    </div>
+                </div>
+
+                <div id="user-dash" class="hero-box">
+                    <div class="avatar-preview">👤</div>
+                    <h2 id="welcome-name" style="margin:0;">Hello, User!</h2>
+                    <p style="font-size:12px; margin-top:5px;">Your Balance: <b id="dash-bux">0</b> B$</p>
+                    <div style="clear:both; padding-top:10px;">
+                        <span class="logout-link" onclick="logout()">Logout</span>
+                    </div>
+                </div>
+
+                <div class="hero-box">
+                    <h3>Site News</h3>
+                    <p style="font-size:12px; color:#666;"><b>Jan 16, 2026:</b> Bill has joined the community! The user registry is now fully operational and syncing with Staff tools.</p>
+                </div>
+            </div>
+
+            <div class="side-column">
+                <div class="login-box" id="auth-ui">
+                    <h3 style="margin-top:0;">Member Login</h3>
+                    <input type="text" id="user-in" placeholder="Username">
+                    <input type="password" id="pass-in" placeholder="Password">
+                    <button class="btn" onclick="login()">Login</button>
+                    <p style="text-align:center; font-size:10px; margin:10px 0;">- OR -</p>
+                    <button class="btn btn-reg" onclick="register()">Create Account</button>
+                </div>
+                
+                <div class="login-box" style="margin-top:20px;">
+                    <h3>Statistics</h3>
+                    <p style="font-size:11px;">Total Users: <b id="total-accounts">0</b></p>
+                    <p style="font-size:11px;">System Status: <b style="color:green;">Online</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MASTER DATABASE LOGIC
+        function getUsers() {
+            return JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        }
+
+        function updateLiveUI() {
+            const users = getUsers();
+            const currentUser = localStorage.getItem("currentUser");
+            const alertMsg = localStorage.getItem("globalAlert");
+
+            // 1. Update Red Bar
+            const bar = document.getElementById('red-alert-bar');
+            if (alertMsg && alertMsg !== "") {
+                bar.innerText = alertMsg;
+                bar.style.display = "block";
+            } else {
+                bar.style.display = "none";
+            }
+
+            // 2. Update Auth State
+            if (currentUser && users[currentUser]) {
+                const data = users[currentUser];
+                document.getElementById('logged-out-hero').style.display = "none";
+                document.getElementById('auth-ui').style.display = "none";
+                document.getElementById('user-dash').style.display = "block";
+                
+                document.getElementById('welcome-name').innerText = "Hello, " + currentUser + "!";
+                document.getElementById('dash-bux').innerText = (data.bux || 0).toLocaleString();
+                document.getElementById('header-auth').innerText = currentUser + " (" + (data.bux || 0) + " B$)";
+                
+                // Show admin link if they have the flag
+                if (data.isAdmin === true) {
+                    document.getElementById('admin-link').style.display = "inline";
+                }
+            } else {
+                // Not logged in
+                document.getElementById('logged-out-hero').style.display = "block";
+                document.getElementById('auth-ui').style.display = "block";
+                document.getElementById('user-dash').style.display = "none";
+                document.getElementById('header-auth').innerText = "Welcome, Guest!";
+            }
+
+            document.getElementById('total-accounts').innerText = Object.keys(users).length;
+        }
+
+        function register() {
+            const u = document.getElementById('user-in').value.trim();
+            const p = document.getElementById('pass-in').value.trim();
+            if (!u || !p) return alert("Enter details!");
+
+            const users = getUsers();
+            if (users[u]) return alert("Username taken!");
+
+            // Create new user object
+            users[u] = { 
+                password: p, 
+                bux: 500, 
+                isAdmin: (u.toLowerCase() === "admin"), 
+                inventory: ["Brown Shirt"],
+                id: Math.floor(Math.random() * 90000) + 10000
+            };
+
+            localStorage.setItem("blypo_users", JSON.stringify(users));
+            alert("Account for " + u + " created! Please login.");
             updateLiveUI();
         }
-    });
-</script>
+
+        function login() {
+            const u = document.getElementById('user-in').value.trim();
+            const p = document.getElementById('pass-in').value.trim();
+            const users = getUsers();
+
+            if (users[u] && users[u].password === p) {
+                localStorage.setItem("currentUser", u);
+                localStorage.setItem("isAdmin", users[u].isAdmin);
+                location.reload();
+            } else {
+                alert("Invalid Login!");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("isAdmin");
+            location.reload();
+        }
+
+        // AUTO-SYNC: If Admin panel adds Bux or a new user, this page updates instantly
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'blypo_users' || e.key === 'globalAlert') {
+                updateLiveUI();
+            }
+        });
+
+        window.onload = updateLiveUI;
+    </script>
+</body>
+</html>
