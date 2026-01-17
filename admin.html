@@ -2,147 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - Staff Panel</title>
+    <title>BLYPEME - Master Staff Panel</title>
     <script>
-        // IMMEDIATE SECURITY CHECK
+        // REDIRECT IF NOT LOGGED IN AS ADMIN
         if (localStorage.getItem("isAdmin") !== "true") {
             window.location.replace("index.html");
         }
     </script>
     <style>
-        :root {
-            --roblox-red: #d92525;
-            --panel-grey: #e1e1e1;
-            --border-dark: #b5b5b5;
-        }
-
+        :root { --roblox-red: #d92525; --panel-grey: #e1e1e1; --border: #b5b5b5; }
         body { background: #f4f4f4; font-family: Arial, sans-serif; margin: 0; padding: 0; color: #333; }
         
         /* STAFF HEADER */
         .staff-header { background: #222; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--roblox-red); }
-        .staff-header h1 { font-size: 20px; margin: 0; letter-spacing: 1px; }
-        .staff-header .user-info { font-size: 12px; }
-
-        /* TAB NAVIGATION */
-        .tab-nav { background: var(--panel-grey); padding: 8px 20px 0; border-bottom: 1px solid var(--border-dark); display: flex; gap: 4px; }
-        .tab { 
-            padding: 10px 20px; background: #d0d0d0; border: 1px solid var(--border-dark); border-bottom: none; 
-            font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 5px 5px 0 0; color: #555;
-        }
+        .staff-header h1 { font-size: 18px; margin: 0; letter-spacing: 1px; font-weight: bold; }
+        
+        /* TABS */
+        .tab-nav { background: var(--panel-grey); padding: 8px 20px 0; border-bottom: 1px solid var(--border); display: flex; gap: 4px; }
+        .tab { padding: 10px 20px; background: #d0d0d0; border: 1px solid var(--border); border-bottom: none; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 5px 5px 0 0; }
         .tab.active { background: white; border-bottom: 1px solid white; margin-bottom: -1px; color: #000; }
 
-        /* MAIN CONTENT AREA */
-        .main-content { padding: 25px; max-width: 1200px; margin: 0 auto; display: none; }
+        .main-content { padding: 25px; max-width: 1100px; margin: 0 auto; display: none; }
         .main-content.active { display: block; }
 
-        .dashboard-box { border: 1px solid var(--border-dark); background: white; margin-bottom: 25px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
-        .dashboard-header { background: #f0f0f0; padding: 12px; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-dark); display: flex; justify-content: space-between; }
-        .dashboard-inner { padding: 20px; }
+        .dashboard-box { border: 1px solid var(--border); background: white; margin-bottom: 20px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
+        .dashboard-header { background: #f0f0f0; padding: 10px; font-weight: bold; font-size: 13px; border-bottom: 1px solid var(--border); }
+        .dashboard-inner { padding: 15px; }
 
-        /* AUDIT GRID */
-        .audit-grid { display: grid; grid-template-columns: 300px 1fr 300px; gap: 20px; }
-        .info-table { width: 100%; font-size: 12px; border-collapse: collapse; }
-        .info-table td { padding: 10px; border-bottom: 1px solid #eee; }
-
-        /* LIVE REGISTRY LIST */
-        .registry-list { height: 300px; overflow-y: auto; font-family: monospace; font-size: 11px; background: #f9f9f9; padding: 10px; border: 1px inset #ccc; }
-        .registry-item { padding: 4px; border-bottom: 1px solid #eee; cursor: pointer; }
+        /* LIVE LISTS */
+        .registry-feed { height: 250px; overflow-y: auto; font-family: monospace; font-size: 11px; background: #fafafa; border: 1px inset #ccc; padding: 5px; }
+        .registry-item { padding: 5px; border-bottom: 1px solid #eee; cursor: pointer; }
         .registry-item:hover { background: #eef; }
+        .registry-item b { color: #007a3d; }
 
-        /* BUTTONS */
-        .btn { padding: 7px 15px; font-size: 12px; font-weight: bold; cursor: pointer; border: 1px solid #888; border-radius: 3px; }
-        .btn-approve { background: #28a745; color: white; border-color: #1e7e34; }
-        .btn-reject { background: #dc3545; color: white; border-color: #bd2130; }
-        
-        input, textarea { padding: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; }
-        .alert-bar-preview { background: var(--roblox-red); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 20px; }
+        /* BUTTONS & INPUTS */
+        .btn { padding: 8px 15px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid #888; border-radius: 3px; }
+        .btn-save { background: #28a745; color: white; border-color: #1e7e34; }
+        .btn-term { background: #dc3545; color: white; border-color: #bd2130; }
+        input, textarea, select { padding: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+
+        .alert-preview { background: var(--roblox-red); color: white; padding: 10px; text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div class="staff-header">
-    <h1>BLYPEME Staff Portal</h1>
-    <div class="user-info">ADMIN: <b id="admin-display">---</b> | <a href="index.html" style="color:white; text-decoration:none;">Site Home</a></div>
+    <h1>BLYPEME ADMIN CONSOLE</h1>
+    <div style="font-size: 11px;">Current Admin: <b id="admin-name">---</b> | <a href="index.html" style="color:cyan;">Return to Site</a></div>
 </div>
 
 <div class="tab-nav">
-    <div class="tab active" onclick="openTab(event, 'audit')">User Audit & Registry</div>
-    <div class="tab" onclick="openTab(event, 'site')">Site Controls</div>
-    <div class="tab" onclick="openTab(event, 'economy')">Economy Analysis</div>
+    <div class="tab active" onclick="openTab(event, 'users-tab')">User Registry</div>
+    <div class="tab" onclick="openTab(event, 'site-tab')">Site Maintenance</div>
+    <div class="tab" onclick="openTab(event, 'econ-tab')">Economy</div>
 </div>
 
-<div id="audit" class="main-content active">
-    <div class="audit-grid">
+<div id="users-tab" class="main-content active">
+    <div style="display: grid; grid-template-columns: 280px 1fr 280px; gap: 20px;">
+        
         <div class="dashboard-box">
-            <div class="dashboard-header">Live User Registry</div>
+            <div class="dashboard-header">Live Registry (Auto-Sync)</div>
             <div class="dashboard-inner">
-                <div class="registry-list" id="registry-feed">Loading users...</div>
-                <button class="btn" style="width:100%; margin-top:10px;" onclick="refreshRegistry()">FORCE SYNC</button>
+                <div class="registry-feed" id="user-list">Loading...</div>
+                <p style="font-size: 10px; color: #777; margin-top: 10px;">Click a name to inspect.</p>
             </div>
         </div>
 
         <div class="dashboard-box">
-            <div class="dashboard-header">Investigative Tool</div>
+            <div class="dashboard-header">User Investigative Tool</div>
             <div class="dashboard-inner">
-                <div style="display:flex; gap:5px; margin-bottom:20px;">
-                    <input type="text" id="search-name" placeholder="Username...">
-                    <button class="btn" onclick="searchUser()">SEARCH</button>
-                </div>
+                <input type="text" id="target-search" placeholder="Search username...">
+                <button class="btn" style="width:100%;" onclick="searchUser()">LOAD USER</button>
 
-                <div id="audit-results" style="display:none;">
-                    <table class="info-table">
-                        <tr><td><b>Email:</b></td><td><input type="text" id="aud-email" value="verified@blypeme.com"></td></tr>
-                        <tr><td><b>Blypo-Bux:</b></td><td><input type="number" id="aud-bux"></td></tr>
-                        <tr><td><b>IP Addr:</b></td><td id="aud-ip" style="color:blue;">127.0.0.1</td></tr>
-                    </table>
-                    <div style="margin-top:20px; display:flex; gap:10px;">
-                        <button class="btn btn-approve" onclick="saveUserChanges()">SAVE CHANGES</button>
-                        <button class="btn btn-reject" onclick="banUser()">TERMINATE</button>
+                <div id="inspect-area" style="display:none; margin-top:20px; border-top: 1px solid #eee; padding-top:15px;">
+                    <label style="font-size:11px;">User ID: <span id="view-id"></span></label>
+                    <label style="font-size:11px;">Blypo-Bux Balance:</label>
+                    <input type="number" id="view-bux">
+                    
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-save" style="flex:1;" onclick="saveChanges()">SAVE CHANGES</button>
+                        <button class="btn btn-term" onclick="banUser()">BAN</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-box">
-            <div class="dashboard-header">Asset Injection</div>
+            <div class="dashboard-header">Asset Injector</div>
             <div class="dashboard-inner">
-                <label style="font-size:11px;">Select Item:</label>
-                <select id="item-inject" style="width:100%; padding:8px; margin-bottom:10px;">
-                    <option value="Brown Shirt">Brown Shirt</option>
+                <label style="font-size:11px;">Select Item to Give:</label>
+                <select id="item-choice">
                     <option value="Admin Cape">Admin Cape</option>
                     <option value="Golden Crown">Golden Crown</option>
+                    <option value="Blue Hoodie">Blue Hoodie</option>
+                    <option value="Brown Shirt">Brown Shirt</option>
                 </select>
-                <button class="btn btn-approve" style="width:100%;" onclick="injectAsset()">GIVE ITEM</button>
+                <button class="btn" style="width:100%;" onclick="injectItem()">GIVE ITEM</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="site" class="main-content">
+<div id="site-tab" class="main-content">
     <div class="dashboard-box">
-        <div class="dashboard-header">System Notification (Red Bar)</div>
+        <div class="dashboard-header">System Announcement (Red Bar)</div>
         <div class="dashboard-inner">
-            <div class="alert-bar-preview" id="preview-text">No active site-wide messages.</div>
-            <textarea id="system-msg" rows="3" placeholder="Enter alert text..."></textarea>
-            <button class="btn btn-reject" style="width:100%; margin-top:15px;" onclick="setRedBar()">POST ALERT</button>
+            <div class="alert-preview" id="live-preview">No active announcement.</div>
+            <textarea id="alert-text" rows="3" placeholder="Type a site-wide message..."></textarea>
+            <button class="btn btn-term" style="width:100%;" onclick="postAlert()">UPDATE ALL USERS</button>
+            <button class="btn" style="width:100%; margin-top:5px;" onclick="clearAlert()">CLEAR ALERT</button>
         </div>
     </div>
 </div>
 
-<div id="economy" class="main-content">
+<div id="econ-tab" class="main-content">
     <div class="dashboard-box">
-        <div class="dashboard-header">Global B$ Analytics</div>
+        <div class="dashboard-header">Global Economy Stats</div>
         <div class="dashboard-inner">
-            <h2 id="total-circ">B$ 0</h2>
-            <p style="font-size:12px; color:#666;">Total currency held across all player accounts.</p>
+            <h1 id="total-circ">B$ 0</h1>
+            <p style="font-size:12px; color:#666;">This is the total amount of B$ held by every user in the database.</p>
         </div>
     </div>
 </div>
 
 <script>
-    // --- GLOBAL DATA ---
+    // --- GLOBAL STATE ---
     let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-    let currentTarget = "";
+    let activeUser = "";
 
     function openTab(evt, tabName) {
         let contents = document.getElementsByClassName("main-content");
@@ -153,96 +139,99 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // --- REGISTRY LOGIC ---
+    // --- REFRESH REGISTRY ---
     function refreshRegistry() {
         users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-        const feed = document.getElementById('registry-feed');
-        feed.innerHTML = "";
-        
+        const listDiv = document.getElementById('user-list');
+        listDiv.innerHTML = "";
+
         Object.keys(users).forEach(u => {
-            const div = document.createElement('div');
-            div.className = "registry-item";
-            div.innerText = `• ${u}`;
-            div.onclick = () => { 
-                document.getElementById('search-name').value = u; 
-                searchUser(); 
+            const item = document.createElement('div');
+            item.className = "registry-item";
+            item.innerHTML = `• <b>${u}</b> (B$: ${users[u].bux})`;
+            item.onclick = () => {
+                document.getElementById('target-search').value = u;
+                searchUser();
             };
-            feed.appendChild(div);
+            listDiv.appendChild(item);
         });
-        updateEcon();
+
+        updateEconomy();
     }
 
-    // --- SEARCH & AUDIT ---
+    // --- USER TOOLS ---
     function searchUser() {
-        const name = document.getElementById('search-name').value.trim();
-        if(users[name]) {
-            currentTarget = name;
-            document.getElementById('audit-results').style.display = 'block';
-            document.getElementById('aud-bux').value = users[name].bux;
-            document.getElementById('aud-ip').innerText = "IP: 192.168.1." + Math.floor(Math.random()*255);
+        const name = document.getElementById('target-search').value.trim();
+        if (users[name]) {
+            activeUser = name;
+            document.getElementById('inspect-area').style.display = 'block';
+            document.getElementById('view-id').innerText = users[name].id || "Unknown";
+            document.getElementById('view-bux').value = users[name].bux;
         } else {
-            alert("User not found in registry.");
+            alert("User not found!");
         }
     }
 
-    function saveUserChanges() {
-        if(!currentTarget) return;
-        users[currentTarget].bux = parseInt(document.getElementById('aud-bux').value);
+    function saveChanges() {
+        if (!activeUser) return;
+        users[activeUser].bux = parseInt(document.getElementById('view-bux').value);
         localStorage.setItem("blypo_users", JSON.stringify(users));
-        // Live sync if target is you
-        if(localStorage.getItem("currentUser") === currentTarget) {
-            localStorage.setItem("blypoBux", users[currentTarget].bux);
-        }
-        alert("Account Updated.");
+        alert("Saved " + activeUser + "'s balance.");
         refreshRegistry();
     }
 
-    function injectAsset() {
-        if(!currentTarget) return alert("Select a user first!");
-        const item = document.getElementById('item-inject').value;
-        if(!users[currentTarget].inventory) users[currentTarget].inventory = [];
+    function injectItem() {
+        if (!activeUser) return alert("Search for a user first!");
+        const item = document.getElementById('item-choice').value;
+        if (!users[activeUser].inventory) users[activeUser].inventory = [];
         
-        users[currentTarget].inventory.push(item);
+        users[activeUser].inventory.push(item);
         localStorage.setItem("blypo_users", JSON.stringify(users));
-        alert(`Injected ${item} into ${currentTarget}'s inventory.`);
+        alert("Injected " + item + " into " + activeUser + "'s inventory.");
     }
 
     function banUser() {
-        if(!currentTarget) return;
+        if (!activeUser) return;
         let blacklist = JSON.parse(localStorage.getItem("blypo_blacklist") || "[]");
-        if(!blacklist.includes(currentTarget)) {
-            blacklist.push(currentTarget);
-            localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
-            alert(currentTarget + " has been terminated.");
-        }
+        blacklist.push(activeUser);
+        localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
+        alert(activeUser + " banned.");
     }
 
     // --- SITE CONTROLS ---
-    function setRedBar() {
-        const msg = document.getElementById('system-msg').value;
+    function postAlert() {
+        const msg = document.getElementById('alert-text').value;
         localStorage.setItem("globalAlert", msg);
-        document.getElementById('preview-text').innerText = msg;
+        document.getElementById('live-preview').innerText = msg;
     }
 
-    function updateEcon() {
+    function clearAlert() {
+        localStorage.setItem("globalAlert", "");
+        document.getElementById('live-preview').innerText = "No active announcement.";
+    }
+
+    function updateEconomy() {
         let total = 0;
         Object.keys(users).forEach(u => total += users[u].bux);
         document.getElementById('total-circ').innerText = "B$ " + total.toLocaleString();
     }
 
+    // --- THE LIVE SYNC ENGINE ---
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'blypo_users') {
+            console.log("Database updated in another tab. Refreshing...");
+            refreshRegistry();
+            if (activeUser) searchUser();
+        }
+        if (e.key === 'globalAlert') {
+            document.getElementById('live-preview').innerText = e.newValue || "No active announcement.";
+        }
+    });
+
     window.onload = function() {
-        document.getElementById('admin-display').innerText = localStorage.getItem("currentUser");
+        document.getElementById('admin-name').innerText = localStorage.getItem("currentUser");
         refreshRegistry();
     };
-
-    // --- PROFILE GENERATOR SYSTEM ---
-    // This function creates a virtual "Profile" link for users
-    function viewProfile(username) {
-        // In a real site, this would be profile.html?user=name
-        // For now, let's store the target and redirect
-        localStorage.setItem("profileTarget", username);
-        window.location.href = "profile.html";
-    }
 </script>
 </body>
 </html>
