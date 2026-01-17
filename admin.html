@@ -2,152 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - Master Control Console</title>
+    <title>Admin Console</title>
     <script>
         if (localStorage.getItem("isAdmin") !== "true") window.location.replace("index.html");
     </script>
     <style>
         :root {
-            --admin-dark: #1a1a1a;
-            --admin-blue: #007bff;
-            --admin-red: #d9534f;
-            --admin-green: #5cb85c;
-            --admin-gold: #f0ad4e;
+            --god-black: #050505; --god-gold: #ffd700; --god-red: #ff3333;
+            --god-blue: #008cff; --god-green: #00ff44;
         }
 
-        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
-        .site-wrapper { width: 1000px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.5); background: #fff; min-height: 100vh; }
+        body { background: #111; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 0; color: #eee; }
+        .site-wrapper { width: 1100px; margin: 0 auto; border: 2px solid var(--god-gold); background: #1a1a1a; min-height: 100vh; }
         
         /* HEADER */
-        .admin-header { background: var(--admin-dark); color: white; padding: 20px; text-align: left; border-bottom: 4px solid var(--admin-red); }
-        .admin-header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; }
-        .admin-header p { margin: 5px 0 0; font-size: 10px; color: #aaa; }
+        .admin-header { background: var(--god-black); padding: 25px; border-bottom: 3px solid var(--god-gold); }
+        .admin-header h1 { margin: 0; font-size: 28px; color: var(--god-gold); text-shadow: 0 0 10px var(--god-gold); }
 
-        .sub-nav { background: #333; padding: 10px; font-size: 11px; }
-        .sub-nav a { color: #72fb3c; text-decoration: none; font-weight: bold; margin-right: 20px; }
+        .sub-nav { background: #222; padding: 12px; font-size: 12px; display: flex; justify-content: space-between; }
+        .sub-nav a { color: var(--god-blue); text-decoration: none; font-weight: bold; }
 
         /* ACCORDION */
-        .admin-section { border: 1px solid #ccc; margin: 10px 20px; border-radius: 4px; overflow: hidden; }
+        .admin-section { border: 1px solid #333; margin: 15px 20px; background: #252525; }
         .dropdown-header {
-            background: #f8f9fa; padding: 12px; font-weight: bold; cursor: pointer;
-            display: flex; justify-content: space-between; user-select: none; border-bottom: 1px solid #eee;
+            background: #333; padding: 15px; font-weight: bold; cursor: pointer;
+            display: flex; justify-content: space-between; color: var(--god-gold);
+            border-bottom: 1px solid #444;
         }
-        .dropdown-header:hover { background: #f1f1f1; }
-        .content { display: none; padding: 20px; background: #fff; }
+        .content { display: none; padding: 25px; background: #1e1e1e; }
         .content.active { display: block; }
 
-        /* INPUTS */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        label { display: block; font-size: 10px; font-weight: bold; color: #444; margin-bottom: 5px; text-transform: uppercase; }
-        input, textarea, select { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; box-sizing: border-box; }
-        
-        .btn { padding: 10px 20px; border: none; font-weight: bold; cursor: pointer; font-size: 11px; border-radius: 3px; }
-        .btn-blue { background: var(--admin-blue); color: white; }
-        .btn-red { background: var(--admin-red); color: white; }
-        .btn-green { background: var(--admin-green); color: white; }
-        .btn-gold { background: var(--admin-gold); color: white; }
+        label { display: block; font-size: 10px; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+        input, textarea, select { background: #000; color: var(--god-green); border: 1px solid #444; padding: 10px; width: 100%; box-sizing: border-box; margin-bottom: 15px; }
 
-        /* USER LIST TABLE */
-        .user-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        .user-table th { background: #eee; text-align: left; padding: 8px; border: 1px solid #ddd; }
-        .user-table td { padding: 8px; border: 1px solid #ddd; }
+        .btn { padding: 12px; border: none; font-weight: bold; cursor: pointer; border-radius: 2px; text-transform: uppercase; width: 100%; }
+        .btn-gold { background: var(--god-gold); color: #000; }
+        .btn-blue { background: var(--god-blue); color: #fff; }
 
-        .console { background: #000; color: #0f0; font-family: monospace; padding: 15px; font-size: 11px; height: 100px; overflow-y: scroll; margin: 20px; border-radius: 5px; }
+        .console { background: #000; color: var(--god-green); padding: 15px; font-size: 11px; height: 120px; overflow-y: scroll; border: 1px solid #333; margin: 20px; }
     </style>
 </head>
 <body>
 
 <div class="site-wrapper">
     <div class="admin-header">
-        <h1>BLYPEME MASTER CONSOLE</h1>
-        <p>System Status: ONLINE | Root Access: GRANTED | Server: Canada_East_1</p>
+        <h1>ADMIN CONSOLE</h1>
+        <div style="font-size:11px; color:#666;">KERNEL_ACCESS: LEVEL_10 | DATABASE: BLYPEME_PROD</div>
     </div>
 
     <div class="sub-nav">
         <a href="index.html">← RETURN TO SITE</a>
-        <a href="#" onclick="location.reload()">REFRESH ENGINE</a>
-        <a href="#" style="color:red;" onclick="wipeData()">FACTORY RESET</a>
+        <div id="clock">00:00:00</div>
     </div>
 
     <div class="admin-section">
-        <div class="dropdown-header" onclick="toggle(this)">👥 USER DATABASE & PLAYER DISRECTORY <span>[+]</span></div>
-        <div class="content">
-            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 15px;">
-                <table class="user-table" id="user-list-table">
-                    <thead><tr><th>Username</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
-                    <tbody id="user-rows"></tbody>
-                </table>
-            </div>
-            <button class="btn btn-blue" onclick="refreshUserList()">REFRESH DATABASE</button>
-        </div>
-    </div>
-
-    <div class="admin-section">
-        <div class="dropdown-header" onclick="toggle(this)">⚡ INDIVIDUAL PLAYER MANIPULATION <span>[+]</span></div>
+        <div class="dropdown-header" onclick="toggle(this)">📦 ITEM & ASSET INJECTION <span>[+]</span></div>
         <div class="content">
             <div class="grid-2">
                 <div>
                     <label>Target Username</label>
-                    <input type="text" id="target-user" placeholder="Enter exact name...">
+                    <input type="text" id="target-player" placeholder="Enter username...">
                     
-                    <label>Gift Blypo-Bux (B$)</label>
-                    <input type="number" id="gift-amount" placeholder="Amount to add...">
-                    <button class="btn btn-green" onclick="giveBux()">GIVE CURRENCY</button>
-                </div>
-                <div>
-                    <label>Moderation Action</label>
-                    <select id="ban-type">
-                        <option value="warn">Issue Warning</option>
-                        <option value="kick">Server Kick</option>
-                        <option value="ban">Permanent Ban</option>
+                    <label>Select Item to Grant</label>
+                    <select id="item-to-give">
+                        <option value="brown-shirt|Brown Shirt">Brown Shirt (Common)</option>
+                        <option value="gold-crown|Golden Crown">Golden Crown (Legendary)</option>
+                        <option value="void-star|The Void Star">The Void Star (Artifact)</option>
+                        <option value="admin-cape|Admin Cape">Admin Cape (Dev-Only)</option>
+                        <option value="ban-hammer|Ban Hammer">Ban Hammer (God-Item)</option>
                     </select>
-                    <label>Reason for Ban</label>
-                    <textarea id="ban-reason" placeholder="Spamming, hacking, etc."></textarea>
-                    <button class="btn btn-red" onclick="applyBan()">APPLY PENALTY</button>
+                    <button class="btn btn-gold" onclick="injectItem()">INJECT ITEM TO INVENTORY</button>
+                </div>
+                <div>
+                    <label>Quick B$ Gift</label>
+                    <input type="number" id="quick-bux" placeholder="Amount...">
+                    <button class="btn btn-blue" onclick="giftBux()">GRANT CURRENCY</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="admin-section">
-        <div class="dropdown-header" onclick="toggle(this)">📰 CONTENT & POLL MANAGEMENT <span>[+]</span></div>
+        <div class="dropdown-header" onclick="toggle(this)">🌐 SITE-WIDE COMMANDS <span>[+]</span></div>
         <div class="content">
-            <label>Site-Wide Announcement (News)</label>
-            <textarea id="news-in" rows="3"></textarea>
-            
-            <label>Update Featured Game</label>
-            <input type="text" id="feat-game-in">
-
-            <div class="grid-2">
-                <div>
-                    <label>Current Poll Question</label>
-                    <input type="text" id="poll-q" value="Favorite Hat?">
-                </div>
-                <div>
-                    <label>Reset Poll Data</label><br>
-                    <button class="btn btn-gold" onclick="resetPoll()">CLEAR ALL VOTES</button>
-                </div>
-            </div>
-            <button class="btn btn-blue" style="width:100%; margin-top:10px;" onclick="saveSiteContent()">SAVE CONTENT CHANGES</button>
+            <label>Site Broadcast</label>
+            <input type="text" id="alert-msg" placeholder="Warning: Server restart in 5 minutes...">
+            <button class="btn btn-blue" onclick="broadcast()">SEND ALERT</button>
         </div>
     </div>
 
-    <div class="admin-section">
-        <div class="dropdown-header" onclick="toggle(this)">🚨 SYSTEM ALERTS & EVENT TRIGGERS <span>[+]</span></div>
-        <div class="content">
-            <label>Site Broadcast (Urgent Alert)</label>
-            <input type="text" id="broadcast-msg" placeholder="Attention all players...">
-            <button class="btn btn-red" onclick="sendBroadcast()">SEND GLOBAL ALERT</button>
-
-            <div style="margin-top:20px;">
-                <label>Developer Event Triggers</label>
-                <button class="btn btn-gold" onclick="log('Event: 2x B$ Weekend Started!')">START 2x BUX EVENT</button>
-                <button class="btn btn-gold" onclick="log('Event: Maintenance Mode Enabled.')">ENABLE MAINTENANCE</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="console" id="admin-log">[READY] Master Console Version 10.04 - Authorization Successful.</div>
+    <div class="console" id="log">SYSTEM READY...</div>
 </div>
 
 <script>
@@ -158,91 +103,74 @@
     }
 
     function log(msg) {
-        const logger = document.getElementById('admin-log');
-        logger.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${msg}`;
-        logger.scrollTop = logger.scrollHeight;
+        const l = document.getElementById('log');
+        l.innerHTML += `<br>> ${msg}`;
+        l.scrollTop = l.scrollHeight;
     }
 
-    // --- USER DATABASE LOGIC ---
-    function refreshUserList() {
-        const users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-        const tbody = document.getElementById('user-rows');
-        tbody.innerHTML = '';
-        
-        for (let name in users) {
-            const row = tbody.insertRow();
-            row.innerHTML = `
-                <td>${name} ${users[name].isAdmin ? '<b style="color:red;">[ADMIN]</b>' : ''}</td>
-                <td>B$ ${users[name].bux}</td>
-                <td>Active</td>
-                <td><button class="btn btn-red" style="padding:2px 5px; font-size:9px;" onclick="deleteUser('${name}')">DELETE</button></td>
-            `;
-        }
-        log("Database Refreshed.");
-    }
+    // --- ITEM INJECTION LOGIC ---
+    function injectItem() {
+        const target = document.getElementById('target-player').value.trim();
+        const itemData = document.getElementById('item-to-give').value.split('|');
+        const itemId = itemData[0];
+        const itemName = itemData[1];
 
-    function giveBux() {
-        const target = document.getElementById('target-user').value;
-        const amount = parseInt(document.getElementById('gift-amount').value);
+        if (!target) return alert("Identify target user.");
+
         let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
 
         if (users[target]) {
-            users[target].bux += amount;
-            localStorage.setItem("blypo_users", JSON.stringify(users));
-            // If target is YOU, update your current session balance too
-            if(localStorage.getItem("currentUser") === target) {
-                localStorage.setItem("blypoBux", users[target].bux);
+            // Check for inventory property, create if missing
+            if (!users[target].inventory) users[target].inventory = [];
+            
+            // Add item if they don't have it
+            if (!users[target].inventory.some(i => i.id === itemId)) {
+                users[target].inventory.push({id: itemId, name: itemName});
+                localStorage.setItem("blypo_users", JSON.stringify(users));
+                
+                // If it's you, update current session inventory too
+                if (localStorage.getItem("currentUser") === target) {
+                    let myItems = JSON.parse(localStorage.getItem("ownedItems") || "[]");
+                    myItems.push({id: itemId, name: itemName});
+                    localStorage.setItem("ownedItems", JSON.stringify(myItems));
+                }
+                
+                log(`INJECTOR: Granted [${itemName}] to user ${target}.`);
+                alert(`Successfully injected ${itemName}!`);
+            } else {
+                alert("User already owns this item.");
             }
-            log(`Success: Added ${amount} B$ to ${target}`);
-            alert(`Sent B$ ${amount} to ${target}!`);
-            refreshUserList();
         } else {
             alert("Player not found in database.");
         }
     }
 
-    function applyBan() {
-        const target = document.getElementById('target-user').value;
-        const type = document.getElementById('ban-type').value;
-        if(!target) return alert("Enter a username!");
-        log(`CRITICAL: Action [${type}] applied to user ${target}.`);
-        alert(`User ${target} has been processed.`);
-    }
+    function giftBux() {
+        const target = document.getElementById('target-player').value.trim();
+        const amt = parseInt(document.getElementById('quick-bux').value);
+        if(!target || isNaN(amt)) return alert("Invalid Input.");
 
-    // --- SITE CONTENT LOGIC ---
-    function saveSiteContent() {
-        localStorage.setItem("admin_news", document.getElementById('news-in').value);
-        localStorage.setItem("admin_featGame", document.getElementById('feat-game-in').value);
-        log("Site content updated.");
-        alert("Changes Saved to Index!");
-    }
-
-    function resetPoll() {
-        localStorage.removeItem("poll_votes");
-        localStorage.removeItem("hasVoted");
-        log("Poll votes cleared.");
-        alert("Poll has been reset for all users.");
-    }
-
-    function sendBroadcast() {
-        const msg = document.getElementById('broadcast-msg').value;
-        localStorage.setItem("globalAlert", msg);
-        log(`Broadcast Sent: ${msg}`);
-        alert("Alert Sent!");
-    }
-
-    function wipeData() {
-        if(confirm("DANGER: This wipes every user, every item, and every setting. Continue?")) {
-            localStorage.clear();
-            location.href = "index.html";
+        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        if(users[target]) {
+            users[target].bux += amt;
+            localStorage.setItem("blypo_users", JSON.stringify(users));
+            if(localStorage.getItem("currentUser") === target) localStorage.setItem("blypoBux", users[target].bux);
+            log(`ECON: Gifted ${amt} B$ to ${target}.`);
+            alert("Currency Granted.");
         }
     }
 
-    window.onload = function() {
-        document.getElementById('news-in').value = localStorage.getItem("admin_news") || "";
-        document.getElementById('feat-game-in').value = localStorage.getItem("admin_featGame") || "";
-        refreshUserList();
+    function broadcast() {
+        const m = document.getElementById('alert-msg').value;
+        localStorage.setItem("globalAlert", m);
+        log(`BROADCAST: ${m}`);
     }
+
+    setInterval(() => {
+        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+    }, 1000);
+
+    window.onload = () => log("Admin Console Authorized.");
 </script>
 
 </body>
