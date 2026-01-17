@@ -25,14 +25,15 @@
         .game-right { flex-grow: 1; }
         .game-title { font-size: 32px; font-weight: bold; margin: 0; color: #333; }
         .game-meta { font-size: 14px; color: #666; margin: 5px 0 20px 0; }
-        .game-meta b { color: #005596; cursor: pointer; }
+        .game-meta b { color: #005596; }
 
         /* PLAY BUTTON */
         .play-section { background: #f4f4f4; border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center; }
         .play-btn { 
-            background: #02b039; color: white; border: none; padding: 15px 80px; 
+            background: #02b039; color: white; border: none; padding: 15px 0; 
             font-size: 28px; font-weight: bold; cursor: pointer; border-radius: 8px;
             box-shadow: 0 5px 0 #018029; transition: 0.1s; width: 100%;
+            display: block; text-decoration: none;
         }
         .play-btn:hover { background: #02c741; }
         .play-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #018029; }
@@ -64,9 +65,10 @@
                 <div class="game-meta">By <b id="display-creator">Creator</b></div>
 
                 <div class="play-section">
-                    <button class="play-btn" onclick="launchGame()">Play</button>
+                    <a href="#" class="play-btn" id="playLink" onclick="launchGame(event)">Play</a>
+                    
                     <p style="font-size: 10px; color: #888; margin-top: 10px;">
-                        Requires BLYPEME Client to be installed.
+                        Requires BLYPEME Client to be installed in C:\BlypeMe.
                     </p>
                 </div>
             </div>
@@ -81,12 +83,12 @@
     </div>
 
     <script>
-        // 1. Get data from local storage (passed from games.html)
+        // 1. Get data from local storage
         const gameName = localStorage.getItem("gameTarget") || "Baseplate";
         const gameCreator = localStorage.getItem("gameCreator") || "BlypeMe";
         const currentUser = localStorage.getItem("currentUser") || "Guest";
 
-        // 2. Setup Page Content based on the selected game
+        // 2. Setup Page Content
         const gameData = {
             "Happy Home": { emoji: "🏠", desc: "A peaceful place to hang out with friends. Explore the house and relax!" },
             "Brick Battle": { emoji: "⚔️", desc: "Classic combat! Use your tools to destroy the enemy towers and win." },
@@ -95,22 +97,22 @@
 
         const currentData = gameData[gameName] || gameData["Baseplate"];
 
-        // Fill the HTML elements
         document.getElementById('display-title').innerText = gameName;
         document.getElementById('display-creator').innerText = gameCreator;
         document.getElementById('display-emoji').innerText = currentData.emoji;
         document.getElementById('display-desc').innerText = currentData.desc;
 
-        // 3. LAUNCH LOGIC
-        function launchGame() {
-            // The URI scheme we registered in the Windows Registry
-            const protocol = "blypeme://";
-            const args = `launch?user=${currentUser}&game=${gameName}`;
+        // 3. LAUNCH LOGIC (GitHub Optimized)
+        function launchGame(e) {
+            e.preventDefault(); // Stop the link from jumping the page
             
-            // This triggers the Windows "Allow this app to open?" popup
-            window.location.href = protocol + args;
-
-            console.log("Attempting to launch client for: " + currentUser);
+            // Build the protocol link
+            const uri = `blypeme://launch?user=${currentUser}&game=${gameName}`;
+            
+            // Try to open the application
+            window.location.assign(uri);
+            
+            console.log("Launching via GitHub Pages: " + uri);
         }
     </script>
 </body>
