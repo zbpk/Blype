@@ -2,174 +2,198 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - People</title>
+    <title>BLYPEME - People</title>
     <style>
         body {
-            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
-            background-attachment: fixed;
+            background: #ade8ff;
             font-family: 'Verdana', sans-serif;
             margin: 0; padding: 0;
-            min-height: 100vh;
+            text-align: center;
         }
 
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-        }
+        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
 
-        .banner-container {
-            background: #fff;
-            border-bottom: 1px solid #000;
-        }
-        .banner-img {
-            width: 900px;
-            display: block;
-        }
+        /* UNIFIED HEADER */
+        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
+        .banner-img { width: 100%; }
 
         .sub-nav {
             background-color: #8a49a8;
             padding: 8px 0;
             color: white;
             font-size: 11px;
-            text-align: center;
-            border-bottom: 2px solid #5a2d6d;
-            width: 900px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
         }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .sub-nav a:hover { text-decoration: underline; }
 
+        /* MAIN CONTENT GRID */
         .main-container {
             display: grid;
-            grid-template-columns: 200px 1fr;
+            grid-template-columns: 200px 1fr 200px;
             gap: 15px;
-            margin-top: 15px;
+            padding: 20px 0;
+            text-align: left;
         }
 
-        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        /* BOX STYLING */
+        .box { 
+            background: #f0f0f0; 
+            border: 1px solid #a4a4a4; 
+            margin-bottom: 15px; 
+            padding: 10px;
+            font-size: 11px;
+        }
         .box-header {
-            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
-            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+            background: #e9e9e9;
+            border-bottom: 1px solid #a4a4a4;
+            padding: 4px;
+            font-weight: bold;
+            margin: -10px -10px 10px -10px;
+            color: #333;
         }
 
-        /* PEOPLE SEARCH & LIST */
-        .search-row { display: flex; gap: 5px; margin-bottom: 15px; }
-        .search-input { flex-grow: 1; padding: 4px; font-size: 12px; border: 1px solid #777; }
-
+        /* PEOPLE GRID */
         .people-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
         }
         .person-card {
-            border: 1px solid #eee;
+            background: #fff;
+            border: 1px solid #ccc;
             padding: 8px;
             text-align: center;
-            font-size: 10px;
         }
-        .avatar-placeholder {
-            width: 80px;
-            height: 80px;
-            background: #ddd;
-            margin: 0 auto 5px auto;
-            border: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .person-thumb {
+            width: 60px; height: 60px; background: #eee; 
+            margin: 0 auto 5px; border: 1px solid #ddd;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; color: #aaa;
         }
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 3px;
-        }
-        .online { background: #39ff14; }
-        .offline { background: #bbb; }
+        .person-name { font-weight: bold; font-size: 10px; display: block; color: #0000ee; overflow: hidden; text-overflow: ellipsis; }
+        .online-dot { color: #27ae60; font-size: 8px; }
 
-        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
-
-        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+        input { width: 85%; padding: 3px; font-size: 10px; border: 1px solid #777; }
+        .btn-search { background: #eee; border: 1px solid #777; font-size: 10px; cursor: pointer; padding: 2px 5px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container">
-            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" alt="BLYPE" class="banner-img">
         </div>
 
-        <div class="sub-nav">
-            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        <div class="sub-nav" id="main-nav">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="people.html">People</a> |
+            <a href="marketplace.html">Marketplace</a> | 
+            <a href="character.html">Character</a> | 
+            <a href="forum.html">Forum</a> | 
+            <a href="help.html">Help</a>
         </div>
 
         <div class="main-container">
             <aside>
                 <div class="box">
-                    <div class="box-header">Member Login</div>
-                    <div style="font-size: 10px;">Character Name</div>
-                    <input type="text" style="width:90%; font-size:10px; margin-bottom:5px;">
-                    <div style="text-align: center;">
-                        <button class="btn">Login</button>
-                    </div>
+                    <div class="box-header">Search Users</div>
+                    Search by name:<br>
+                    <input type="text" placeholder="Enter username..."><br>
+                    <button class="btn-search">Search</button>
                 </div>
 
                 <div class="box">
-                    <div class="box-header">Users Chip Tray</div>
-                    <div id="tray" style="font-size: 10px;">
-                        <div style="background:#f0f0f0; border:1px solid #ccc; padding:4px; margin-bottom:4px; display:flex; justify-content:space-between;">
-                            Admin_Krew <button onclick="this.parentElement.remove()" style="font-size:8px;">X</button>
-                        </div>
+                    <div class="box-header">Friends Online</div>
+                    <div style="color:#666; font-style:italic; font-size:9px;">
+                        No friends online. Build something together to make friends!
                     </div>
                 </div>
             </aside>
 
             <main>
                 <div class="box">
-                    <div class="box-header">Search BLYPE Players</div>
-                    <div class="search-row">
-                        <input type="text" class="search-input" placeholder="Enter character name...">
-                        <button class="btn">Search</button>
+                    <div class="box-header">Online Now</div>
+                    <div class="people-grid">
+                        <div class="person-card">
+                            <div class="person-thumb">👤</div>
+                            <span class="person-name">Admin_Krew <span class="online-dot">●</span></span>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-thumb">👤</div>
+                            <span class="person-name">Build_Man <span class="online-dot">●</span></span>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-thumb">👤</div>
+                            <span class="person-name">ArcticBuilder <span class="online-dot">●</span></span>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-thumb">👤</div>
+                            <span class="person-name">Robo_Jeff <span class="online-dot">●</span></span>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-thumb">👤</div>
+                            <span class="person-name">PizzaLover <span class="online-dot">●</span></span>
+                        </div>
+                        <div class="person-card">
+                            <div class="person-thumb">👤</div>
+                            <span class="person-name">Guest_4922 <span class="online-dot">●</span></span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="box">
-                    <div class="box-header">Recently Online</div>
-                    <div class="people-grid">
-                        
-                        <div class="person-card">
-                            <div class="avatar-placeholder">Avatar</div>
-                            <b>Admin_Krew</b><br>
-                            <span class="status-dot online"></span><small>Online</small>
-                        </div>
-
-                        <div class="person-card">
-                            <div class="avatar-placeholder">Avatar</div>
-                            <b>ArcticBuilder</b><br>
-                            <span class="status-dot offline"></span><small>Offline</small>
-                        </div>
-
-                        <div class="person-card">
-                            <div class="avatar-placeholder">Avatar</div>
-                            <b>Vesmond</b><br>
-                            <span class="status-dot online"></span><small>In-Game</small>
-                        </div>
-
-                        <div class="person-card">
-                            <div class="avatar-placeholder">Avatar</div>
-                            <b>PixelRacer</b><br>
-                            <span class="status-dot offline"></span><small>Offline</small>
-                        </div>
-
-                    </div>
+                    <div class="box-header">Recently Joined</div>
+                    <table style="width:100%; font-size:10px;">
+                        <tr><td><b>Novus_Rex</b></td><td style="text-align:right; color:#888;">Joined 2 mins ago</td></tr>
+                        <tr><td><b>Cinder_Block</b></td><td style="text-align:right; color:#888;">Joined 15 mins ago</td></tr>
+                        <tr><td><b>Sparky09</b></td><td style="text-align:right; color:#888;">Joined 1 hour ago</td></tr>
+                    </table>
                 </div>
             </main>
+
+            <aside>
+                <div class="box" id="admin-view" style="display:none;">
+                    <div class="box-header" style="background:#ffcccc;">Admin Tools</div>
+                    <span style="font-size:9px;">
+                        <b>Current IP Logs:</b><br>
+                        192.168.1.1 (Admin)<br>
+                        72.14.21.0 (Build_Man)<br><br>
+                        <button class="btn-search" style="width:100%;" onclick="alert('Searching for Alts...')">Check for Alts</button>
+                    </span>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">Community Stats</div>
+                    Members: <b>1,402</b><br>
+                    Online: <b>156</b><br>
+                    New Today: <b>14</b>
+                </div>
+            </aside>
         </div>
 
         <div class="footer">
-            Privacy Policy | Advertise | Contact Us | About Us | Jobs
-            <br><br>
-            <b>BLYPE Corporation © 2026</b>
+            BLYPEME Corporation © 2026. Be respectful to other builders!
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+            
+            if (isAdmin) {
+                // Show admin sidebar tools
+                document.getElementById('admin-view').style.display = "block";
+                
+                // Add Admin Tab to Nav
+                const nav = document.getElementById('main-nav');
+                if(!nav.innerHTML.includes("admin.html")) {
+                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
+                }
+            }
+        };
+    </script>
 </body>
 </html>
