@@ -2,193 +2,248 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - Home</title>
+    <title>BLYPEME - Master Control Console</title>
+    <script>
+        if (localStorage.getItem("isAdmin") !== "true") window.location.replace("index.html");
+    </script>
     <style>
         :root {
-            --bg-blue: #ade8ff;
-            --blype-purple: #8a49a8;
-            --blype-green: #72fb3c;
-            --box-gray: #f0f0f0;
-            --header-gray: #e9e9e9;
-            --border-gray: #a4a4a4;
+            --admin-dark: #1a1a1a;
+            --admin-blue: #007bff;
+            --admin-red: #d9534f;
+            --admin-green: #5cb85c;
+            --admin-gold: #f0ad4e;
         }
 
-        body { background: var(--bg-blue); font-family: 'Verdana', sans-serif; margin: 0; padding: 0; text-align: center; color: #333; }
-        .site-wrapper { width: 900px; margin: 0 auto; background: transparent; }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 1000px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.5); background: #fff; min-height: 100vh; }
+        
+        /* HEADER */
+        .admin-header { background: var(--admin-dark); color: white; padding: 20px; text-align: left; border-bottom: 4px solid var(--admin-red); }
+        .admin-header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; }
+        .admin-header p { margin: 5px 0 0; font-size: 10px; color: #aaa; }
 
-        /* HEADER & NAV */
-        .banner-container { background: #fff; border-bottom: 2px solid #000; width: 900px; height: 110px; cursor: pointer; }
-        .banner-img { width: 100%; }
+        .sub-nav { background: #333; padding: 10px; font-size: 11px; }
+        .sub-nav a { color: #72fb3c; text-decoration: none; font-weight: bold; margin-right: 20px; }
 
-        .sub-nav { 
-            background-color: var(--blype-purple); 
-            padding: 10px 0; color: white; font-size: 11px; font-weight: bold; border-bottom: 1px solid #000;
+        /* ACCORDION */
+        .admin-section { border: 1px solid #ccc; margin: 10px 20px; border-radius: 4px; overflow: hidden; }
+        .dropdown-header {
+            background: #f8f9fa; padding: 12px; font-weight: bold; cursor: pointer;
+            display: flex; justify-content: space-between; user-select: none; border-bottom: 1px solid #eee;
         }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 12px; }
+        .dropdown-header:hover { background: #f1f1f1; }
+        .content { display: none; padding: 20px; background: #fff; }
+        .content.active { display: block; }
 
-        /* LAYOUT */
-        .main-container { display: grid; grid-template-columns: 210px 1fr 210px; gap: 15px; padding: 20px; text-align: left; }
-
-        .box { background: var(--box-gray); border: 1px solid var(--border-gray); margin-bottom: 15px; padding: 12px; font-size: 11px; }
-        .box-header { background: var(--header-gray); border-bottom: 1px solid var(--border-gray); padding: 6px; font-weight: bold; margin: -12px -12px 10px -12px; font-size: 10px; }
-
-        input { width: 90%; margin-bottom: 8px; font-size: 10px; border: 1px solid #777; padding: 3px; }
-        .btn-action { background: var(--blype-green); border: 1px solid #27ae60; padding: 6px 12px; font-weight: bold; cursor: pointer; font-size: 10px; width: 100%; }
+        /* INPUTS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        label { display: block; font-size: 10px; font-weight: bold; color: #444; margin-bottom: 5px; text-transform: uppercase; }
+        input, textarea, select { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; box-sizing: border-box; }
         
-        .mini-avatar { width: 80px; height: 80px; background: #fff; border: 1px solid #ccc; margin: 5px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        
-        /* POLL RESULTS BAR */
-        .poll-bar { background: #ddd; height: 10px; border-radius: 5px; margin-top: 5px; overflow: hidden; }
-        .poll-fill { background: var(--blype-purple); height: 100%; width: 0%; transition: width 0.5s; }
+        .btn { padding: 10px 20px; border: none; font-weight: bold; cursor: pointer; font-size: 11px; border-radius: 3px; }
+        .btn-blue { background: var(--admin-blue); color: white; }
+        .btn-red { background: var(--admin-red); color: white; }
+        .btn-green { background: var(--admin-green); color: white; }
+        .btn-gold { background: var(--admin-gold); color: white; }
+
+        /* USER LIST TABLE */
+        .user-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .user-table th { background: #eee; text-align: left; padding: 8px; border: 1px solid #ddd; }
+        .user-table td { padding: 8px; border: 1px solid #ddd; }
+
+        .console { background: #000; color: #0f0; font-family: monospace; padding: 15px; font-size: 11px; height: 100px; overflow-y: scroll; margin: 20px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="site-wrapper">
-        <div class="banner-container" onclick="window.location.href='index.html'">
-            <img src="Banner.png" class="banner-img">
-        </div>
+<div class="site-wrapper">
+    <div class="admin-header">
+        <h1>BLYPEME MASTER CONSOLE</h1>
+        <p>System Status: ONLINE | Root Access: GRANTED | Server: Canada_East_1</p>
+    </div>
 
-        <nav class="sub-nav" id="main-nav">
-            <a href="index.html">HOME</a>
-            <a href="games.html">GAMES</a>
-            <a href="people.html">PEOPLE</a>
-            <a href="marketplace.html">MARKETPLACE</a>
-            <a href="character.html">CHARACTER</a>
-            <a href="shop.html">SHOP</a>
-            <a href="forum.html">FORUM</a>
-        </nav>
+    <div class="sub-nav">
+        <a href="index.html">← RETURN TO SITE</a>
+        <a href="#" onclick="location.reload()">REFRESH ENGINE</a>
+        <a href="#" style="color:red;" onclick="wipeData()">FACTORY RESET</a>
+    </div>
 
-        <div class="main-container">
-            <aside>
-                <div class="box" id="auth-box">
-                    <div class="box-header">Login / Register</div>
-                    <div id="logged-out">
-                        <input type="text" id="user" placeholder="Username">
-                        <input type="password" id="pass" placeholder="Password">
-                        <button class="btn-action" onclick="handleAuth('login')">LOGIN</button>
-                        <button class="btn-action" style="margin-top:5px; background:#fff;" onclick="handleAuth('register')">REGISTER</button>
-                    </div>
-                    <div id="logged-in" style="display:none; text-align:center;">
-                        <div class="mini-avatar">👤</div>
-                        <b id="display-name">User</b><br>
-                        <span style="color:green; font-weight:bold;">B$ <span id="balance">0</span></span><br>
-                        <button class="btn-action" style="margin-top:10px; background:#eee;" onclick="logout()">LOGOUT</button>
-                    </div>
-                </div>
-            </aside>
-
-            <main>
-                <div class="box">
-                    <div class="box-header">Site News</div>
-                    <div id="news-content">Welcome to BLYPEME! Create an account to start your journey.</div>
-                </div>
-                <div class="box">
-                    <div class="box-header">Featured Experience</div>
-                    <h2 id="feat-game-name" style="margin:0; font-size:16px;">Frozen Peak Obby</h2>
-                    <p>Challenge yourself in the tundra!</p>
-                </div>
-            </main>
-
-            <aside>
-                <div class="box">
-                    <div class="box-header">Community Poll</div>
-                    <div id="poll-ui">
-                        <b>Favorite Hat?</b><br>
-                        <input type="radio" name="hat" value="fedora"> Fedora<br>
-                        <input type="radio" name="hat" value="crown"> Crown<br>
-                        <button class="btn-action" style="margin-top:10px;" onclick="vote()">VOTE</button>
-                    </div>
-                    <div id="poll-results" style="display:none;">
-                        Fedora: <span id="fedora-count">0</span>%
-                        <div class="poll-bar"><div id="bar-fedora" class="poll-fill"></div></div>
-                        Crown: <span id="crown-count">0</span>%
-                        <div class="poll-bar"><div id="bar-crown" class="poll-fill"></div></div>
-                        <p style="font-size:9px; color:#666; margin-top:5px;">Thanks for voting!</p>
-                    </div>
-                </div>
-            </aside>
+    <div class="admin-section">
+        <div class="dropdown-header" onclick="toggle(this)">👥 USER DATABASE & PLAYER DISRECTORY <span>[+]</span></div>
+        <div class="content">
+            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 15px;">
+                <table class="user-table" id="user-list-table">
+                    <thead><tr><th>Username</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="user-rows"></tbody>
+                </table>
+            </div>
+            <button class="btn btn-blue" onclick="refreshUserList()">REFRESH DATABASE</button>
         </div>
     </div>
 
-    <script>
-        function format(n){ n=parseInt(n); if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e3)return(n/1e3).toFixed(1)+'K'; return n; }
+    <div class="admin-section">
+        <div class="dropdown-header" onclick="toggle(this)">⚡ INDIVIDUAL PLAYER MANIPULATION <span>[+]</span></div>
+        <div class="content">
+            <div class="grid-2">
+                <div>
+                    <label>Target Username</label>
+                    <input type="text" id="target-user" placeholder="Enter exact name...">
+                    
+                    <label>Gift Blypo-Bux (B$)</label>
+                    <input type="number" id="gift-amount" placeholder="Amount to add...">
+                    <button class="btn btn-green" onclick="giveBux()">GIVE CURRENCY</button>
+                </div>
+                <div>
+                    <label>Moderation Action</label>
+                    <select id="ban-type">
+                        <option value="warn">Issue Warning</option>
+                        <option value="kick">Server Kick</option>
+                        <option value="ban">Permanent Ban</option>
+                    </select>
+                    <label>Reason for Ban</label>
+                    <textarea id="ban-reason" placeholder="Spamming, hacking, etc."></textarea>
+                    <button class="btn btn-red" onclick="applyBan()">APPLY PENALTY</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // --- AUTH SYSTEM ---
-        function handleAuth(type) {
-            const u = document.getElementById('user').value.trim();
-            const p = document.getElementById('pass').value.trim();
-            if(!u || !p) return alert("Fill in both fields!");
-
-            let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-
-            if(type === 'register') {
-                if(users[u]) return alert("Username taken!");
-                users[u] = { password: p, bux: 500, isAdmin: (u.toLowerCase() === 'admin') };
-                localStorage.setItem("blypo_users", JSON.stringify(users));
-                alert("Account created! You can now login.");
-            } else {
-                if(users[u] && users[u].password === p) {
-                    localStorage.setItem("currentUser", u);
-                    localStorage.setItem("isAdmin", users[u].isAdmin);
-                    localStorage.setItem("blypoBux", users[u].bux);
-                    location.reload();
-                } else { alert("Invalid credentials!"); }
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem("isAdmin");
-            location.reload();
-        }
-
-        // --- VOTING SYSTEM ---
-        function vote() {
-            const selected = document.querySelector('input[name="hat"]:checked');
-            if(!selected) return alert("Select an option!");
+    <div class="admin-section">
+        <div class="dropdown-header" onclick="toggle(this)">📰 CONTENT & POLL MANAGEMENT <span>[+]</span></div>
+        <div class="content">
+            <label>Site-Wide Announcement (News)</label>
+            <textarea id="news-in" rows="3"></textarea>
             
-            let votes = JSON.parse(localStorage.getItem("poll_votes") || '{"fedora":12, "crown":8}');
-            votes[selected.value]++;
-            localStorage.setItem("poll_votes", JSON.stringify(votes));
-            localStorage.setItem("hasVoted", "true");
-            showResults();
+            <label>Update Featured Game</label>
+            <input type="text" id="feat-game-in">
+
+            <div class="grid-2">
+                <div>
+                    <label>Current Poll Question</label>
+                    <input type="text" id="poll-q" value="Favorite Hat?">
+                </div>
+                <div>
+                    <label>Reset Poll Data</label><br>
+                    <button class="btn btn-gold" onclick="resetPoll()">CLEAR ALL VOTES</button>
+                </div>
+            </div>
+            <button class="btn btn-blue" style="width:100%; margin-top:10px;" onclick="saveSiteContent()">SAVE CONTENT CHANGES</button>
+        </div>
+    </div>
+
+    <div class="admin-section">
+        <div class="dropdown-header" onclick="toggle(this)">🚨 SYSTEM ALERTS & EVENT TRIGGERS <span>[+]</span></div>
+        <div class="content">
+            <label>Site Broadcast (Urgent Alert)</label>
+            <input type="text" id="broadcast-msg" placeholder="Attention all players...">
+            <button class="btn btn-red" onclick="sendBroadcast()">SEND GLOBAL ALERT</button>
+
+            <div style="margin-top:20px;">
+                <label>Developer Event Triggers</label>
+                <button class="btn btn-gold" onclick="log('Event: 2x B$ Weekend Started!')">START 2x BUX EVENT</button>
+                <button class="btn btn-gold" onclick="log('Event: Maintenance Mode Enabled.')">ENABLE MAINTENANCE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="console" id="admin-log">[READY] Master Console Version 10.04 - Authorization Successful.</div>
+</div>
+
+<script>
+    function toggle(header) {
+        const content = header.nextElementSibling;
+        content.classList.toggle('active');
+        header.querySelector('span').innerText = content.classList.contains('active') ? '[-]' : '[+]';
+    }
+
+    function log(msg) {
+        const logger = document.getElementById('admin-log');
+        logger.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${msg}`;
+        logger.scrollTop = logger.scrollHeight;
+    }
+
+    // --- USER DATABASE LOGIC ---
+    function refreshUserList() {
+        const users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        const tbody = document.getElementById('user-rows');
+        tbody.innerHTML = '';
+        
+        for (let name in users) {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${name} ${users[name].isAdmin ? '<b style="color:red;">[ADMIN]</b>' : ''}</td>
+                <td>B$ ${users[name].bux}</td>
+                <td>Active</td>
+                <td><button class="btn btn-red" style="padding:2px 5px; font-size:9px;" onclick="deleteUser('${name}')">DELETE</button></td>
+            `;
         }
+        log("Database Refreshed.");
+    }
 
-        function showResults() {
-            document.getElementById('poll-ui').style.display = 'none';
-            document.getElementById('poll-results').style.display = 'block';
-            const v = JSON.parse(localStorage.getItem("poll_votes") || '{"fedora":12, "crown":8}');
-            const total = v.fedora + v.crown;
-            const fPerc = Math.round((v.fedora / total) * 100);
-            const cPerc = 100 - fPerc;
+    function giveBux() {
+        const target = document.getElementById('target-user').value;
+        const amount = parseInt(document.getElementById('gift-amount').value);
+        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
 
-            document.getElementById('fedora-count').innerText = fPerc;
-            document.getElementById('bar-fedora').style.width = fPerc + '%';
-            document.getElementById('crown-count').innerText = cPerc;
-            document.getElementById('bar-crown').style.width = cPerc + '%';
-        }
-
-        window.onload = function() {
-            const user = localStorage.getItem("currentUser");
-            if(user) {
-                document.getElementById('logged-out').style.display = 'none';
-                document.getElementById('logged-in').style.display = 'block';
-                document.getElementById('display-name').innerText = user;
-                document.getElementById('balance').innerText = format(localStorage.getItem("blypoBux") || 0);
-                
-                if(localStorage.getItem("isAdmin") === "true") {
-                    const nav = document.getElementById('main-nav');
-                    nav.innerHTML += '<a href="admin.html" style="color:yellow;">ADMIN</a>';
-                }
+        if (users[target]) {
+            users[target].bux += amount;
+            localStorage.setItem("blypo_users", JSON.stringify(users));
+            // If target is YOU, update your current session balance too
+            if(localStorage.getItem("currentUser") === target) {
+                localStorage.setItem("blypoBux", users[target].bux);
             }
-
-            if(localStorage.getItem("hasVoted")) showResults();
-
-            // Load Admin content
-            if(localStorage.getItem("admin_news")) document.getElementById('news-content').innerHTML = localStorage.getItem("admin_news");
-            if(localStorage.getItem("admin_featGame")) document.getElementById('feat-game-name').innerText = localStorage.getItem("admin_featGame");
+            log(`Success: Added ${amount} B$ to ${target}`);
+            alert(`Sent B$ ${amount} to ${target}!`);
+            refreshUserList();
+        } else {
+            alert("Player not found in database.");
         }
-    </script>
+    }
+
+    function applyBan() {
+        const target = document.getElementById('target-user').value;
+        const type = document.getElementById('ban-type').value;
+        if(!target) return alert("Enter a username!");
+        log(`CRITICAL: Action [${type}] applied to user ${target}.`);
+        alert(`User ${target} has been processed.`);
+    }
+
+    // --- SITE CONTENT LOGIC ---
+    function saveSiteContent() {
+        localStorage.setItem("admin_news", document.getElementById('news-in').value);
+        localStorage.setItem("admin_featGame", document.getElementById('feat-game-in').value);
+        log("Site content updated.");
+        alert("Changes Saved to Index!");
+    }
+
+    function resetPoll() {
+        localStorage.removeItem("poll_votes");
+        localStorage.removeItem("hasVoted");
+        log("Poll votes cleared.");
+        alert("Poll has been reset for all users.");
+    }
+
+    function sendBroadcast() {
+        const msg = document.getElementById('broadcast-msg').value;
+        localStorage.setItem("globalAlert", msg);
+        log(`Broadcast Sent: ${msg}`);
+        alert("Alert Sent!");
+    }
+
+    function wipeData() {
+        if(confirm("DANGER: This wipes every user, every item, and every setting. Continue?")) {
+            localStorage.clear();
+            location.href = "index.html";
+        }
+    }
+
+    window.onload = function() {
+        document.getElementById('news-in').value = localStorage.getItem("admin_news") || "";
+        document.getElementById('feat-game-in').value = localStorage.getItem("admin_featGame") || "";
+        refreshUserList();
+    }
+</script>
+
 </body>
 </html>
