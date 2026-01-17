@@ -21,9 +21,9 @@
             display: block; text-decoration: none;
         }
 
-        /* FAKE LAUNCHER POPUP (The "Roblox" Style) */
+        /* FAKE LAUNCHER POPUP */
         #launcher-overlay {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 1000;
             align-items: center; justify-content: center;
@@ -35,12 +35,13 @@
         .loading-bar-bg { background: #ddd; height: 20px; width: 100%; border-radius: 10px; margin-top: 20px; overflow: hidden; }
         #loading-bar-fill { background: #02b039; height: 100%; width: 0%; transition: width 0.1s linear; }
         
-        /* Game content styles... */
+        /* Layout */
         .game-container { padding: 20px; display: flex; gap: 30px; border-bottom: 1px solid #eee; }
         .game-left { width: 420px; }
         .game-screenshot { width: 400px; height: 250px; background: #333; display: flex; align-items: center; justify-content: center; font-size: 80px; color: white; border: 4px solid #000; }
         .game-title { font-size: 32px; font-weight: bold; margin: 0; color: #333; }
         .game-meta a { color: #005596; text-decoration: none; font-weight: bold; }
+        .game-meta a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -67,7 +68,9 @@
             </div>
             <div class="game-right">
                 <h1 id="display-title" class="game-title">Loading...</h1>
-                <div class="game-meta">By <a href="#" id="creator-link" onclick="goToProfile(event)">Loading...</a></div>
+                
+                <div class="game-meta">By <a href="#" onclick="goToAdminProfile(event)">admin</a></div>
+                
                 <div class="play-section">
                     <a href="#" class="play-btn" id="playLink" onclick="startFakeLaunch(event)">Play</a>
                 </div>
@@ -77,35 +80,43 @@
 
     <script>
         const gameName = localStorage.getItem("gameTarget") || "Baseplate";
-        const gameCreator = localStorage.getItem("gameCreator") || "BlypeMe";
         const currentUser = localStorage.getItem("currentUser") || "Guest";
 
-        // Setup Page text
-        window.onload = function() {
-            document.getElementById('display-title').innerText = gameName;
-            document.getElementById('creator-link').innerText = gameCreator;
+        // Game Database
+        const gameData = {
+            "Happy Home": { emoji: "🏠", desc: "A peaceful place to hang out with friends." },
+            "Brick Battle": { emoji: "⚔️", desc: "Classic combat! Destroy the enemy towers." },
+            "Baseplate": { emoji: "🧱", desc: "A blank canvas for creators." }
         };
 
-        // THE FAKE LOADING LOGIC
+        window.onload = function() {
+            const currentData = gameData[gameName] || gameData["Baseplate"];
+            document.getElementById('display-title').innerText = gameName;
+            document.getElementById('display-emoji').innerText = currentData.emoji;
+        };
+
+        // NAVIGATION: Always go to Admin
+        function goToAdminProfile(e) {
+            e.preventDefault();
+            localStorage.setItem("profileTarget", "admin"); // Forces profile to be admin
+            window.location.href = "profile.html";
+        }
+
+        // FAKE LAUNCHER LOGIC
         function startFakeLaunch(e) {
             e.preventDefault();
-            
             const overlay = document.getElementById('launcher-overlay');
             const fill = document.getElementById('loading-bar-fill');
             const status = document.getElementById('launcher-status');
             
-            // 1. Show the popup
             overlay.style.display = "flex";
             
-            // 2. Pick random time between 2000ms (2s) and 4000ms (4s)
             const duration = Math.floor(Math.random() * (4000 - 2000 + 1)) + 2000;
             const startTime = Date.now();
 
-            // 3. Animate the bar
             const interval = setInterval(() => {
                 const elapsed = Date.now() - startTime;
                 const progress = (elapsed / duration) * 100;
-                
                 fill.style.width = progress + "%";
                 
                 if (progress >= 50) status.innerText = "Connecting to Server...";
@@ -119,22 +130,14 @@
         }
 
         function finishLaunch() {
-            // 4. Trigger the actual game launch protocol
             const uri = `blypeme://launch?user=${currentUser}&game=${gameName}`;
             window.location.assign(uri);
             
-            // 5. Hide the fake launcher after it triggers the game
             setTimeout(() => {
                 document.getElementById('launcher-overlay').style.display = "none";
-                document.getElementById('loading-bar-fill').style.width = "0%"; // Reset for next time
+                document.getElementById('loading-bar-fill').style.width = "0%";
                 document.getElementById('launcher-status').innerText = "Starting BLYPEME...";
             }, 1000);
-        }
-
-        function goToProfile(e) {
-            e.preventDefault();
-            localStorage.setItem("profileTarget", gameCreator);
-            window.location.href = "profile.html";
         }
     </script>
 </body>
