@@ -2,202 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - Home</title>
+    <title>BLYPEME - Inbox</title>
     <style>
         body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
-        
-        /* SYSTEM RED BAR */
-        #red-alert-bar { 
-            background: #d92525; color: white; padding: 10px; text-align: center; 
-            font-weight: bold; font-size: 13px; display: none; border-bottom: 2px solid #a00;
-        }
-
         .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        /* HEADER & NOTIFICATION */
-        .header { background: #005596; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 24px; font-weight: bold; letter-spacing: -1px; }
-        .notify-badge { background: #ffea00; color: #000; padding: 2px 6px; border-radius: 10px; font-weight: bold; font-size: 10px; margin-left: 5px; text-decoration: none; }
-        
+        /* HEADER */
+        .header { background: #005596; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
         .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
         .nav a { margin-right: 15px; text-decoration: none; color: blue; }
 
-        .content { padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        .content { padding: 20px; }
+        .tab-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #005596; padding-bottom: 5px; }
 
-        /* HERO BOXES & CLOSE BUTTON */
-        .hero-box { border: 1px solid #ccc; padding: 20px; background: #f9f9f9; margin-bottom: 20px; position: relative; }
-        .close-btn { position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold; color: #999; font-size: 14px; }
-        .close-btn:hover { color: #d92525; }
+        /* REQUESTS & MESSAGES */
+        .box-item { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; background: #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
+        .box-item:hover { background: #f0f8ff; }
+        
+        .msg-content { flex-grow: 1; margin-right: 20px; }
+        .msg-sender { font-weight: bold; color: #005596; font-size: 13px; display: block; margin-bottom: 5px; }
+        .msg-text { font-size: 12px; color: #333; }
+        .msg-date { font-size: 10px; color: #999; margin-top: 5px; }
 
-        .login-box { border: 1px solid #ccc; padding: 20px; background: #eee; }
-        input { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; border: 1px solid #ccc; }
-        .btn { width: 100%; padding: 10px; background: #005596; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-reg { background: #007a3d; margin-top: 5px; }
+        /* BUTTONS */
+        .btn { padding: 5px 15px; border: none; cursor: pointer; font-weight: bold; border-radius: 3px; font-size: 11px; }
+        .btn-acc { background: #007a3d; color: white; }
+        .btn-dec { background: #d92525; color: white; margin-left: 5px; }
+        .btn-view { background: #005596; color: white; }
 
-        /* USER DASHBOARD */
-        #user-dash { display: none; }
-        .avatar-preview { width: 100px; height: 120px; background: #fff; border: 1px solid #ccc; float: left; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        .logout-link { font-size: 10px; color: blue; cursor: pointer; text-decoration: underline; }
+        .empty-hint { color: #999; font-style: italic; font-size: 13px; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="red-alert-bar"></div>
-
     <div class="site-wrapper">
-        <div class="header">
-            <div class="logo">BLYPEME</div>
-            <div id="header-auth" style="font-size:12px; display: flex; align-items: center;">
-                Welcome, Guest!
-            </div>
-        </div>
-        
+        <div class="header">MY INBOX</div>
         <div class="nav">
-            <a href="index.html"><b>Home</b></a> | 
-            <a href="games.html">Games</a> | 
-            <a href="marketplace.html">Catalog</a> | 
-            <a href="people.html">People</a> |
-            <a href="inbox.html" id="inbox-link">Inbox</a> |
-            <a href="admin.html" id="admin-link" style="display:none; color:red; font-weight:bold;">Admin</a>
+            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="settings.html">Settings</a>
         </div>
 
         <div class="content">
-            <div class="main-column">
-                
-                <div id="logged-out-hero" class="hero-box">
-                    <span class="close-btn" onclick="closeBanner('logged-out-hero', 5)">x</span>
-                    <h1>Imagine Anything.</h1>
-                    <p>BLYPEME is a user-generated gaming platform. Build, play, and socialize!</p>
-                    <div style="width:100%; height:150px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-weight:bold;">[2011 ERA ART]</div>
-                </div>
-
-                <div id="user-dash" class="hero-box">
-                    <span class="close-btn" onclick="closeBanner('user-dash', 5)">x</span>
-                    <div class="avatar-preview">👤</div>
-                    <h2 id="welcome-name" style="margin:0;">Hello!</h2>
-                    <p style="font-size:12px; margin-top:5px;">Balance: <b id="dash-bux">0</b> B$</p>
-                    <div style="clear:both; padding-top:10px;">
-                        <span class="logout-link" onclick="logout()">Logout</span>
-                    </div>
-                </div>
-
-                <div class="hero-box">
-                    <h3>Site News & Updates</h3>
-                    <div id="news-feed" style="font-size:12px;">
-                        <p><b>Jan 16, 2026:</b> Social systems are live! You can now send friend requests and messages.</p>
-                    </div>
-                </div>
+            <div class="tab-header">Friend Requests</div>
+            <div id="request-list">
+                <div class="empty-hint">Loading requests...</div>
             </div>
 
-            <div class="side-column">
-                <div class="login-box" id="auth-ui">
-                    <h3 style="margin-top:0;">Member Login</h3>
-                    <input type="text" id="user-in" placeholder="Username">
-                    <input type="password" id="pass-in" placeholder="Password">
-                    <button class="btn" onclick="login()">Login</button>
-                    <button class="btn btn-reg" onclick="register()">Create Account</button>
-                </div>
-                
-                <div class="login-box" style="margin-top:20px;">
-                    <h3>Statistics</h3>
-                    <p style="font-size:11px;">Total Users: <b id="total-accounts">0</b></p>
-                    <p style="font-size:11px;">System Status: <b style="color:green;">Online</b></p>
-                </div>
+            <br><br>
+
+            <div class="tab-header">Messages</div>
+            <div id="message-list">
+                <div class="empty-hint">Loading messages...</div>
             </div>
         </div>
     </div>
 
     <script>
-        // MASTER DATA ACCESS
-        function getDB(key) { return JSON.parse(localStorage.getItem(key) || (key === 'blypo_users' ? "{}" : "[]")); }
+        const BLYPE = {
+            me: localStorage.getItem("currentUser"),
+            db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
+        };
 
-        function updateLiveUI() {
-            const users = getDB('blypo_users');
-            const currentUser = localStorage.getItem("currentUser");
-            const alertMsg = localStorage.getItem("globalAlert");
-            const requests = getDB('blypo_requests');
-
-            // 1. Alert Bar
-            const bar = document.getElementById('red-alert-bar');
-            if (alertMsg) { bar.innerText = alertMsg; bar.style.display = "block"; } 
-            else { bar.style.display = "none"; }
-
-            // 2. Notification Dot
-            let notifyHTML = "";
-            if (currentUser) {
-                const myReqs = requests.filter(r => r.to === currentUser).length;
-                if (myReqs > 0) {
-                    notifyHTML = `<a href="inbox.html" class="notify-badge">${myReqs}</a>`;
-                }
+        function loadInbox() {
+            if (!BLYPE.me) {
+                document.querySelector('.content').innerHTML = "<h1>Please log in to view your inbox.</h1>";
+                return;
             }
 
-            // 3. Auth UI
-            if (currentUser && users[currentUser]) {
-                const data = users[currentUser];
-                document.getElementById('header-auth').innerHTML = `${currentUser} (${data.bux} B$) ${notifyHTML}`;
-                document.getElementById('logged-out-hero').style.display = "none";
-                document.getElementById('auth-ui').style.display = "none";
-                
-                // Show Banner only if not expired
-                if (!isExpired('user-dash')) { document.getElementById('user-dash').style.display = "block"; }
-                
-                document.getElementById('welcome-name').innerText = "Hello, " + currentUser + "!";
-                document.getElementById('dash-bux').innerText = (data.bux || 0).toLocaleString();
-                if (data.isAdmin) document.getElementById('admin-link').style.display = "inline";
+            // 1. HANDLE FRIEND REQUESTS
+            const requests = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
+            const reqList = document.getElementById('request-list');
+            const myReqs = requests.filter(r => r.to === BLYPE.me);
+
+            if (myReqs.length === 0) {
+                reqList.innerHTML = "<div class='empty-hint'>You have no pending friend requests.</div>";
             } else {
-                document.getElementById('header-auth').innerHTML = "Welcome, Guest!";
-                if (!isExpired('logged-out-hero')) { document.getElementById('logged-out-hero').style.display = "block"; }
-                document.getElementById('auth-ui').style.display = "block";
-                document.getElementById('user-dash').style.display = "none";
+                reqList.innerHTML = myReqs.map(r => `
+                    <div class="box-item">
+                        <div class="msg-content">
+                            <span class="msg-sender">${r.from}</span>
+                            <span class="msg-text">sent you a friend request!</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-acc" onclick="handleFriend('${r.from}', true)">Accept</button>
+                            <button class="btn btn-dec" onclick="handleFriend('${r.from}', false)">Decline</button>
+                        </div>
+                    </div>
+                `).join('');
             }
 
-            document.getElementById('total-accounts').innerText = Object.keys(users).length;
+            // 2. HANDLE MESSAGES
+            const messages = JSON.parse(localStorage.getItem("blypo_messages") || "[]");
+            const msgList = document.getElementById('message-list');
+            const myMsgs = messages.filter(m => m.to === BLYPE.me);
+
+            if (myMsgs.length === 0) {
+                msgList.innerHTML = "<div class='empty-hint'>Your message folder is empty.</div>";
+            } else {
+                msgList.innerHTML = myMsgs.reverse().map(m => `
+                    <div class="box-item">
+                        <div class="msg-content">
+                            <span class="msg-sender">From: ${m.from}</span>
+                            <div class="msg-text">"${m.content}"</div>
+                            <div class="msg-date">${m.date}</div>
+                        </div>
+                        <button class="btn btn-view" onclick="viewProfile('${m.from}')">Reply</button>
+                    </div>
+                `).join('');
+            }
         }
 
-        // BANNER TIMER LOGIC
-        function closeBanner(id, hours) {
-            document.getElementById(id).style.display = 'none';
-            const expiry = new Date().getTime() + (hours * 60 * 60 * 1000);
-            localStorage.setItem(id + "_expiry", expiry);
+        function handleFriend(sender, approved) {
+            let requests = JSON.parse(localStorage.getItem("blypo_requests") || "[]");
+            
+            if (approved) {
+                // Update Both User Files
+                if (!BLYPE.db[BLYPE.me].friends) BLYPE.db[BLYPE.me].friends = [];
+                if (!BLYPE.db[sender].friends) BLYPE.db[sender].friends = [];
+                
+                // Add if not already there
+                if (!BLYPE.db[BLYPE.me].friends.includes(sender)) BLYPE.db[BLYPE.me].friends.push(sender);
+                if (!BLYPE.db[sender].friends.includes(BLYPE.me)) BLYPE.db[sender].friends.push(BLYPE.me);
+                
+                localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
+                alert("You are now friends with " + sender + "!");
+            }
+
+            // Remove the request record
+            requests = requests.filter(r => !(r.from === sender && r.to === BLYPE.me));
+            localStorage.setItem("blypo_requests", JSON.stringify(requests));
+            
+            loadInbox();
         }
 
-        function isExpired(id) {
-            const expiry = localStorage.getItem(id + "_expiry");
-            return expiry && new Date().getTime() < expiry;
+        function viewProfile(name) {
+            localStorage.setItem("profileTarget", name);
+            window.location.href = "profile.html";
         }
 
-        // AUTH FUNCTIONS
-        function register() {
-            const u = document.getElementById('user-in').value.trim();
-            const p = document.getElementById('pass-in').value.trim();
-            if (!u || !p) return alert("Fill fields!");
-            const users = getDB('blypo_users');
-            if (users[u]) return alert("Username taken!");
-            users[u] = { password: p, bux: 500, isAdmin: (u.toLowerCase()==="admin"), inventory: ["Brown Shirt"], id: Math.floor(Math.random()*90000)+10000, friends: [] };
-            localStorage.setItem("blypo_users", JSON.stringify(users));
-            alert("Registered! Now Login.");
-            updateLiveUI();
-        }
-
-        function login() {
-            const u = document.getElementById('user-in').value.trim();
-            const p = document.getElementById('pass-in').value.trim();
-            const users = getDB('blypo_users');
-            if (users[u] && users[u].password === p) {
-                localStorage.setItem("currentUser", u);
-                localStorage.setItem("isAdmin", users[u].isAdmin);
-                location.reload();
-            } else { alert("Invalid!"); }
-        }
-
-        function logout() {
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem("isAdmin");
-            location.reload();
-        }
-
-        window.addEventListener('storage', () => updateLiveUI());
-        window.onload = updateLiveUI;
+        window.onload = loadInbox;
     </script>
 </body>
 </html>
