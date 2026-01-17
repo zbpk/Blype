@@ -4,196 +4,132 @@
     <meta charset="UTF-8">
     <title>BLYPEME - Shop</title>
     <style>
-        body {
-            background: #ade8ff;
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            text-align: center;
-        }
-
-        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
-
-        /* UNIFIED HEADER */
-        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
-        .banner-img { width: 100%; }
-
-        .sub-nav {
-            background-color: #8a49a8;
-            padding: 8px 0;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-        }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
-        .sub-nav a:hover { text-decoration: underline; }
-
-        /* MAIN CONTENT GRID */
-        .main-container {
-            display: grid;
-            grid-template-columns: 200px 1fr 200px;
-            gap: 15px;
-            padding: 20px 0;
-            text-align: left;
-        }
-
-        /* BOX STYLING */
-        .box { 
-            background: #f0f0f0; 
-            border: 1px solid #a4a4a4; 
-            margin-bottom: 15px; 
-            padding: 10px;
-            font-size: 11px;
-        }
-        .box-header {
-            background: #e9e9e9;
-            border-bottom: 1px solid #a4a4a4;
-            padding: 4px;
-            font-weight: bold;
-            margin: -10px -10px 10px -10px;
-            color: #333;
-        }
-
-        /* SHOP CARDS */
-        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .bux-card {
-            background: #fff; border: 1px solid #ccc; padding: 15px; text-align: center;
-            transition: transform 0.1s;
-        }
-        .bux-card:hover { border-color: #8a49a8; background: #fff9ff; }
-        .bux-amount { font-size: 18px; font-weight: bold; color: green; display: block; margin-bottom: 5px; }
-        .bux-price { font-size: 10px; color: #666; display: block; margin-bottom: 10px; }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        .buy-bux-btn {
-            background: #72fb3c; border: 1px solid #27ae60; 
-            padding: 5px; width: 100%; font-weight: bold; cursor: pointer; font-size: 11px;
+        /* HEADER */
+        .header { background: #007a3d; color: white; padding: 15px; font-weight: bold; font-size: 18px; display: flex; justify-content: space-between; }
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
+
+        .shop-container { padding: 30px; text-align: center; }
+        .shop-header { margin-bottom: 30px; }
+        .shop-header h1 { color: #007a3d; margin-bottom: 5px; }
+
+        /* B$ CARDS */
+        .bux-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+        
+        .bux-card { 
+            border: 2px solid #ccc; background: #f9f9f9; padding: 20px; 
+            border-radius: 8px; transition: 0.2s; cursor: pointer;
+        }
+        .bux-card:hover { border-color: #007a3d; background: #f0fff4; transform: scale(1.02); }
+        
+        .bux-amount { font-size: 24px; font-weight: bold; color: #007a3d; display: block; margin-bottom: 10px; }
+        .bux-price { font-size: 14px; color: #666; font-weight: bold; }
+        
+        .buy-btn { 
+            margin-top: 15px; background: #007a3d; color: white; border: none; 
+            padding: 10px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 4px;
         }
 
-        .dev-refill {
-            background: #ffcc00; border: 1px solid #997a00; font-weight: bold;
-            padding: 10px; cursor: pointer; width: 100%; margin-top: 5px;
+        /* MEMBERSHIP BOX */
+        .club-box { 
+            margin-top: 40px; border: 2px solid #8a49a8; background: #f9f0ff; 
+            padding: 20px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;
         }
+        .club-text { text-align: left; }
+        .club-text h2 { color: #8a49a8; margin: 0; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container" onclick="window.location.href='index.html'">
-            <img src="Banner.png" alt="BLYPE" class="banner-img">
+        <div class="header">
+            <span>UPGRADE BLYPEME</span>
+            <span id="current-balance" style="font-size: 12px; font-weight: normal;">Your Balance: 0 B$</span>
+        </div>
+        <div class="nav">
+            <a href="index.html">Home</a> | <a href="marketplace.html">Catalog</a> | <a href="shop.html"><b>Shop</b></a> | <a href="games.html">Games</a>
         </div>
 
-        <div class="sub-nav" id="main-nav">
-            <a href="index.html">Home</a> | 
-            <a href="games.html">Games</a> | 
-            <a href="people.html">People</a> |
-            <a href="marketplace.html">Marketplace</a> | 
-            <a href="shop.html" style="color: #72fb3c;">Shop</a> |
-            <a href="forum.html">Forum</a> | 
-            <a href="help.html">Help</a>
-        </div>
+        <div class="shop-container">
+            <div class="shop-header">
+                <h1>Get more Blypo-Bux</h1>
+                <p>Blypo-Bux (B$) allows you to buy cool items for your character and special perks in games!</p>
+            </div>
 
-        <div class="main-container">
-            <aside>
-                <div class="box">
-                    <div class="box-header">Your Currency</div>
-                    Current Balance:<br>
-                    <b style="font-size: 14px; color: green;">B$ <span id="current-bux">0</span></b>
+            <div class="bux-grid">
+                <div class="bux-card" onclick="addBux(400)">
+                    <span class="bux-amount">400 B$</span>
+                    <span class="bux-price">$4.95 USD</span>
+                    <button class="buy-btn">PURCHASE</button>
                 </div>
 
-                <div class="box">
-                    <div class="box-header">Payment Methods</div>
-                    <span style="font-size: 9px; color: #777;">
-                        ● Blypo-Card<br>
-                        ● Credit Card<br>
-                        ● Mobile Pay
-                    </span>
-                </div>
-            </aside>
-
-            <main>
-                <div class="box">
-                    <div class="box-header">Purchase Blypo-Bux</div>
-                    <p style="font-size: 10px; color: #666; margin-bottom: 15px;">
-                        Blypo-Bux allows you to upgrade your avatar and unlock special features in games!
-                    </p>
-                    
-                    <div class="shop-grid">
-                        <div class="bux-card">
-                            <span class="bux-amount">400 B$</span>
-                            <span class="bux-price">$4.95 USD</span>
-                            <button class="buy-bux-btn" onclick="addBux(400)">Purchase</button>
-                        </div>
-
-                        <div class="bux-card">
-                            <span class="bux-amount">1,000 B$</span>
-                            <span class="bux-price">$9.95 USD</span>
-                            <button class="buy-bux-btn" onclick="addBux(1000)">Purchase</button>
-                        </div>
-
-                        <div class="bux-card">
-                            <span class="bux-amount">10,000 B$</span>
-                            <span class="bux-price">$49.95 USD</span>
-                            <button class="buy-bux-btn" onclick="addBux(10000)">Purchase</button>
-                        </div>
-
-                        <div class="bux-card">
-                            <span class="bux-amount">1,000,000 B$</span>
-                            <span class="bux-price">$99.95 USD</span>
-                            <button class="buy-bux-btn" onclick="addBux(1000000)">Purchase</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-            <aside>
-                <div class="box">
-                    <div class="box-header">Member Deals</div>
-                    Join <b>Builders Club</b> to get 15 B$ every single day!
+                <div class="bux-card" onclick="addBux(800)">
+                    <span class="bux-amount">800 B$</span>
+                    <span class="bux-price">$9.95 USD</span>
+                    <button class="buy-btn">PURCHASE</button>
                 </div>
 
-                <div class="box" id="admin-tools" style="display:none;">
-                    <div class="box-header" style="background:#ffcc00; color:#000;">Dev Tools</div>
-                    <button class="dev-refill" onclick="addBux(1000000000)">+ 1 BILLION B$</button>
-                    <p style="font-size: 8px; text-align: center; margin-top: 5px;">Admin Quick-Fill Enabled</p>
+                <div class="bux-card" onclick="addBux(2000)">
+                    <span class="bux-amount">2,000 B$</span>
+                    <span class="bux-price">$24.95 USD</span>
+                    <button class="buy-btn">PURCHASE</button>
                 </div>
-            </aside>
+            </div>
+
+            <div class="club-box">
+                <div class="club-text">
+                    <h2>Builders Club</h2>
+                    <p style="font-size: 12px; margin: 5px 0;">Get a daily stipend of 15 B$ and a special hard hat!</p>
+                </div>
+                <button class="buy-btn" style="width: 150px; background: #8a49a8;" onclick="joinBC()">JOIN NOW</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- SMART FORMATTING ---
-        function formatBux(num) {
-            num = parseInt(num);
-            if (num >= 1e12) return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
-            if (num >= 1e9) return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
-            if (num >= 1e6) return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
-            if (num >= 1e3) return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
-            return num.toString();
-        }
-
-        function addBux(amt) {
-            let current = parseInt(localStorage.getItem("blypoBux") || 0);
-            localStorage.setItem("blypoBux", current + amt);
-            alert("B$ " + amt + " has been added to your account!");
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            const bux = localStorage.getItem("blypoBux") || 0;
-            document.getElementById('current-bux').innerText = formatBux(bux);
-        }
-
-        window.onload = function() {
-            const isAdmin = localStorage.getItem("isAdmin") === "true";
-            if (isAdmin) {
-                document.getElementById('admin-tools').style.display = "block";
-                const nav = document.getElementById('main-nav');
-                if(!nav.innerHTML.includes("admin.html")) {
-                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
-                }
-            }
-            updateDisplay();
+        const BLYPE = {
+            session: localStorage.getItem("currentUser"),
+            db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
         };
+
+        function updateBalanceUI() {
+            if (BLYPE.session && BLYPE.db[BLYPE.session]) {
+                const bal = BLYPE.db[BLYPE.session].bux;
+                document.getElementById('current-balance').innerText = "Your Balance: " + bal.toLocaleString() + " B$";
+            }
+        }
+
+        function addBux(amount) {
+            if (!BLYPE.session) return alert("Please log in to purchase B$!");
+
+            // Update Database
+            BLYPE.db[BLYPE.session].bux += amount;
+            localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
+            
+            // Legacy sync
+            localStorage.setItem("blypoBux", BLYPE.db[BLYPE.session].bux);
+
+            alert(`Successfully added ${amount} B$ to your account!`);
+            updateBalanceUI();
+        }
+
+        function joinBC() {
+            if (!BLYPE.session) return alert("Log in first!");
+            alert("This feature is coming soon in the next update!");
+        }
+
+        // Auto-refresh balance if Admin changes it in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'blypo_users') {
+                BLYPE.db = JSON.parse(e.newValue);
+                updateBalanceUI();
+            }
+        });
+
+        window.onload = updateBalanceUI;
     </script>
 </body>
 </html>
