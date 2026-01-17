@@ -2,219 +2,213 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - Master Command Center (Root)</title>
+    <title>BLYPEME - Master Control</title>
     <script>
-        // CRITICAL SECURITY: Only Admin/1234 can access
-        if (localStorage.getItem("isAdmin") !== "true") {
-            window.location.replace("index.html");
-        }
+        if (localStorage.getItem("isAdmin") !== "true") window.location.replace("index.html");
     </script>
     <style>
+        :root {
+            --admin-dark: #2c3e50;
+            --admin-blue: #3498db;
+            --admin-red: #e74c3c;
+            --admin-green: #27ae60;
+        }
+
         body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
-        .site-wrapper { width: 1000px; margin: 0 auto; background: transparent; }
+        .site-wrapper { width: 900px; margin: 0 auto; }
         
-        /* HEADER & NAVIGATION */
-        .admin-header { background: #444; color: #72fb3c; padding: 10px 20px; font-family: monospace; display: flex; justify-content: space-between; border-bottom: 2px solid #000; }
-        .sub-nav { background-color: #8a49a8; padding: 8px 0; color: white; font-size: 11px; font-weight: bold; border-bottom: 1px solid #000; text-align: center; }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .banner-container { background: #fff; border-bottom: 2px solid #000; height: 100px; cursor: pointer; }
+        .banner-img { width: 100%; }
 
-        /* DASHBOARD GRID */
-        .admin-grid { display: grid; grid-template-columns: 220px 1fr 250px; gap: 15px; padding: 20px 0; }
+        .sub-nav { 
+            background: var(--admin-dark); color: white; padding: 10px; 
+            font-size: 11px; font-weight: bold; border-bottom: 2px solid #000;
+        }
+        .sub-nav a { color: #72fb3c; text-decoration: none; margin-right: 15px; }
 
-        /* BOX STYLING */
-        .box { background: #f0f0f0; border: 1px solid #a4a4a4; margin-bottom: 15px; padding: 10px; font-size: 11px; }
-        .box-header { background: #e9e9e9; border-bottom: 1px solid #a4a4a4; padding: 4px; font-weight: bold; margin: -10px -10px 10px -10px; color: #333; display: flex; justify-content: space-between; }
+        /* ACCORDION STYLING */
+        .admin-section {
+            background: #f0f0f0;
+            border: 1px solid #a4a4a4;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .dropdown-header {
+            background: #e9e9e9;
+            padding: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #a4a4a4;
+            user-select: none;
+        }
+
+        .dropdown-header:hover { background: #ddd; }
+
+        .content {
+            display: none; /* Hidden by default */
+            padding: 15px;
+            background: #fff;
+        }
+
+        .content.active { display: block; }
+
+        /* UI ELEMENTS */
+        label { display: block; font-size: 10px; font-weight: bold; margin-bottom: 4px; color: #555; }
+        input, textarea, select { width: 98%; padding: 5px; margin-bottom: 12px; border: 1px solid #ccc; font-family: Verdana; }
+        .btn { padding: 6px 12px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid #333; }
+        .btn-save { background: var(--admin-green); color: white; }
+        .btn-danger { background: var(--admin-red); color: white; }
         
-        /* TOOLS */
-        label { display: block; font-weight: bold; margin: 8px 0 3px 0; font-size: 10px; color: #555; }
-        input, textarea, select { width: 95%; font-family: 'Verdana'; font-size: 11px; border: 1px solid #777; padding: 3px; margin-bottom: 5px; }
-        .btn { padding: 4px 10px; font-size: 10px; font-weight: bold; cursor: pointer; margin-top: 5px; border: 1px solid #777; }
-        .btn-green { background: #72fb3c; border-color: #27ae60; }
-        .btn-red { background: #ff4d4d; color: white; border-color: #900; }
-        .btn-full { width: 100%; margin-top: 10px; }
-
-        /* LOGS */
-        .console-log { background: #000; color: #00ff00; font-family: 'Courier New', monospace; height: 120px; overflow-y: scroll; padding: 5px; font-size: 10px; border: 1px solid #333; }
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 2px; border-bottom: 1px dashed #ccc; }
+        .console-log {
+            background: #000; color: #00ff00; font-family: monospace;
+            height: 80px; overflow-y: scroll; padding: 5px; font-size: 10px; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-<div class="site-wrapper">
-    <div class="admin-header">
-        <span>BLYPEME_OS v4.2 // SESSION: ADMIN_ROOT</span>
-        <span>SERVER STATUS: <span style="color:white">OPTIMAL</span></span>
-    </div>
-    
-    <div class="sub-nav">
-        <a href="index.html">← RETURN TO PUBLIC SITE</a> | <b>MAINTENANCE MODE</b> | <a href="#" onclick="location.reload()">REFRESH SYSTEM</a>
-    </div>
+    <div class="site-wrapper">
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" class="banner-img">
+        </div>
 
-    <div class="admin-grid">
-        
-        <aside>
-            <div class="box">
-                <div class="box-header">Economy Overdrive</div>
-                <label>Target User</label>
-                <input type="text" value="Admin" id="target-user">
-                
-                <label>Adjust Blypo-Bux</label>
-                <input type="number" id="nbux" placeholder="e.g. 5000000">
-                <button class="btn btn-green btn-full" onclick="setBux()">SET EXACT BALANCE</button>
-                <button class="btn btn-full" onclick="addBux(1000000)">+ 1 MILLION</button>
-                <button class="btn btn-full" onclick="addBux(1000000000)">+ 1 BILLION</button>
-            </div>
+        <div class="sub-nav">
+            <a href="index.html">← PUBLIC SITE</a>
+            SYSTEM CONSOLE [VER 4.2] | LOGGED IN AS MASTER_ROOT
+        </div>
 
-            <div class="box">
-                <div class="box-header">Moderation Suite</div>
-                <button class="btn btn-red btn-full">BAN USER (IP + HWID)</button>
-                <button class="btn btn-red btn-full">MUTE GLOBAL CHAT</button>
-                <button class="btn btn-full">VIEW USER INVENTORY</button>
-                <button class="btn btn-full">RESET USER PASSWORD</button>
-            </div>
+        <div style="padding: 0 20px;">
             
-            <div class="box">
-                <div class="box-header">System Tools</div>
-                <button class="btn btn-red btn-full" onclick="clearData()">WIPE ALL LOCAL DATA</button>
-                <p style="font-size: 9px; color: #777;">Caution: This wipes your balance and owned items.</p>
+            <div class="admin-section">
+                <div class="dropdown-header" onclick="toggleSection(this)">
+                    👤 USER MANAGEMENT & BANNING <span>[+]</span>
+                </div>
+                <div class="content">
+                    <label>Username to Target</label>
+                    <input type="text" placeholder="e.g. Guest_4922">
+                    <label>Action</label>
+                    <select>
+                        <option>Warn User</option>
+                        <option>Kick from Server</option>
+                        <option>7-Day Ban</option>
+                        <option>Terminate Account (IP BAN)</option>
+                    </select>
+                    <button class="btn btn-danger" onclick="log('Security Action Applied to User.')">EXECUTE PENALTY</button>
+                </div>
             </div>
-        </aside>
 
-        <main>
-            <div class="box">
-                <div class="box-header">Live Homepage Editor</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div>
-                        <label>Featured Experience</label>
+            <div class="admin-section">
+                <div class="dropdown-header" onclick="toggleSection(this)">
+                    🎨 ASSET CREATOR (MARKETPLACE TOOLS) <span>[+]</span>
+                </div>
+                <div class="content">
+                    <label>Item Name</label>
+                    <input type="text" id="asset-name" placeholder="Cool Admin Hat">
+                    <label>Item Price (B$)</label>
+                    <input type="number" id="asset-price" placeholder="100">
+                    <label>Texture/Image Filename</label>
+                    <input type="text" id="asset-img" placeholder="AdminHat.png">
+                    <button class="btn btn-save" onclick="log('Asset Uploaded to Catalog.')">PUBLISH TO MARKETPLACE</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <div class="dropdown-header" onclick="toggleSection(this)">
+                    💰 ECONOMY & STATS OVERRIDE <span>[+]</span>
+                </div>
+                <div class="content">
+                    <label>Set My B$ Balance</label>
+                    <input type="number" id="bux-val" placeholder="Current: 100,000,000">
+                    <button class="btn btn-save" onclick="updateBux()">APPLY WEALTH</button>
+                    
+                    <div style="margin-top:15px; border-top: 1px solid #eee; padding-top:10px;">
+                        <label>Featured Game Name (Home Page)</label>
                         <input type="text" id="feat-title-in">
-                        <label>Sidebar Blypeme Fact</label>
-                        <textarea id="facts-in" rows="4"></textarea>
-                    </div>
-                    <div>
-                        <label>Krew's Korner Tweet</label>
-                        <input type="text" id="tweet-in">
-                        <label>News Feed (HTML Supported)</label>
-                        <textarea id="news-in" rows="4"></textarea>
+                        <button class="btn btn-save" onclick="saveContent()">UPDATE HOME CONTENT</button>
                     </div>
                 </div>
-                <button class="btn btn-green btn-full" style="height:40px; font-size:12px;" onclick="pushLive()">PUSH CHANGES TO PUBLIC SITE</button>
             </div>
 
-            <div class="box">
-                <div class="box-header">Asset Minting (Marketplace)</div>
-                <div style="display:flex; gap:10px;">
-                    <div style="flex:1;">
-                        <label>Item Name</label>
-                        <input type="text" placeholder="e.g. Shiny Sword">
-                    </div>
-                    <div style="flex:1;">
-                        <label>B$ Price</label>
-                        <input type="number" placeholder="500">
-                    </div>
+            <div class="admin-section">
+                <div class="dropdown-header" onclick="toggleSection(this)">
+                    🚨 SYSTEM ALERTS & BROADCASTS <span>[+]</span>
                 </div>
-                <label>Texture Filename</label>
-                <input type="text" placeholder="sword_texture.png">
-                <button class="btn btn-green btn-full">MINT TO CATALOG</button>
-            </div>
-
-            <div class="box">
-                <div class="box-header">Internal System Logs</div>
-                <div class="console-log" id="logs">
-                    [SYSTEM] Security handshake successful...<br>
-                    [SYSTEM] Loading Marketplace database...<br>
-                    [SYSTEM] 1,402 users currently pinging Node-01...<br>
+                <div class="content">
+                    <label>Global Broadcast Message</label>
+                    <textarea id="alert-in" placeholder="Enter message for all users..."></textarea>
+                    <button class="btn btn-danger" style="background:orange;" onclick="setAlert()">BROADCAST TO SITE</button>
+                    
+                    <button class="btn btn-danger" style="margin-top:20px; width:100%;" onclick="wipeData()">WIPE LOCAL DATABASE</button>
                 </div>
             </div>
-        </main>
 
-        <aside>
-            <div class="box">
-                <div class="box-header">Live Server Stats</div>
-                <div class="stat-row"><span>Online Users:</span><b id="u-count">1,402</b></div>
-                <div class="stat-row"><span>Server Load:</span><b>22.4%</b></div>
-                <div class="stat-row"><span>Total B$ Flow:</span><b>4.2B</b></div>
-                <div class="stat-row"><span>Active Obbies:</span><b>842</b></div>
+            <div class="console-log" id="logs">
+                [SYSTEM] Ready...<br>
+                [SYSTEM] Admin Session Authorized...<br>
             </div>
-
-            <div class="box">
-                <div class="box-header">Global System Alert</div>
-                <label>Banner Message</label>
-                <textarea id="alert-msg" placeholder="Warning: Maintenance in 10 mins..."></textarea>
-                <button class="btn btn-red btn-full" onclick="sendAlert()">BROADCAST TO ALL USERS</button>
-            </div>
-
-            <div class="box">
-                <div class="box-header">Developer Quick-Links</div>
-                <a href="character.html" style="display:block; margin:5px 0;">→ Character Wardrobe</a>
-                <a href="marketplace.html" style="display:block; margin:5px 0;">→ Marketplace Catalog</a>
-                <a href="shop.html" style="display:block; margin:5px 0;">→ Currency Exchange</a>
-            </div>
-        </aside>
-
+        </div>
     </div>
-</div>
 
-<script>
-    function setBux() {
-        const val = document.getElementById('nbux').value;
-        if(!val) return;
-        localStorage.setItem("blypoBux", val);
-        addLog(`Set balance to B$ ${val}`);
-        alert("Account Updated!");
-    }
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const span = header.querySelector('span');
+            
+            // Toggle active class
+            content.classList.toggle('active');
+            
+            // Toggle [+] and [-]
+            if(content.classList.contains('active')) {
+                span.innerText = "[-]";
+                header.style.background = "#d0d0d0";
+            } else {
+                span.innerText = "[+]";
+                header.style.background = "#e9e9e9";
+            }
+        }
 
-    function addBux(amt) {
-        let current = parseInt(localStorage.getItem("blypoBux") || 0);
-        localStorage.setItem("blypoBux", current + amt);
-        addLog(`Added B$ ${amt} to Admin account.`);
-        alert("B$ Added!");
-    }
+        function log(msg) {
+            const div = document.getElementById('logs');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            div.innerHTML += `[${time}] ${msg}<br>`;
+            div.scrollTop = div.scrollHeight;
+        }
 
-    function pushLive() {
-        localStorage.setItem("admin_featGame", document.getElementById('feat-title-in').value);
-        localStorage.setItem("admin_facts", document.getElementById('facts-in').value);
-        localStorage.setItem("admin_news", document.getElementById('news-in').value);
-        localStorage.setItem("admin_tweet", document.getElementById('tweet-in').value);
-        addLog("Public homepage data updated.");
-        alert("Front page updated!");
-    }
+        function updateBux() {
+            const val = document.getElementById('bux-val').value;
+            if(!val) return;
+            localStorage.setItem("blypoBux", val);
+            log(`Balance updated to ${val} B$`);
+            alert("Economy Synced!");
+        }
 
-    function sendAlert() {
-        const msg = document.getElementById('alert-msg').value;
-        if(msg) {
+        function setAlert() {
+            const msg = document.getElementById('alert-in').value;
             localStorage.setItem("globalAlert", msg);
-            addLog(`Global Alert Broadcast: ${msg}`);
-            alert("Alert Broadcasted!");
+            log(`Global Broadcast queued: ${msg}`);
+            alert("Broadcast will show on next page load!");
         }
-    }
 
-    function clearData() {
-        if(confirm("DANGER: This will wipe your balance, inventory, and streaks. Proceed?")) {
-            localStorage.clear();
-            location.reload();
+        function saveContent() {
+            localStorage.setItem("admin_featGame", document.getElementById('feat-title-in').value);
+            log("Home page featured game updated.");
+            alert("Home Content Saved!");
         }
-    }
 
-    function addLog(msg) {
-        const logs = document.getElementById('logs');
-        const time = new Date().toLocaleTimeString([], {hour12: false});
-        logs.innerHTML += `[${time}] ${msg}<br>`;
-        logs.scrollTop = logs.scrollHeight;
-    }
+        function wipeData() {
+            if(confirm("DANGER: This wipes everything!")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
 
-    window.onload = function() {
-        // Load existing content into inputs
-        document.getElementById('feat-title-in').value = localStorage.getItem("admin_featGame") || "Frozen Peak Obby";
-        document.getElementById('facts-in').value = localStorage.getItem("admin_facts") || "Average bid: 610 Tallyz\n623 bombastic items available.";
-        document.getElementById('news-in').value = localStorage.getItem("admin_news") || "Physics Update v2.1\nWinter Fest Launch!";
-        document.getElementById('tweet-in').value = localStorage.getItem("admin_tweet") || "Forge your own destiny today!";
-        
-        // Random user fluctuation
-        setInterval(() => {
-            document.getElementById('u-count').innerText = Math.floor(Math.random() * (1500 - 1350) + 1350);
-        }, 3000);
-    };
-</script>
-
+        // Load existing values
+        window.onload = function() {
+            document.getElementById('feat-title-in').value = localStorage.getItem("admin_featGame") || "Frozen Peak Obby";
+        }
+    </script>
 </body>
 </html>
