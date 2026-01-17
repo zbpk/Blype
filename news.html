@@ -2,137 +2,180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - News</title>
+    <title>BLYPEME - Official News</title>
     <style>
         body {
-            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
-            background-attachment: fixed;
+            background: #ade8ff;
             font-family: 'Verdana', sans-serif;
             margin: 0; padding: 0;
-            min-height: 100vh;
+            text-align: center;
         }
 
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-        }
+        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
 
-        .banner-container {
-            background: #fff;
-            border-bottom: 1px solid #000;
-        }
-        .banner-img {
-            width: 900px;
-            display: block;
-        }
+        /* UNIFIED HEADER */
+        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
+        .banner-img { width: 100%; }
 
         .sub-nav {
             background-color: #8a49a8;
             padding: 8px 0;
             color: white;
             font-size: 11px;
-            text-align: center;
-            border-bottom: 2px solid #5a2d6d;
-            width: 900px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
         }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .sub-nav a:hover { text-decoration: underline; }
 
+        /* MAIN CONTENT GRID */
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 240px;
+            grid-template-columns: 200px 1fr 200px;
             gap: 15px;
-            margin-top: 15px;
+            padding: 20px 0;
+            text-align: left;
         }
 
-        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        /* BOX STYLING */
+        .box { 
+            background: #f0f0f0; 
+            border: 1px solid #a4a4a4; 
+            margin-bottom: 15px; 
+            padding: 10px;
+            font-size: 11px;
+        }
         .box-header {
-            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
-            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+            background: #e9e9e9;
+            border-bottom: 1px solid #a4a4a4;
+            padding: 4px;
+            font-weight: bold;
+            margin: -10px -10px 10px -10px;
+            color: #333;
         }
 
-        /* NEWS POST STYLING */
-        .news-post { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .news-post:last-child { border-bottom: none; }
-        .news-date { font-size: 10px; color: #666; font-style: italic; }
-        .news-title { font-size: 16px; color: #8a49a8; font-weight: bold; display: block; margin: 5px 0; }
-        .news-content { font-size: 12px; line-height: 1.5; color: #333; }
+        /* NEWS POSTS */
+        .news-post { background: #fff; border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; }
+        .news-date { color: #8a49a8; font-weight: bold; font-size: 10px; margin-bottom: 5px; display: block; }
+        .news-title { font-size: 16px; font-weight: bold; color: #000; margin-bottom: 10px; display: block; }
+        .news-body { line-height: 1.5; color: #333; }
 
-        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 10px; padding: 2px 8px; cursor: pointer; }
-
-        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+        .archive-link { display: block; color: #0000ee; text-decoration: none; margin-bottom: 5px; }
+        .archive-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container">
-            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" alt="BLYPE" class="banner-img">
         </div>
 
-        <div class="sub-nav">
-            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a>
+        <div class="sub-nav" id="main-nav">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="marketplace.html">Marketplace</a> | 
+            <a href="character.html">Character</a> | 
+            <a href="forum.html">Forum</a> | 
+            <a href="news.html">News</a> |
+            <a href="help.html">Help</a>
         </div>
 
         <div class="main-container">
+            <aside>
+                <div class="box">
+                    <div class="box-header">News Categories</div>
+                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
+                        <li><a href="#" class="archive-link">● Announcements</a></li>
+                        <li><a href="#" class="archive-link">● Site Updates</a></li>
+                        <li><a href="#" class="archive-link">● Contests</a></li>
+                        <li><a href="#" class="archive-link">● Community Spotlights</a></li>
+                    </ul>
+                </div>
+                
+                <div class="box">
+                    <div class="box-header">Admin Postings</div>
+                    <div id="admin-status" style="font-size: 10px; color: #666;">
+                        Login as Admin to see editorial controls.
+                    </div>
+                </div>
+            </aside>
+
             <main>
                 <div class="box">
-                    <div class="box-header">The BLYPE Blog</div>
+                    <div class="box-header">Latest From BLYPEME HQ</div>
                     
                     <div class="news-post">
-                        <span class="news-date">January 16, 2026</span>
-                        <a href="#" class="news-title">Physics Update v2.1: Smoother Bricks!</a>
-                        <p class="news-content">
-                            Today we've deployed a major update to our physics engine. Large builds will now be 40% more stable, and the "stuck-in-floor" bug has finally been squashed. Happy building!
-                        </p>
-                        <button class="btn">Read More (14 Comments)</button>
+                        <span class="news-date">SYSTEM OVERRIDE FEED</span>
+                        <span class="news-title">Current Admin Bulletin</span>
+                        <div class="news-body" id="dynamic-news">
+                            No active bulletins from the Admin Panel.
+                        </div>
                     </div>
 
                     <div class="news-post">
-                        <span class="news-date">January 12, 2026</span>
-                        <a href="#" class="news-title">Winter Fest is Officially Live!</a>
-                        <p class="news-content">
-                            Snow has fallen on the homepage! Head over to the Marketplace to grab the limited-edition <b>Ice Crown</b> and explore the Frozen Peak featured game for double Tallyz.
-                        </p>
-                        <button class="btn">Read More (82 Comments)</button>
+                        <span class="news-date">JANUARY 15, 2026</span>
+                        <span class="news-title">Welcome to the Future of Building</span>
+                        <div class="news-body">
+                            Today marks the grand opening of BLYPEME! We are thrilled to invite you to a world of creativity, gaming, and community. Explore the Marketplace and dress up your character today!
+                        </div>
                     </div>
 
                     <div class="news-post">
-                        <span class="news-date">January 5, 2026</span>
-                        <a href="#" class="news-title">Happy New Year from the Krew</a>
-                        <p class="news-content">
-                            2025 was a massive year for BLYPE. We reached 100k users and saw some of the most creative games ever built. Stay tuned for our 2026 Roadmap coming next week!
-                        </p>
-                        <button class="btn">Read More (34 Comments)</button>
+                        <span class="news-date">JANUARY 12, 2026</span>
+                        <span class="news-title">Physics Engine v1.0 Launched</span>
+                        <div class="news-body">
+                            Our engineers have finalized the core block physics. Soon, you'll be able to build complex machines and traps in your own places.
+                        </div>
                     </div>
                 </div>
             </main>
 
             <aside>
                 <div class="box">
-                    <div class="box-header">Archive</div>
-                    <ul style="font-size: 11px; list-style: square; padding-left: 15px;">
-                        <li><a href="#">January 2026</a></li>
-                        <li><a href="#">December 2025</a></li>
-                        <li><a href="#">November 2025</a></li>
-                        <li><a href="#">October 2025</a></li>
-                    </ul>
+                    <div class="box-header">Post History</div>
+                    <a href="#" class="archive-link">January 2026 (3)</a>
+                    <a href="#" class="archive-link">December 2025 (0)</a>
                 </div>
 
                 <div class="box">
-                    <div class="box-header">Developer Tweets</div>
-                    <p style="font-size: 10px; font-style: italic;">
-                        "@Admin_Krew: Just saw a 5,000 piece castle on the Games page... wow!"
+                    <div class="box-header">Krew's Corner</div>
+                    <p id="tweet-area" style="font-style:italic; text-align:center; font-size:10px;">
+                        "The world is just a collection of blocks waiting to be moved."
                     </p>
                 </div>
             </aside>
         </div>
 
         <div class="footer">
-            Privacy Policy | Advertise | Contact Us | About Us | Jobs
-            <br><br>
-            <b>BLYPE Corporation © 2026</b>
+            BLYPEME Corporation © 2026. Keep building!
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+            // Update Navigation and Sidebar if Admin
+            if(isAdmin) {
+                const nav = document.getElementById('main-nav');
+                if(!nav.innerHTML.includes("admin.html")) {
+                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
+                }
+                document.getElementById('admin-status').innerHTML = "Moderator Mode: <b>ACTIVE</b><br>You are viewing the site as a system administrator.";
+            }
+
+            // Pull dynamic content from Admin Panel
+            const customNews = localStorage.getItem("admin_news");
+            if(customNews && customNews.trim() !== "") {
+                document.getElementById('dynamic-news').innerHTML = customNews;
+            }
+
+            const customTweet = localStorage.getItem("admin_tweet");
+            if(customTweet) {
+                document.getElementById('tweet-area').innerText = customTweet;
+            }
+        }
+    </script>
 </body>
 </html>
