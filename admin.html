@@ -193,19 +193,37 @@
         evt.currentTarget.classList.add("active");
     }
 
-    function searchUser() {
-        const name = document.getElementById('search-name').value.trim();
-        if(!name) return;
+function searchUser() {
+    const name = document.getElementById('search-name').value.trim();
+    if(!name) return;
+    
+    // 1. Pull the master database
+    let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+    
+    // 2. Check if user exists
+    if(users[name]) {
+        // Show the results grid
+        document.getElementById('audit-results').style.display = 'grid';
         
-        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-        if(users[name]) {
-            document.getElementById('audit-results').style.display = 'grid';
-            document.getElementById('aud-id').innerText = Math.floor(Math.random() * 99000);
-            document.getElementById('aud-bux').value = users[name].bux;
+        // Fill in the data from the 'database'
+        document.getElementById('aud-id').innerText = users[name].id || Math.floor(Math.random() * 99000);
+        document.getElementById('aud-bux').value = users[name].bux || 0;
+        document.getElementById('aud-ip').innerText = "192.168.1." + Math.floor(Math.random() * 255);
+        
+        // If they have a mod history, show it, otherwise show clean
+        const historyDisp = document.getElementById('aud-history');
+        if(users[name].history) {
+            historyDisp.innerHTML = users[name].history.join("<br>");
         } else {
-            alert("User not found in BLYPEME registry.");
+            historyDisp.innerHTML = "-- Account is in Good Standing --";
         }
+        
+        console.log("Admin Console: Located user " + name);
+    } else {
+        alert("User '" + name + "' not found. Make sure you typed the name exactly as registered!");
+        document.getElementById('audit-results').style.display = 'none';
     }
+}
 
     function saveCurrency() {
         const name = document.getElementById('search-name').value.trim();
