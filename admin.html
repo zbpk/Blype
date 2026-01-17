@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>BLYPEME - Staff Panel</title>
     <script>
-        if (localStorage.getItem("isAdmin") !== "true") window.location.replace("index.html");
+        // IMMEDIATE SECURITY CHECK
+        if (localStorage.getItem("isAdmin") !== "true") {
+            window.location.replace("index.html");
+        }
     </script>
     <style>
         :root {
@@ -36,102 +39,80 @@
         .dashboard-header { background: #f0f0f0; padding: 12px; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-dark); display: flex; justify-content: space-between; }
         .dashboard-inner { padding: 20px; }
 
-        /* AUDIT PAGE */
-        .audit-grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        /* AUDIT GRID */
+        .audit-grid { display: grid; grid-template-columns: 300px 1fr 300px; gap: 20px; }
         .info-table { width: 100%; font-size: 12px; border-collapse: collapse; }
         .info-table td { padding: 10px; border-bottom: 1px solid #eee; }
-        .info-table b { color: #444; }
 
-        /* MOD QUEUE */
-        .mod-queue { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .asset-card { border: 1px solid #ccc; text-align: center; padding: 15px; background: #fafafa; }
-        .asset-preview { width: 100px; height: 100px; background: #fff; margin: 0 auto 10px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 30px;}
+        /* LIVE REGISTRY LIST */
+        .registry-list { height: 300px; overflow-y: auto; font-family: monospace; font-size: 11px; background: #f9f9f9; padding: 10px; border: 1px inset #ccc; }
+        .registry-item { padding: 4px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .registry-item:hover { background: #eef; }
 
         /* BUTTONS */
         .btn { padding: 7px 15px; font-size: 12px; font-weight: bold; cursor: pointer; border: 1px solid #888; border-radius: 3px; }
         .btn-approve { background: #28a745; color: white; border-color: #1e7e34; }
         .btn-reject { background: #dc3545; color: white; border-color: #bd2130; }
         
-        input, select, textarea { padding: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-family: Arial; }
-
-        .alert-bar-preview { background: var(--roblox-red); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 20px; border-radius: 3px; }
+        input, textarea { padding: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; }
+        .alert-bar-preview { background: var(--roblox-red); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div class="staff-header">
     <h1>BLYPEME Staff Portal</h1>
-    <div class="user-info">ADMINISTRATOR: <b id="admin-name">ROOT</b> | <a href="index.html" style="color:white; text-decoration:none; border-bottom:1px dotted #fff;">Site Home</a></div>
+    <div class="user-info">ADMIN: <b id="admin-display">---</b> | <a href="index.html" style="color:white; text-decoration:none;">Site Home</a></div>
 </div>
 
 <div class="tab-nav">
-    <div class="tab active" onclick="openTab(event, 'audit')">User Search / Audit</div>
-    <div class="tab" onclick="openTab(event, 'queue')">Asset Approval</div>
-    <div class="tab" onclick="openTab(event, 'site')">Site-Wide Controls</div>
-    <div class="tab" onclick="openTab(event, 'economy')">Blypo-Bux Economy</div>
+    <div class="tab active" onclick="openTab(event, 'audit')">User Audit & Registry</div>
+    <div class="tab" onclick="openTab(event, 'site')">Site Controls</div>
+    <div class="tab" onclick="openTab(event, 'economy')">Economy Analysis</div>
 </div>
 
 <div id="audit" class="main-content active">
-    <div class="dashboard-box">
-        <div class="dashboard-header">User Investigative Tool</div>
-        <div class="dashboard-inner">
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="search-name" placeholder="Search Username (e.g. Guest_1)...">
-                <button class="btn" style="background:#eee;" onclick="searchUser()">Search Database</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="audit-grid" id="audit-results" style="display:none;">
+    <div class="audit-grid">
         <div class="dashboard-box">
-            <div class="dashboard-header">Account Metadata</div>
+            <div class="dashboard-header">Live User Registry</div>
             <div class="dashboard-inner">
-                <table class="info-table">
-                    <tr><td><b>User ID:</b></td><td id="aud-id">---</td></tr>
-                    <tr><td><b>Email:</b></td><td><input type="text" id="aud-email" value="verified@blypeme.com"></td></tr>
-                    <tr><td><b>Membership:</b></td><td>Builders Club</td></tr>
-                    <tr><td><b>IP History:</b></td><td id="aud-ip" style="font-family:monospace; color:blue;">72.14.192.XXX</td></tr>
-                </table>
-                <button class="btn btn-approve" style="width:100%; margin-top:15px;">Manual Verify Email</button>
+                <div class="registry-list" id="registry-feed">Loading users...</div>
+                <button class="btn" style="width:100%; margin-top:10px;" onclick="refreshRegistry()">FORCE SYNC</button>
             </div>
         </div>
-        <div class="dashboard-box">
-            <div class="dashboard-header">Moderation & Wealth Management</div>
-            <div class="dashboard-inner">
-                <label><b>Adjust Blypo-Bux (B$):</b></label>
-                <div style="display:flex; gap:10px; margin-top:5px;">
-                    <input type="number" id="aud-bux" value="0">
-                    <button class="btn btn-approve" onclick="saveCurrency()">Update B$</button>
-                </div>
-                
-                <h4 style="border-bottom: 1px solid #eee; padding-bottom:10px; margin-top:25px;">Moderation Incident Log</h4>
-                <div id="aud-history" style="font-size:11px; background:#f9f9f9; padding:10px; border:1px inset #eee; height:80px; overflow-y:scroll;">
-                    -- No recent incidents found --
-                </div>
-                <div style="margin-top:10px; display:flex; gap:5px;">
-                    <button class="btn btn-reject" onclick="banTarget()">TERMINATE ACCOUNT</button>
-                    <button class="btn" onclick="alert('Warning Sent')">ISSUE WARNING</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div id="queue" class="main-content">
-    <div class="dashboard-box">
-        <div class="dashboard-header">Pending Asset Queue <span>Total: 3</span></div>
-        <div class="dashboard-inner mod-queue">
-            <div class="asset-card">
-                <div class="asset-preview">👕</div>
-                <b>Brown Shirt</b><br><span style="color:#666; font-size:10px;">ID: 9021</span><br><br>
-                <button class="btn btn-approve" onclick="this.parentElement.remove()">APPROVE</button>
-                <button class="btn btn-reject" onclick="this.parentElement.remove()">REJECT</button>
+        <div class="dashboard-box">
+            <div class="dashboard-header">Investigative Tool</div>
+            <div class="dashboard-inner">
+                <div style="display:flex; gap:5px; margin-bottom:20px;">
+                    <input type="text" id="search-name" placeholder="Username...">
+                    <button class="btn" onclick="searchUser()">SEARCH</button>
+                </div>
+
+                <div id="audit-results" style="display:none;">
+                    <table class="info-table">
+                        <tr><td><b>Email:</b></td><td><input type="text" id="aud-email" value="verified@blypeme.com"></td></tr>
+                        <tr><td><b>Blypo-Bux:</b></td><td><input type="number" id="aud-bux"></td></tr>
+                        <tr><td><b>IP Addr:</b></td><td id="aud-ip" style="color:blue;">127.0.0.1</td></tr>
+                    </table>
+                    <div style="margin-top:20px; display:flex; gap:10px;">
+                        <button class="btn btn-approve" onclick="saveUserChanges()">SAVE CHANGES</button>
+                        <button class="btn btn-reject" onclick="banUser()">TERMINATE</button>
+                    </div>
+                </div>
             </div>
-            <div class="asset-card">
-                <div class="asset-preview">👒</div>
-                <b>Golden Hat</b><br><span style="color:#666; font-size:10px;">ID: 8842</span><br><br>
-                <button class="btn btn-approve" onclick="this.parentElement.remove()">APPROVE</button>
-                <button class="btn btn-reject" onclick="this.parentElement.remove()">REJECT</button>
+        </div>
+
+        <div class="dashboard-box">
+            <div class="dashboard-header">Asset Injection</div>
+            <div class="dashboard-inner">
+                <label style="font-size:11px;">Select Item:</label>
+                <select id="item-inject" style="width:100%; padding:8px; margin-bottom:10px;">
+                    <option value="Brown Shirt">Brown Shirt</option>
+                    <option value="Admin Cape">Admin Cape</option>
+                    <option value="Golden Crown">Golden Crown</option>
+                </select>
+                <button class="btn btn-approve" style="width:100%;" onclick="injectAsset()">GIVE ITEM</button>
             </div>
         </div>
     </div>
@@ -139,138 +120,129 @@
 
 <div id="site" class="main-content">
     <div class="dashboard-box">
-        <div class="dashboard-header">Global System Alert (Red Bar)</div>
+        <div class="dashboard-header">System Notification (Red Bar)</div>
         <div class="dashboard-inner">
             <div class="alert-bar-preview" id="preview-text">No active site-wide messages.</div>
-            <textarea id="system-msg" rows="3" placeholder="Enter text to display at top of site..."></textarea>
-            <button class="btn btn-reject" style="width:100%; margin-top:15px; font-size:14px;" onclick="setRedBar()">POST ALERT</button>
-        </div>
-    </div>
-    <div class="dashboard-box" style="border-color:red;">
-        <div class="dashboard-header" style="background:#ffdada;">Emergency Maintenance Mode</div>
-        <div class="dashboard-inner" style="display:flex; justify-content:space-between; align-items:center;">
-            <p style="font-size:12px; margin:0;">Toggle "Under Construction" page for all non-admins.</p>
-            <button class="btn btn-reject" onclick="toggleMaintenance()">ENGAGE MAINTENANCE</button>
+            <textarea id="system-msg" rows="3" placeholder="Enter alert text..."></textarea>
+            <button class="btn btn-reject" style="width:100%; margin-top:15px;" onclick="setRedBar()">POST ALERT</button>
         </div>
     </div>
 </div>
 
 <div id="economy" class="main-content">
     <div class="dashboard-box">
-        <div class="dashboard-header">Blypo-Bux (B$) Circulation Data</div>
+        <div class="dashboard-header">Global B$ Analytics</div>
         <div class="dashboard-inner">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-                <div style="background:#f0faf0; border:1px solid #cce; padding:20px; text-align:center;">
-                    <span style="font-size:12px; color:#555;">Total B$ Minted</span><br>
-                    <b style="font-size:24px; color:#28a745;" id="econ-total">Calculating...</b>
-                </div>
-                <div style="background:#fffaf0; border:1px solid #eec; padding:20px; text-align:center;">
-                    <span style="font-size:12px; color:#555;">B$ From Store Purchases</span><br>
-                    <b style="font-size:24px; color:#d9a525;">882,400</b>
-                </div>
-            </div>
-            <h4 style="margin-top:25px;">Marketplace Flow Analysis</h4>
-            <div style="height:100px; background:#eee; border-radius:5px; border:1px solid #ddd; display:flex; align-items:flex-end; padding:10px; gap:5px;">
-                <div style="height:30%; background:#28a745; width:20px;"></div>
-                <div style="height:55%; background:#28a745; width:20px;"></div>
-                <div style="height:90%; background:#28a745; width:20px;"></div>
-                <div style="height:70%; background:#28a745; width:20px;"></div>
-            </div>
-            <p style="font-size:10px; color:#888;">Live minting history (B$ generated per hour)</p>
+            <h2 id="total-circ">B$ 0</h2>
+            <p style="font-size:12px; color:#666;">Total currency held across all player accounts.</p>
         </div>
     </div>
 </div>
 
 <script>
+    // --- GLOBAL DATA ---
+    let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+    let currentTarget = "";
+
     function openTab(evt, tabName) {
         let contents = document.getElementsByClassName("main-content");
         for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
-        
         let tabs = document.getElementsByClassName("tab");
         for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
-
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
     }
 
-function searchUser() {
-    const name = document.getElementById('search-name').value.trim();
-    if(!name) return;
-    
-    // 1. Pull the master database
-    let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-    
-    // 2. Check if user exists
-    if(users[name]) {
-        // Show the results grid
-        document.getElementById('audit-results').style.display = 'grid';
+    // --- REGISTRY LOGIC ---
+    function refreshRegistry() {
+        users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        const feed = document.getElementById('registry-feed');
+        feed.innerHTML = "";
         
-        // Fill in the data from the 'database'
-        document.getElementById('aud-id').innerText = users[name].id || Math.floor(Math.random() * 99000);
-        document.getElementById('aud-bux').value = users[name].bux || 0;
-        document.getElementById('aud-ip').innerText = "192.168.1." + Math.floor(Math.random() * 255);
-        
-        // If they have a mod history, show it, otherwise show clean
-        const historyDisp = document.getElementById('aud-history');
-        if(users[name].history) {
-            historyDisp.innerHTML = users[name].history.join("<br>");
-        } else {
-            historyDisp.innerHTML = "-- Account is in Good Standing --";
-        }
-        
-        console.log("Admin Console: Located user " + name);
-    } else {
-        alert("User '" + name + "' not found. Make sure you typed the name exactly as registered!");
-        document.getElementById('audit-results').style.display = 'none';
+        Object.keys(users).forEach(u => {
+            const div = document.createElement('div');
+            div.className = "registry-item";
+            div.innerText = `• ${u}`;
+            div.onclick = () => { 
+                document.getElementById('search-name').value = u; 
+                searchUser(); 
+            };
+            feed.appendChild(div);
+        });
+        updateEcon();
     }
-}
 
-    function saveCurrency() {
+    // --- SEARCH & AUDIT ---
+    function searchUser() {
         const name = document.getElementById('search-name').value.trim();
-        const amt = parseInt(document.getElementById('aud-bux').value);
-        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
         if(users[name]) {
-            users[name].bux = amt;
-            localStorage.setItem("blypo_users", JSON.stringify(users));
-            if(localStorage.getItem("currentUser") === name) localStorage.setItem("blypoBux", amt);
-            alert("Economy adjustment successful for " + name);
-            refreshEcon();
+            currentTarget = name;
+            document.getElementById('audit-results').style.display = 'block';
+            document.getElementById('aud-bux').value = users[name].bux;
+            document.getElementById('aud-ip').innerText = "IP: 192.168.1." + Math.floor(Math.random()*255);
+        } else {
+            alert("User not found in registry.");
         }
     }
 
+    function saveUserChanges() {
+        if(!currentTarget) return;
+        users[currentTarget].bux = parseInt(document.getElementById('aud-bux').value);
+        localStorage.setItem("blypo_users", JSON.stringify(users));
+        // Live sync if target is you
+        if(localStorage.getItem("currentUser") === currentTarget) {
+            localStorage.setItem("blypoBux", users[currentTarget].bux);
+        }
+        alert("Account Updated.");
+        refreshRegistry();
+    }
+
+    function injectAsset() {
+        if(!currentTarget) return alert("Select a user first!");
+        const item = document.getElementById('item-inject').value;
+        if(!users[currentTarget].inventory) users[currentTarget].inventory = [];
+        
+        users[currentTarget].inventory.push(item);
+        localStorage.setItem("blypo_users", JSON.stringify(users));
+        alert(`Injected ${item} into ${currentTarget}'s inventory.`);
+    }
+
+    function banUser() {
+        if(!currentTarget) return;
+        let blacklist = JSON.parse(localStorage.getItem("blypo_blacklist") || "[]");
+        if(!blacklist.includes(currentTarget)) {
+            blacklist.push(currentTarget);
+            localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
+            alert(currentTarget + " has been terminated.");
+        }
+    }
+
+    // --- SITE CONTROLS ---
     function setRedBar() {
         const msg = document.getElementById('system-msg').value;
         localStorage.setItem("globalAlert", msg);
         document.getElementById('preview-text').innerText = msg;
-        alert("Site-wide red bar updated.");
     }
 
-    function banTarget() {
-        const name = document.getElementById('search-name').value.trim();
-        let blacklist = JSON.parse(localStorage.getItem("blypo_blacklist") || "[]");
-        if(!blacklist.includes(name)) {
-            blacklist.push(name);
-            localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
-            alert(name + " has been TERMINATED.");
-        }
-    }
-
-    function refreshEcon() {
-        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+    function updateEcon() {
         let total = 0;
-        for(let u in users) { total += users[u].bux; }
-        document.getElementById('econ-total').innerText = total.toLocaleString() + " B$";
-    }
-
-    function toggleMaintenance() {
-        alert("SITE-WIDE LOCKDOWN: MAINTENANCE MODE ON.");
+        Object.keys(users).forEach(u => total += users[u].bux);
+        document.getElementById('total-circ').innerText = "B$ " + total.toLocaleString();
     }
 
     window.onload = function() {
-        refreshEcon();
-        document.getElementById('admin-name').innerText = localStorage.getItem("currentUser") || "STAFF";
+        document.getElementById('admin-display').innerText = localStorage.getItem("currentUser");
+        refreshRegistry();
+    };
+
+    // --- PROFILE GENERATOR SYSTEM ---
+    // This function creates a virtual "Profile" link for users
+    function viewProfile(username) {
+        // In a real site, this would be profile.html?user=name
+        // For now, let's store the target and redirect
+        localStorage.setItem("profileTarget", username);
+        window.location.href = "profile.html";
     }
 </script>
-
 </body>
 </html>
