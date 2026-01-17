@@ -1,127 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BLYPEME - Game Details</title>
-    <style>
-        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
-        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
-        
-        /* HEADER & NAV */
-        .header { background: #005596; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
-        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
-        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
+<script>
+    /**
+     * 1. DATA RETRIEVAL
+     * Pulls information sent from games.html via localStorage.
+     */
+    const gameName = localStorage.getItem("gameTarget") || "Baseplate";
+    const gameCreator = localStorage.getItem("gameCreator") || "BlypeMe";
+    const currentUser = localStorage.getItem("currentUser") || "Guest";
 
-        /* GAME LAYOUT */
-        .game-container { padding: 20px; display: flex; gap: 30px; border-bottom: 1px solid #eee; }
-        
-        .game-left { width: 420px; }
-        .game-screenshot { 
-            width: 400px; height: 250px; background: #333; 
-            border: 4px solid #000; display: flex; align-items: center; 
-            justify-content: center; font-size: 80px; color: white;
+    /**
+     * 2. GAME DATABASE
+     * This holds the descriptions and icons for each game.
+     */
+    const gameData = {
+        "Happy Home": { 
+            emoji: "🏠", 
+            desc: "A peaceful place to hang out with friends. Explore the house and relax!" 
+        },
+        "Brick Battle": { 
+            emoji: "⚔️", 
+            desc: "Classic combat! Use your tools to destroy the enemy towers and win." 
+        },
+        "Baseplate": { 
+            emoji: "🧱", 
+            desc: "A blank canvas for creators. See what you can build on this empty grid." 
         }
+    };
 
-        .game-right { flex-grow: 1; }
-        .game-title { font-size: 32px; font-weight: bold; margin: 0; color: #333; }
-        .game-meta { font-size: 14px; color: #666; margin: 5px 0 20px 0; }
+    /**
+     * 3. PAGE INITIALIZATION
+     * This runs as soon as the window loads to fill in the text and images.
+     */
+    window.onload = function() {
+        const titleElem = document.getElementById('display-title');
+        const creatorElem = document.getElementById('creator-link');
+        const emojiElem = document.getElementById('display-emoji');
+        const descElem = document.getElementById('display-desc');
+
+        // Fill Title and Creator
+        if(titleElem) titleElem.innerText = gameName;
+        if(creatorElem) creatorElem.innerText = gameCreator;
         
-        /* Link styling for the Creator name */
-        .game-meta a { color: #005596; text-decoration: none; font-weight: bold; }
-        .game-meta a:hover { text-decoration: underline; }
-
-        /* PLAY BUTTON */
-        .play-section { background: #f4f4f4; border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center; }
-        .play-btn { 
-            background: #02b039; color: white; border: none; padding: 15px 0; 
-            font-size: 28px; font-weight: bold; cursor: pointer; border-radius: 8px;
-            box-shadow: 0 5px 0 #018029; transition: 0.1s; width: 100%;
-            display: block; text-decoration: none;
-        }
-        .play-btn:hover { background: #02c741; }
-        .play-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #018029; }
-
-        /* DESCRIPTION */
-        .details-section { padding: 20px; }
-        .details-section h3 { border-bottom: 1px solid #ccc; padding-bottom: 5px; font-size: 16px; }
-        .desc-text { font-size: 13px; line-height: 1.6; color: #444; background: #fdfdfd; padding: 15px; border: 1px solid #eee; }
-    </style>
-</head>
-<body>
-
-    <div class="site-wrapper">
-        <div class="header">BLYPEME</div>
-        <div class="nav">
-            <a href="index.html">Home</a> | 
-            <a href="games.html">Games</a> | 
-            <a href="catalog.html">Catalog</a> | 
-            <a href="people.html">People</a>
-        </div>
-
-        <div class="game-container">
-            <div class="game-left">
-                <div id="display-emoji" class="game-screenshot">🎮</div>
-            </div>
-
-            <div class="game-right">
-                <h1 id="display-title" class="game-title">Loading...</h1>
-                
-                <div class="game-meta">
-                    By <a href="#" id="creator-link" onclick="goToProfile(event)">Loading...</a>
-                </div>
-
-                <div class="play-section">
-                    <a href="#" class="play-btn" id="playLink" onclick="launchGame(event)">Play</a>
-                    <p style="font-size: 10px; color: #888; margin-top: 10px;">
-                        Requires BLYPEME Client to be installed in C:\BlypeMe.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="details-section">
-            <h3>About this Game</h3>
-            <div id="display-desc" class="desc-text">
-                Loading game description...
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 1. Get data from local storage
-        const gameName = localStorage.getItem("gameTarget") || "Baseplate";
-        const gameCreator = localStorage.getItem("gameCreator") || "BlypeMe";
-        const currentUser = localStorage.getItem("currentUser") || "Guest";
-
-        // 2. Setup Page Content
-        const gameData = {
-            "Happy Home": { emoji: "🏠", desc: "A peaceful place to hang out with friends. Explore the house and relax!" },
-            "Brick Battle": { emoji: "⚔️", desc: "Classic combat! Use your tools to destroy the enemy towers and win." },
-            "Baseplate": { emoji: "🧱", desc: "A blank canvas for creators. See what you can build on this empty grid." }
-        };
-
+        // Find the specific game info or use "Baseplate" as a backup
         const currentData = gameData[gameName] || gameData["Baseplate"];
+        
+        if(emojiElem) emojiElem.innerText = currentData.emoji;
+        if(descElem) descElem.innerText = currentData.desc;
+        
+        console.log("Page loaded for game: " + gameName);
+    };
 
-        document.getElementById('display-title').innerText = gameName;
-        document.getElementById('creator-link').innerText = gameCreator; // Fills the link text
-        document.getElementById('display-emoji').innerText = currentData.emoji;
-        document.getElementById('display-desc').innerText = currentData.desc;
+    /**
+     * 4. NAVIGATION: TO PROFILE
+     * Triggered when clicking the creator's name.
+     */
+    function goToProfile(e) {
+        e.preventDefault(); // Prevents the page from jumping
+        localStorage.setItem("profileTarget", gameCreator);
+        window.location.href = "profile.html";
+    }
 
-        // 3. PROFILE NAVIGATION
-        function goToProfile(e) {
-            e.preventDefault();
-            // Store the creator's name so the profile page knows who to show
-            localStorage.setItem("profileTarget", gameCreator);
-            // Move to the profile page
-            window.location.href = "profile.html";
-        }
-
-        // 4. LAUNCH LOGIC
-        function launchGame(e) {
-            e.preventDefault();
-            const uri = `blypeme://launch?user=${currentUser}&game=${gameName}`;
-            window.location.assign(uri);
-        }
-    </script>
-</body>
-</html>
+    /**
+     * 5. LAUNCHER: OPEN GODOT
+     * Triggered by the Play button. Works on GitHub Pages.
+     */
+    function launchGame(e) {
+        e.preventDefault();
+        
+        // This matches the Registry Bridge we built
+        const uri = `blypeme://launch?user=${currentUser}&game=${gameName}`;
+        
+        // Sends the command to Windows
+        window.location.assign(uri);
+        
+        console.log("Attempting to launch: " + uri);
+    }
+</script>
