@@ -4,140 +4,137 @@
     <meta charset="UTF-8">
     <title>BLYPEME - Help & Support</title>
     <style>
-        body {
-            background: #ade8ff;
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            text-align: center;
-        }
-
-        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
-
-        /* UNIFIED HEADER */
-        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
-        .banner-img { width: 100%; }
-
-        .sub-nav {
-            background-color: #8a49a8;
-            padding: 8px 0;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-        }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
-        .sub-nav a:hover { text-decoration: underline; }
-
-        /* MAIN GRID */
-        .main-container {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 15px;
-            padding: 20px 0;
-            text-align: left;
-        }
-
-        .box { 
-            background: #f0f0f0; 
-            border: 1px solid #a4a4a4; 
-            margin-bottom: 15px; 
-            padding: 10px;
-            font-size: 11px;
-        }
-        .box-header {
-            background: #e9e9e9;
-            border-bottom: 1px solid #a4a4a4;
-            padding: 4px;
-            font-weight: bold;
-            margin: -10px -10px 10px -10px;
-            color: #333;
-        }
-
-        /* HELP CONTENT */
-        .help-q { font-weight: bold; color: #8a49a8; display: block; margin-top: 10px; font-size: 12px; }
-        .help-a { display: block; margin-bottom: 10px; padding-left: 5px; border-left: 2px solid #ccc; margin-top: 3px; }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        .contact-btn {
-            background: #0080ff; color: white; border: 1px solid #003366;
-            padding: 5px 10px; font-weight: bold; cursor: pointer; width: 100%;
-            font-size: 10px; margin-top: 5px;
-        }
+        /* HEADER */
+        .header { background: #555; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
 
-        .admin-note { background: #fffbe6; border: 1px solid #ffe58f; padding: 10px; margin-top: 10px; }
+        .help-content { padding: 30px; }
+        
+        /* SEARCH BOX */
+        .help-search { background: #f4f4f4; padding: 20px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 30px; text-align: center; }
+        .help-search input { width: 80%; padding: 12px; border: 1px solid #ccc; font-size: 14px; }
+
+        /* FAQ SECTION */
+        .faq-section h2 { font-size: 18px; border-bottom: 2px solid #555; padding-bottom: 5px; }
+        .faq-item { margin-bottom: 15px; }
+        .faq-q { font-weight: bold; color: #00427a; cursor: pointer; display: block; }
+        .faq-a { font-size: 12px; color: #444; margin-top: 5px; display: none; background: #f9f9f9; padding: 10px; border-left: 3px solid #555; }
+
+        /* SUPPORT TICKET FORM */
+        .ticket-box { margin-top: 40px; padding: 20px; border: 1px solid #ccc; background: #fffdf0; }
+        .ticket-box h3 { margin-top: 0; font-size: 16px; color: #d92525; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; }
+        input, textarea, select { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; box-sizing: border-box; }
+        
+        .btn { background: #555; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #333; }
+
+        #success-msg { display: none; color: green; font-weight: bold; margin-top: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container" onclick="window.location.href='index.html'">
-            <img src="Banner.png" alt="BLYPE" class="banner-img">
+        <div class="header">HELP & CUSTOMER SERVICE</div>
+        <div class="nav">
+            <a href="index.html">Home</a> | <a href="games.html">Games</a> | <a href="catalog.html">Catalog</a> | <a href="help.html"><b>Help</b></a>
         </div>
 
-        <div class="sub-nav" id="main-nav">
-            <a href="index.html">Home</a> | 
-            <a href="games.html">Games</a> | 
-            <a href="marketplace.html">Marketplace</a> | 
-            <a href="character.html">Character</a> | 
-            <a href="forum.html">Forum</a> | 
-            <a href="help.html">Help</a>
-        </div>
+        <div class="help-content">
+            <div class="help-search">
+                <p style="margin-top:0; font-weight:bold;">How can we help you today?</p>
+                <input type="text" id="faq-input" placeholder="Search for a topic (e.g. 'Bux', 'Password')..." onkeyup="searchFAQ()">
+            </div>
 
-        <div class="main-container">
-            <aside>
-                <div class="box">
-                    <div class="box-header">Support Center</div>
-                    Need a hand? Our staff is online 24/7 to help you build your world.
-                    <button class="contact-btn">Email Support</button>
+            <div class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <span class="faq-q" onclick="toggleFAQ(this)">How do I get more Blypo-Bux (B$)?</span>
+                    <div class="faq-a">You can earn B$ by playing games, participating in community events, or receiving them from an Administrator.</div>
                 </div>
 
-                <div class="box">
-                    <div class="box-header">Safety First</div>
-                    Always keep your password secret! Never give it to someone claiming to be "Admin" in a game.
-                </div>
-            </aside>
-
-            <main>
-                <div class="box">
-                    <div class="box-header">Frequently Asked Questions</div>
-                    
-                    <span class="help-q">What are Blypo-Bux?</span>
-                    <span class="help-a">Blypo-Bux are the official currency of BLYPEME. You can use them to buy cool shirts in the Marketplace or gear for your favorite games.</span>
-
-                    <span class="help-q">How do I change my clothes?</span>
-                    <span class="help-a">Go to the "Character" tab in the navigation bar. There you can see all your owned items and select which ones to wear.</span>
-
-                    <span class="help-q">How do I make a game?</span>
-                    <span class="help-a">Coming soon! We are working on the BLYPE Studio software so everyone can build their own 3D worlds.</span>
+                <div class="faq-item">
+                    <span class="faq-q" onclick="toggleFAQ(this)">I forgot my password! What do I do?</span>
+                    <div class="faq-a">Since BLYPEME is currently in development, please contact a Staff member in the Forum to have your password reset manually.</div>
                 </div>
 
-                <div class="box" id="admin-help" style="display:none;">
-                    <div class="box-header" style="background:#fffbe6; color:#856404;">Admin Documentation</div>
-                    <div class="admin-note">
-                        <b>Welcome, Master Admin.</b> Here is how to manage the site:<br><br>
-                        • <b>Economy:</b> Use the Admin Panel to set your balance. Smart Formatting will handle display (K, M, B).<br>
-                        • <b>Content:</b> You can change the homepage News and Featured Game directly from your panel.<br>
-                        • <b>Moderation:</b> You have the power to delete forum threads and broadcast site-wide alerts.
-                    </div>
+                <div class="faq-item">
+                    <span class="faq-q" onclick="toggleFAQ(this)">How do I wear the items I bought?</span>
+                    <div class="faq-a">Go to the 'Character' tab in the navigation menu. There you can see your inventory and click 'Wear' on any item you own.</div>
                 </div>
-            </main>
+            </div>
+
+            <div class="ticket-box">
+                <h3>Contact Staff (Submit a Ticket)</h3>
+                <label>Issue Category</label>
+                <select id="ticket-cat">
+                    <option>Account Issue</option>
+                    <option>Billing / B$ Issue</option>
+                    <option>Reporting a Player</option>
+                    <option>Technical Bug</option>
+                </select>
+
+                <label>Description of Issue</label>
+                <textarea id="ticket-body" rows="4" placeholder="Please explain what happened..."></textarea>
+                
+                <button class="btn" onclick="submitTicket()">Submit Report</button>
+                <div id="success-msg">Ticket Submitted! A moderator will review your case soon.</div>
+            </div>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            const isAdmin = localStorage.getItem("isAdmin") === "true";
-            
-            if (isAdmin) {
-                // Show secret admin help
-                document.getElementById('admin-help').style.display = "block";
-                
-                // Add Admin Tab to Nav
-                const nav = document.getElementById('main-nav');
-                if(!nav.innerHTML.includes("admin.html")) {
-                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
-                }
-            }
+        const BLYPE = {
+            session: localStorage.getItem("currentUser") || "Guest"
         };
+
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            answer.style.display = (answer.style.display === "block") ? "none" : "block";
+        }
+
+        function searchFAQ() {
+            const input = document.getElementById('faq-input').value.toLowerCase();
+            const items = document.getElementsByClassName('faq-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const text = items[i].innerText.toLowerCase();
+                items[i].style.display = text.includes(input) ? "block" : "none";
+            }
+        }
+
+        function submitTicket() {
+            const cat = document.getElementById('ticket-cat').value;
+            const msg = document.getElementById('ticket-body').value.trim();
+
+            if (!msg) return alert("Please describe your issue.");
+
+            // Create Ticket Data
+            const ticket = {
+                user: BLYPE.session,
+                category: cat,
+                message: msg,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Save to Global Logs for Admin to see
+            let logs = JSON.parse(localStorage.getItem("blypo_help_tickets") || "[]");
+            logs.unshift(ticket);
+            localStorage.setItem("blypo_help_tickets", JSON.stringify(logs));
+
+            // UI Feedback
+            document.getElementById('ticket-body').value = "";
+            document.getElementById('success-msg').style.display = "block";
+            
+            setTimeout(() => {
+                document.getElementById('success-msg').style.display = "none";
+            }, 5000);
+        }
     </script>
 </body>
 </html>
