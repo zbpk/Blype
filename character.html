@@ -2,208 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - My Character</title>
+    <title>BLYPEME - Character</title>
     <style>
-        body {
-            background: #ade8ff;
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            text-align: center;
-        }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
+        
+        /* HEADER */
+        .header { background: #8a49a8; color: white; padding: 15px; font-weight: bold; font-size: 18px; display: flex; justify-content: space-between; }
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
 
-        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
+        .content-layout { display: grid; grid-template-columns: 350px 1fr; gap: 20px; padding: 20px; }
 
-        /* UNIFIED HEADER */
-        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
-        .banner-img { width: 100%; }
-
-        .sub-nav {
-            background-color: #8a49a8;
-            padding: 8px 0;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
+        /* AVATAR PREVIEW */
+        .avatar-box { border: 1px solid #ccc; background: #f9f9f9; padding: 10px; text-align: center; }
+        .avatar-display { 
+            width: 300px; height: 350px; background: #fff; border: 1px inset #eee; 
+            margin: 0 auto; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
-        .sub-nav a:hover { text-decoration: underline; }
-
-        /* MAIN GRID */
-        .main-container {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 15px;
-            padding: 20px 0;
-            text-align: left;
-        }
-
-        .box { 
-            background: #f0f0f0; 
-            border: 1px solid #a4a4a4; 
-            margin-bottom: 15px; 
-            padding: 10px;
-            font-size: 11px;
-        }
-        .box-header {
-            background: #e9e9e9;
-            border-bottom: 1px solid #a4a4a4;
-            padding: 4px;
-            font-weight: bold;
-            margin: -10px -10px 10px -10px;
-            color: #333;
-        }
-
-        /* AVATAR DISPLAY */
-        .avatar-preview {
-            width: 100%;
-            height: 250px;
-            background: #fff;
-            border: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            position: relative;
-        }
-        .avatar-mannequin { font-size: 50px; color: #ddd; }
-        .equipped-label { font-size: 10px; color: #8a49a8; font-weight: bold; margin-top: 5px; }
+        .avatar-display img { max-width: 90%; }
 
         /* INVENTORY GRID */
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
+        .inventory-box { border: 1px solid #ccc; padding: 15px; }
+        .inventory-tabs { display: flex; gap: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .tab { font-size: 11px; cursor: pointer; padding: 5px; background: #eee; border-radius: 3px; }
+        .tab.active { background: #8a49a8; color: white; }
+
+        .item-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; 
+            height: 400px; overflow-y: auto; align-content: start;
         }
-        .inventory-item {
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
+        .item-card { 
+            border: 1px solid #eee; padding: 10px; text-align: center; font-size: 10px; cursor: pointer;
         }
-        .btn-wear {
-            background: #72fb3c;
-            border: 1px solid #27ae60;
-            padding: 3px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 5px;
-        }
-        .btn-remove {
-            background: #ff4d4d;
-            color: white;
-            border: 1px solid #900;
-        }
+        .item-card:hover { border-color: #8a49a8; background: #fcfaff; }
+        .item-card img { width: 60px; height: 60px; display: block; margin: 0 auto 5px; }
+        .wearing-tag { color: green; font-weight: bold; font-size: 9px; }
+
+        .stats-footer { font-size: 11px; color: #666; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container" onclick="window.location.href='index.html'">
-            <img src="Banner.png" alt="BLYPE" class="banner-img">
+        <div class="header">
+            <span>CHARACTER CUSTOMIZER</span>
+            <span id="user-bux" style="font-size: 12px;">B$: 0</span>
+        </div>
+        <div class="nav">
+            <a href="index.html">Home</a> | <a href="marketplace.html">Marketplace</a> | <a href="character.html"><b>Character</b></a> | <a href="admin.html">Admin</a>
         </div>
 
-        <div class="sub-nav" id="main-nav">
-            <a href="index.html">Home</a> | 
-            <a href="games.html">Games</a> | 
-            <a href="marketplace.html">Marketplace</a> | 
-            <a href="character.html">Character</a> | 
-            <a href="forum.html">Forum</a> | 
-            <a href="help.html">Help</a>
-        </div>
+        <div class="content-layout">
+            <div class="avatar-box">
+                <div class="avatar-display" id="avatar-render">
+                    <img src="https://via.placeholder.com/200x300?text=Base+Character" alt="Avatar">
+                </div>
+                <button style="margin-top:10px; width:100%; cursor:pointer;" onclick="location.reload()">Refresh Avatar</button>
+            </div>
 
-        <div class="main-container">
-            <aside>
-                <div class="box">
-                    <div class="box-header">Character Preview</div>
-                    <div class="avatar-preview" id="preview-area">
-                        <div class="avatar-mannequin">👤</div>
-                        <div id="wearing-status" class="equipped-label">Wearing: Nothing</div>
+            <div class="inventory-box">
+                <div class="inventory-tabs">
+                    <div class="tab active">All Assets</div>
+                    <div class="tab">Shirts</div>
+                    <div class="tab">Hats</div>
+                    <div class="tab">Faces</div>
+                </div>
+                <div class="item-grid" id="inventory-list">
                     </div>
-                    <button class="btn-wear btn-remove" onclick="unequipAll()">Unequip All</button>
+                <div class="stats-footer">
+                    Total Items: <span id="item-count">0</span>
                 </div>
-
-                <div class="box">
-                    <div class="box-header">Account Stats</div>
-                    Balance: <b style="color:green;">B$ <span id="user-bux">0</span></b><br>
-                    Items Owned: <b id="item-count">0</b>
-                </div>
-            </aside>
-
-            <main>
-                <div class="box">
-                    <div class="box-header">My Wardrobe</div>
-                    <p style="font-size: 10px; color: #666;">Select an item to wear it on your avatar.</p>
-                    <div class="inventory-grid" id="inv-grid">
-                        </div>
-                    <div id="no-items" style="display:none; text-align:center; padding: 20px; color: #999;">
-                        Your wardrobe is empty!<br>
-                        <a href="marketplace.html" style="color:blue;">Visit the Marketplace</a>
-                    </div>
-                </div>
-            </main>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- SMART FORMATTING ---
-        function formatBux(num) {
-            num = parseInt(num);
-            if (num >= 1e12) return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
-            if (num >= 1e9) return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
-            if (num >= 1e6) return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
-            if (num >= 1e3) return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
-            return num.toString();
-        }
+        const BLYPE = {
+            session: localStorage.getItem("currentUser"),
+            db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
+        };
 
         function loadCharacter() {
-            const isAdmin = localStorage.getItem("isAdmin") === "true";
-            
-            // Admin Tab Check
-            if(isAdmin) {
-                const nav = document.getElementById('main-nav');
-                if(!nav.innerHTML.includes("admin.html")) nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
+            if (!BLYPE.session) {
+                document.body.innerHTML = "<h1>Please log in to customize your character.</h1>";
+                return;
             }
 
-            // Stats Update
-            document.getElementById('user-bux').innerText = formatBux(localStorage.getItem("blypoBux") || 0);
+            const userData = BLYPE.db[BLYPE.session];
+            document.getElementById('user-bux').innerText = "B$: " + (userData.bux || 0).toLocaleString();
 
-            // Load Inventory
-            const owned = JSON.parse(localStorage.getItem("ownedItems") || "[]");
-            const grid = document.getElementById('inv-grid');
-            document.getElementById('item-count').innerText = owned.length;
+            const listDiv = document.getElementById('inventory-list');
+            listDiv.innerHTML = "";
 
-            if (owned.length === 0) {
-                document.getElementById('no-items').style.display = "block";
-            } else {
-                grid.innerHTML = "";
-                owned.forEach(item => {
-                    grid.innerHTML += `
-                        <div class="inventory-item">
-                            <b>${item.name}</b><br>
-                            <button class="btn-wear" onclick="equip('${item.name}')">Wear</button>
-                        </div>
-                    `;
-                });
+            // Check if user has items
+            if (!userData.inventory || userData.inventory.length === 0) {
+                listDiv.innerHTML = "<p style='grid-column: span 3; color:#999;'>You don't own any items yet.</p>";
+                return;
             }
 
-            // Load currently wearing
-            const current = localStorage.getItem("equippedItem") || "Nothing";
-            document.getElementById('wearing-status').innerText = "Wearing: " + current;
+            // Fill Inventory from "Database"
+            userData.inventory.forEach(itemName => {
+                const card = document.createElement('div');
+                card.className = "item-card";
+                
+                // Set item image (Uses your logic: Item Name + Front.png)
+                const imgName = itemName.replace(/\s+/g, '') + "Front.png";
+                
+                card.innerHTML = `
+                    <img src="${imgName}" onerror="this.src='https://via.placeholder.com/60/ccc/fff?text=Item'">
+                    <b>${itemName}</b><br>
+                    <button onclick="wearItem('${itemName}')" style="font-size:9px; margin-top:5px; cursor:pointer;">Wear</button>
+                `;
+                listDiv.appendChild(card);
+            });
+
+            document.getElementById('item-count').innerText = userData.inventory.length;
         }
 
-        function equip(name) {
-            localStorage.setItem("equippedItem", name);
-            document.getElementById('wearing-status').innerText = "Wearing: " + name;
-            alert("Equipped: " + name);
+        function wearItem(name) {
+            // This is where you would handle layering the image on the avatar
+            alert("Now wearing: " + name);
+            // In a real live system, you'd save users[name].currentlyWearing = name;
         }
 
-        function unequipAll() {
-            localStorage.removeItem("equippedItem");
-            document.getElementById('wearing-status').innerText = "Wearing: Nothing";
-        }
+        // Listen for Admin injections (if Admin adds an item while this tab is open)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'blypo_users') {
+                BLYPE.db = JSON.parse(e.newValue);
+                loadCharacter();
+            }
+        });
 
         window.onload = loadCharacter;
     </script>
