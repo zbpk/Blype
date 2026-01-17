@@ -25,7 +25,10 @@
         .game-right { flex-grow: 1; }
         .game-title { font-size: 32px; font-weight: bold; margin: 0; color: #333; }
         .game-meta { font-size: 14px; color: #666; margin: 5px 0 20px 0; }
-        .game-meta b { color: #005596; }
+        
+        /* Link styling for the Creator name */
+        .game-meta a { color: #005596; text-decoration: none; font-weight: bold; }
+        .game-meta a:hover { text-decoration: underline; }
 
         /* PLAY BUTTON */
         .play-section { background: #f4f4f4; border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center; }
@@ -62,11 +65,13 @@
 
             <div class="game-right">
                 <h1 id="display-title" class="game-title">Loading...</h1>
-                <div class="game-meta">By <b id="display-creator">Creator</b></div>
+                
+                <div class="game-meta">
+                    By <a href="#" id="creator-link" onclick="goToProfile(event)">Loading...</a>
+                </div>
 
                 <div class="play-section">
                     <a href="#" class="play-btn" id="playLink" onclick="launchGame(event)">Play</a>
-                    
                     <p style="font-size: 10px; color: #888; margin-top: 10px;">
                         Requires BLYPEME Client to be installed in C:\BlypeMe.
                     </p>
@@ -98,21 +103,24 @@
         const currentData = gameData[gameName] || gameData["Baseplate"];
 
         document.getElementById('display-title').innerText = gameName;
-        document.getElementById('display-creator').innerText = gameCreator;
+        document.getElementById('creator-link').innerText = gameCreator; // Fills the link text
         document.getElementById('display-emoji').innerText = currentData.emoji;
         document.getElementById('display-desc').innerText = currentData.desc;
 
-        // 3. LAUNCH LOGIC (GitHub Optimized)
+        // 3. PROFILE NAVIGATION
+        function goToProfile(e) {
+            e.preventDefault();
+            // Store the creator's name so the profile page knows who to show
+            localStorage.setItem("profileTarget", gameCreator);
+            // Move to the profile page
+            window.location.href = "profile.html";
+        }
+
+        // 4. LAUNCH LOGIC
         function launchGame(e) {
-            e.preventDefault(); // Stop the link from jumping the page
-            
-            // Build the protocol link
+            e.preventDefault();
             const uri = `blypeme://launch?user=${currentUser}&game=${gameName}`;
-            
-            // Try to open the application
             window.location.assign(uri);
-            
-            console.log("Launching via GitHub Pages: " + uri);
         }
     </script>
 </body>
