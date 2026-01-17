@@ -4,163 +4,123 @@
     <meta charset="UTF-8">
     <title>BLYPEME - Settings</title>
     <style>
-        body {
-            background: #ade8ff;
-            font-family: 'Verdana', sans-serif;
-            margin: 0; padding: 0;
-            text-align: center;
-        }
-
-        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
-
-        /* UNIFIED HEADER */
-        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
-        .banner-img { width: 100%; }
-
-        .sub-nav {
-            background-color: #8a49a8;
-            padding: 8px 0;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-        }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
-        .sub-nav a:hover { text-decoration: underline; }
-
-        /* MAIN CONTENT GRID */
-        .main-container {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 15px;
-            padding: 20px 0;
-            text-align: left;
-        }
-
-        /* BOX STYLING */
-        .box { 
-            background: #f0f0f0; 
-            border: 1px solid #a4a4a4; 
-            margin-bottom: 15px; 
-            padding: 10px;
-            font-size: 11px;
-        }
-        .box-header {
-            background: #e9e9e9;
-            border-bottom: 1px solid #a4a4a4;
-            padding: 4px;
-            font-weight: bold;
-            margin: -10px -10px 10px -10px;
-            color: #333;
-        }
-
-        /* SETTINGS INPUTS */
-        .setting-row { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input[type="text"], textarea, select { width: 95%; padding: 4px; font-size: 11px; border: 1px solid #aaa; }
-        .save-btn { background: #72fb3c; border: 1px solid #27ae60; padding: 5px 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        .danger-zone { border: 1px solid #ff4d4d; background: #fff1f1; }
+        .header { background: #444; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
+
+        .settings-container { padding: 30px; }
+        .settings-section { border: 1px solid #ccc; padding: 20px; background: #fdfdfd; margin-bottom: 20px; }
+        .settings-section h2 { font-size: 16px; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; color: #333; }
+        
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: #666; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; box-sizing: border-box; }
+        
+        .btn { padding: 10px 20px; background: #444; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn:hover { background: #222; }
+        .btn-save { background: #007a3d; }
+
+        /* STAFF AREA */
+        #staff-settings { border: 2px solid #d92525; display: none; background: #fff5f5; }
+        .staff-tag { color: #d92525; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container" onclick="window.location.href='index.html'">
-            <img src="Banner.png" alt="BLYPE" class="banner-img">
+        <div class="header">ACCOUNT SETTINGS</div>
+        <div class="nav">
+            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="settings.html"><b>Settings</b></a>
         </div>
 
-        <div class="sub-nav" id="main-nav">
-            <a href="index.html">Home</a> | 
-            <a href="games.html">Games</a> | 
-            <a href="people.html">People</a> |
-            <a href="marketplace.html">Marketplace</a> | 
-            <a href="character.html">Character</a> | 
-            <a href="forum.html">Forum</a> | 
-            <a href="settings.html">Settings</a>
-        </div>
+        <div class="settings-container">
+            <div class="settings-section">
+                <h2>Account Info</h2>
+                <label>Username (Cannot be changed)</label>
+                <input type="text" id="set-username" disabled style="background:#f0f0f0;">
+                
+                <label>Change Password</label>
+                <input type="password" id="set-password" placeholder="Enter new password...">
+                
+                <button class="btn btn-save" onclick="saveSettings()">Update Account</button>
+            </div>
 
-        <div class="main-container">
-            <aside>
-                <div class="box">
-                    <div class="box-header">Account</div>
-                    <a href="#" style="display:block; margin-bottom:5px;">Personal Info</a>
-                    <a href="#" style="display:block; margin-bottom:5px;">Privacy</a>
-                    <a href="#" style="display:block; margin-bottom:5px;">Billing</a>
-                </div>
+            <div class="settings-section">
+                <h2>Site Preferences</h2>
+                <label>Site Theme</label>
+                <select id="set-theme" style="width:100%; padding:8px;">
+                    <option value="classic">Classic Blue (2011)</option>
+                    <option value="dark">Dark Mode</option>
+                    <option value="retro">Old School Green</option>
+                </select>
+                <p style="font-size:10px; color:#999; margin-top:10px;">Note: Theme changes are saved to this browser session.</p>
+            </div>
 
-                <div class="box" id="admin-sidebar" style="display:none;">
-                    <div class="box-header" style="color: #d9534f;">System Override</div>
-                    <span style="font-size: 9px; color: #666;">You are editing the root configuration for Admin_Krew.</span>
-                </div>
-            </aside>
-
-            <main>
-                <div class="box">
-                    <div class="box-header">My Settings</div>
-                    
-                    <div class="setting-row">
-                        <label>Display Name</label>
-                        <input type="text" id="display-name" value="Admin">
-                    </div>
-
-                    <div class="setting-row">
-                        <label>Personal Blurb (Bio)</label>
-                        <textarea id="bio" rows="3">Building the future of BLYPEME.</textarea>
-                    </div>
-
-                    <div class="setting-row">
-                        <label>Profile Theme</label>
-                        <select>
-                            <option>Default Blue</option>
-                            <option>Classic Purple</option>
-                            <option>Midnight</option>
-                            <option>Blypo-Gold</option>
-                        </select>
-                    </div>
-
-                    <button class="save-btn" onclick="alert('Settings Saved!')">Update Profile</button>
-                </div>
-
-                <div class="box danger-zone" id="admin-settings" style="display:none;">
-                    <div class="box-header" style="background:#ff4d4d; color:white;">Global System Settings</div>
-                    
-                    <div class="setting-row">
-                        <label>Site Status</label>
-                        <input type="radio" name="status" checked> Public 
-                        <input type="radio" name="status"> Maintenance Mode
-                    </div>
-
-                    <div class="setting-row">
-                        <label>Developer Debug Mode</label>
-                        <input type="checkbox" id="debug-toggle"> Show local storage keys in console
-                    </div>
-
-                    <button class="save-btn" style="background:#ff4d4d; color:white; border-color:#900;" onclick="alert('System Updated!')">Apply Site-Wide Changes</button>
-                </div>
-            </main>
+            <div id="staff-settings" class="settings-section">
+                <span class="staff-tag">STAFF ONLY</span>
+                <h2>Global System Toggles</h2>
+                <label>Maintenance Mode</label>
+                <button class="btn" onclick="toggleMaintenance()">Toggle Maintenance (Live)</button>
+                <p style="font-size:10px; margin-top:5px;">This will affect what users see on the Home page.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            const isAdmin = localStorage.getItem("isAdmin") === "true";
-            
-            if (isAdmin) {
-                // Show Admin specific boxes
-                document.getElementById('admin-sidebar').style.display = "block";
-                document.getElementById('admin-settings').style.display = "block";
-                
-                // Add Admin Tab to Nav
-                const nav = document.getElementById('main-nav');
-                if(!nav.innerHTML.includes("admin.html")) {
-                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
-                }
-            } else {
-                // Redirect non-admins to home if they try to access settings
-                window.location.href = "index.html";
-            }
+        const BLYPE = {
+            session: localStorage.getItem("currentUser"),
+            db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
         };
+
+        function initSettings() {
+            if (!BLYPE.session) {
+                alert("You must be logged in to view settings.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const userData = BLYPE.db[BLYPE.session];
+            
+            // Fill current data
+            document.getElementById('set-username').value = BLYPE.session;
+            document.getElementById('set-password').value = userData.password;
+
+            // Show Admin section if applicable
+            if (userData.isAdmin) {
+                document.getElementById('staff-settings').style.display = "block";
+            }
+        }
+
+        function saveSettings() {
+            const newPass = document.getElementById('set-password').value.trim();
+            
+            if (newPass.length < 3) {
+                return alert("Password is too short!");
+            }
+
+            // Update Database
+            BLYPE.db[BLYPE.session].password = newPass;
+            localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
+
+            alert("Settings saved successfully!");
+        }
+
+        function toggleMaintenance() {
+            const current = localStorage.getItem("maint_mode") === "true";
+            localStorage.setItem("maint_mode", !current);
+            alert("Maintenance Mode is now: " + (!current ? "ON" : "OFF"));
+            
+            // Also update the Global Red Bar
+            if (!current) {
+                localStorage.setItem("globalAlert", "⚠️ SITE IS CURRENTLY UNDER MAINTENANCE ⚠️");
+            } else {
+                localStorage.setItem("globalAlert", "");
+            }
+        }
+
+        window.onload = initSettings;
     </script>
 </body>
 </html>
