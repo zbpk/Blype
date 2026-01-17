@@ -4,136 +4,162 @@
     <meta charset="UTF-8">
     <title>BLYPEME - Home</title>
     <style>
-        :root {
-            --bg-blue: #ade8ff;
-            --blype-purple: #8a49a8;
-            --blype-green: #72fb3c;
-            --box-gray: #f0f0f0;
-            --header-gray: #e9e9e9;
-            --border-gray: #a4a4a4;
+        body { background: #ade8ff; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; }
+        
+        /* SYSTEM RED BAR */
+        #red-alert-bar { 
+            background: #d92525; color: white; padding: 10px; text-align: center; 
+            font-weight: bold; font-size: 13px; display: none; border-bottom: 2px solid #a00;
         }
 
-        body { background: var(--bg-blue); font-family: 'Verdana', sans-serif; margin: 0; padding: 0; text-align: center; color: #333; }
-        .site-wrapper { width: 900px; margin: 0 auto; background: transparent; }
-
-        /* HEADER & NAV */
-        .banner-container { background: #fff; border-bottom: 2px solid #000; width: 900px; height: 110px; cursor: pointer; }
-        .banner-img { width: 100%; }
-
-        .sub-nav { 
-            background-color: var(--blype-purple); 
-            padding: 10px 0; color: white; font-size: 11px; font-weight: bold; border-bottom: 1px solid #000;
-        }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 12px; }
-
-        /* LAYOUT */
-        .main-container { display: grid; grid-template-columns: 210px 1fr 210px; gap: 15px; padding: 20px; text-align: left; }
-
-        .box { background: var(--box-gray); border: 1px solid var(--border-gray); margin-bottom: 15px; padding: 12px; font-size: 11px; }
-        .box-header { background: var(--header-gray); border-bottom: 1px solid var(--border-gray); padding: 6px; font-weight: bold; margin: -12px -12px 10px -12px; font-size: 10px; }
-
-        input { width: 90%; margin-bottom: 8px; font-size: 10px; border: 1px solid #777; padding: 3px; }
-        .btn-action { background: var(--blype-green); border: 1px solid #27ae60; padding: 6px 12px; font-weight: bold; cursor: pointer; font-size: 10px; width: 100%; }
+        .site-wrapper { width: 900px; margin: 0 auto; background: #fff; min-height: 100vh; border: 1px solid #000; }
         
-        .mini-avatar { width: 80px; height: 80px; background: #fff; border: 1px solid #ccc; margin: 5px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        /* HEADER */
+        .header { background: #005596; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: bold; letter-spacing: -1px; }
         
-        /* POLL RESULTS BAR */
-        .poll-bar { background: #ddd; height: 10px; border-radius: 5px; margin-top: 5px; overflow: hidden; }
-        .poll-fill { background: var(--blype-purple); height: 100%; width: 0%; transition: width 0.5s; }
+        .nav { background: #eee; padding: 10px; font-size: 11px; border-bottom: 1px solid #ccc; }
+        .nav a { margin-right: 15px; text-decoration: none; color: blue; }
+
+        .content { padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+
+        /* HERO BOXES */
+        .hero-box { border: 1px solid #ccc; padding: 20px; background: #f9f9f9; margin-bottom: 20px; }
+        .login-box { border: 1px solid #ccc; padding: 20px; background: #eee; }
+        
+        input { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; border: 1px solid #ccc; }
+        .btn { width: 100%; padding: 10px; background: #005596; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-reg { background: #007a3d; margin-top: 5px; }
+
+        /* USER DASHBOARD */
+        #user-dash { display: none; }
+        .avatar-preview { width: 100px; height: 120px; background: #fff; border: 1px solid #ccc; float: left; margin-right: 15px; }
     </style>
 </head>
 <body>
 
+    <div id="red-alert-bar"></div>
+
     <div class="site-wrapper">
-        <div class="banner-container" onclick="window.location.href='index.html'">
-            <img src="Banner.png" class="banner-img">
+        <div class="header">
+            <div class="logo">BLYPEME</div>
+            <div id="header-auth" style="font-size:12px;">Welcome, Guest!</div>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html"><b>Home</b></a> | 
+            <a href="games.html">Games</a> | 
+            <a href="marketplace.html">Catalog</a> | 
+            <a href="people.html">People</a> |
+            <a href="forum.html">Forum</a> |
+            <a href="admin.html" id="admin-link" style="display:none; color:red;">Admin</a>
         </div>
 
-        <nav class="sub-nav" id="main-nav">
-            <a href="index.html">HOME</a>
-            <a href="games.html">GAMES</a>
-            <a href="people.html">PEOPLE</a>
-            <a href="marketplace.html">MARKETPLACE</a>
-            <a href="character.html">CHARACTER</a>
-            <a href="shop.html">SHOP</a>
-            <a href="forum.html">FORUM</a>
-        </nav>
+        <div class="content">
+            <div class="main-column">
+                <div id="logged-out-hero" class="hero-box">
+                    <h1>Imagine Anything.</h1>
+                    <p>BLYPEME is a user-generated gaming platform where you can create worlds and play with friends.</p>
+                    <img src="https://via.placeholder.com/500x200?text=2011+Era+Banner" style="width:100%;">
+                </div>
 
-        <div class="main-container">
-            <aside>
-                <div class="box" id="auth-box">
-                    <div class="box-header">Login / Register</div>
-                    <div id="logged-out">
-                        <input type="text" id="user" placeholder="Username">
-                        <input type="password" id="pass" placeholder="Password">
-                        <button class="btn-action" onclick="handleAuth('login')">LOGIN</button>
-                        <button class="btn-action" style="margin-top:5px; background:#fff;" onclick="handleAuth('register')">REGISTER</button>
-                    </div>
-                    <div id="logged-in" style="display:none; text-align:center;">
-                        <div class="mini-avatar">👤</div>
-                        <b id="display-name">User</b><br>
-                        <span style="color:green; font-weight:bold;">B$ <span id="balance">0</span></span><br>
-                        <button class="btn-action" style="margin-top:10px; background:#eee;" onclick="logout()">LOGOUT</button>
+                <div id="user-dash" class="hero-box">
+                    <div class="avatar-preview">👤</div>
+                    <h2 id="welcome-name">Hello, User!</h2>
+                    <p style="font-size:12px;">Your Balance: <b id="dash-bux">0</b> B$</p>
+                    <div style="clear:both; padding-top:10px;">
+                        <button onclick="logout()" style="font-size:10px; cursor:pointer;">Logout</button>
                     </div>
                 </div>
-            </aside>
 
-            <main>
-                <div class="box">
-                    <div class="box-header">Site News</div>
-                    <div id="news-content">Welcome to BLYPEME! Create an account to start your journey.</div>
+                <div class="hero-box">
+                    <h3>News & Updates</h3>
+                    <p style="font-size:12px; color:#666;">[2026-01-16] The User Audit system is now live for Staff.</p>
                 </div>
-                <div class="box">
-                    <div class="box-header">Featured Experience</div>
-                    <h2 id="feat-game-name" style="margin:0; font-size:16px;">Frozen Peak Obby</h2>
-                    <p>Challenge yourself in the tundra!</p>
-                </div>
-            </main>
+            </div>
 
-            <aside>
-                <div class="box">
-                    <div class="box-header">Community Poll</div>
-                    <div id="poll-ui">
-                        <b>Favorite Hat?</b><br>
-                        <input type="radio" name="hat" value="fedora"> Fedora<br>
-                        <input type="radio" name="hat" value="crown"> Crown<br>
-                        <button class="btn-action" style="margin-top:10px;" onclick="vote()">VOTE</button>
-                    </div>
-                    <div id="poll-results" style="display:none;">
-                        Fedora: <span id="fedora-count">0</span>%
-                        <div class="poll-bar"><div id="bar-fedora" class="poll-fill"></div></div>
-                        Crown: <span id="crown-count">0</span>%
-                        <div class="poll-bar"><div id="bar-crown" class="poll-fill"></div></div>
-                        <p style="font-size:9px; color:#666; margin-top:5px;">Thanks for voting!</p>
-                    </div>
+            <div class="side-column">
+                <div class="login-box" id="auth-ui">
+                    <h3 style="margin-top:0;">Member Login</h3>
+                    <input type="text" id="user-in" placeholder="Username">
+                    <input type="password" id="pass-in" placeholder="Password">
+                    <button class="btn" onclick="login()">Login</button>
+                    <hr>
+                    <button class="btn btn-reg" onclick="register()">Register New Account</button>
                 </div>
-            </aside>
+                
+                <div class="login-box" style="margin-top:20px;">
+                    <h3>Statistics</h3>
+                    <p style="font-size:11px;">Users Online: <b id="online-count">1</b></p>
+                    <p style="font-size:11px;">Total Accounts: <b id="total-accounts">0</b></p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function format(n){ n=parseInt(n); if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e3)return(n/1e3).toFixed(1)+'K'; return n; }
+        // MASTER DATABASE LOAD
+        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        let currentUser = localStorage.getItem("currentUser");
 
-        // --- AUTH SYSTEM ---
-        function handleAuth(type) {
-            const u = document.getElementById('user').value.trim();
-            const p = document.getElementById('pass').value.trim();
-            if(!u || !p) return alert("Fill in both fields!");
-
-            let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-
-            if(type === 'register') {
-                if(users[u]) return alert("Username taken!");
-                users[u] = { password: p, bux: 500, isAdmin: (u.toLowerCase() === 'admin') };
-                localStorage.setItem("blypo_users", JSON.stringify(users));
-                alert("Account created! You can now login.");
+        function updateLiveUI() {
+            // Check Red Bar
+            const alertMsg = localStorage.getItem("globalAlert");
+            const bar = document.getElementById('red-alert-bar');
+            if (alertMsg && alertMsg !== "") {
+                bar.innerText = alertMsg;
+                bar.style.display = "block";
             } else {
-                if(users[u] && users[u].password === p) {
-                    localStorage.setItem("currentUser", u);
-                    localStorage.setItem("isAdmin", users[u].isAdmin);
-                    localStorage.setItem("blypoBux", users[u].bux);
-                    location.reload();
-                } else { alert("Invalid credentials!"); }
+                bar.style.display = "none";
+            }
+
+            // Update Auth State
+            if (currentUser && users[currentUser]) {
+                document.getElementById('logged-out-hero').style.display = "none";
+                document.getElementById('auth-ui').style.display = "none";
+                document.getElementById('user-dash').style.display = "block";
+                
+                document.getElementById('welcome-name').innerText = "Hello, " + currentUser + "!";
+                document.getElementById('dash-bux').innerText = users[currentUser].bux.toLocaleString();
+                document.getElementById('header-auth').innerText = currentUser + " (" + users[currentUser].bux + " B$)";
+                
+                if (users[currentUser].isAdmin) {
+                    document.getElementById('admin-link').style.display = "inline";
+                }
+            }
+
+            document.getElementById('total-accounts').innerText = Object.keys(users).length;
+        }
+
+        function register() {
+            const u = document.getElementById('user-in').value.trim();
+            const p = document.getElementById('pass-in').value.trim();
+            if (!u || !p) return alert("Fill in details!");
+            if (users[u]) return alert("Username taken!");
+
+            // Create user with default stats
+            users[u] = { 
+                password: p, 
+                bux: 500, 
+                isAdmin: (u.toLowerCase() === "admin"), // Auto-admin if name is 'admin'
+                inventory: ["Brown Shirt"],
+                id: Math.floor(Math.random() * 100000)
+            };
+
+            localStorage.setItem("blypo_users", JSON.stringify(users));
+            alert("Account created! You can now login.");
+        }
+
+        function login() {
+            const u = document.getElementById('user-in').value.trim();
+            const p = document.getElementById('pass-in').value.trim();
+
+            if (users[u] && users[u].password === p) {
+                localStorage.setItem("currentUser", u);
+                localStorage.setItem("isAdmin", users[u].isAdmin);
+                location.reload();
+            } else {
+                alert("Invalid Login!");
             }
         }
 
@@ -143,52 +169,15 @@
             location.reload();
         }
 
-        // --- VOTING SYSTEM ---
-        function vote() {
-            const selected = document.querySelector('input[name="hat"]:checked');
-            if(!selected) return alert("Select an option!");
-            
-            let votes = JSON.parse(localStorage.getItem("poll_votes") || '{"fedora":12, "crown":8}');
-            votes[selected.value]++;
-            localStorage.setItem("poll_votes", JSON.stringify(votes));
-            localStorage.setItem("hasVoted", "true");
-            showResults();
-        }
-
-        function showResults() {
-            document.getElementById('poll-ui').style.display = 'none';
-            document.getElementById('poll-results').style.display = 'block';
-            const v = JSON.parse(localStorage.getItem("poll_votes") || '{"fedora":12, "crown":8}');
-            const total = v.fedora + v.crown;
-            const fPerc = Math.round((v.fedora / total) * 100);
-            const cPerc = 100 - fPerc;
-
-            document.getElementById('fedora-count').innerText = fPerc;
-            document.getElementById('bar-fedora').style.width = fPerc + '%';
-            document.getElementById('crown-count').innerText = cPerc;
-            document.getElementById('bar-crown').style.width = cPerc + '%';
-        }
-
-        window.onload = function() {
-            const user = localStorage.getItem("currentUser");
-            if(user) {
-                document.getElementById('logged-out').style.display = 'none';
-                document.getElementById('logged-in').style.display = 'block';
-                document.getElementById('display-name').innerText = user;
-                document.getElementById('balance').innerText = format(localStorage.getItem("blypoBux") || 0);
-                
-                if(localStorage.getItem("isAdmin") === "true") {
-                    const nav = document.getElementById('main-nav');
-                    nav.innerHTML += '<a href="admin.html" style="color:yellow;">ADMIN</a>';
-                }
+        // Live refresh if admin changes something in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'blypo_users' || e.key === 'globalAlert') {
+                users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+                updateLiveUI();
             }
+        });
 
-            if(localStorage.getItem("hasVoted")) showResults();
-
-            // Load Admin content
-            if(localStorage.getItem("admin_news")) document.getElementById('news-content').innerHTML = localStorage.getItem("admin_news");
-            if(localStorage.getItem("admin_featGame")) document.getElementById('feat-game-name').innerText = localStorage.getItem("admin_featGame");
-        }
+        window.onload = updateLiveUI;
     </script>
 </body>
 </html>
