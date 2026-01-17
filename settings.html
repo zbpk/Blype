@@ -2,146 +2,165 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLYPE - Settings</title>
+    <title>BLYPEME - Settings</title>
     <style>
         body {
-            background: linear-gradient(to bottom, #ade8ff 0%, #e0f7ff 100%);
-            background-attachment: fixed;
+            background: #ade8ff;
             font-family: 'Verdana', sans-serif;
             margin: 0; padding: 0;
-            min-height: 100vh;
+            text-align: center;
         }
 
-        .site-wrapper {
-            width: 900px;
-            margin: 0 auto;
-        }
+        .site-wrapper { width: 900px; margin: 0 auto; background-color: transparent; }
 
-        .banner-container {
-            background: #fff;
-            border-bottom: 1px solid #000;
-        }
-        .banner-img {
-            width: 900px;
-            display: block;
-        }
+        /* UNIFIED HEADER */
+        .banner-container { background: #fff; border-bottom: 1px solid #000; width: 900px; height: 100px; overflow: hidden; cursor: pointer; }
+        .banner-img { width: 100%; }
 
         .sub-nav {
             background-color: #8a49a8;
             padding: 8px 0;
             color: white;
             font-size: 11px;
-            text-align: center;
-            border-bottom: 2px solid #5a2d6d;
-            width: 900px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
         }
-        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
+        .sub-nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .sub-nav a:hover { text-decoration: underline; }
 
+        /* MAIN CONTENT GRID */
         .main-container {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 200px 1fr;
             gap: 15px;
-            margin-top: 15px;
+            padding: 20px 0;
+            text-align: left;
         }
 
-        .box { background: #ffffff; border: 1px solid #a4a4a4; padding: 10px; margin-bottom: 12px; }
+        /* BOX STYLING */
+        .box { 
+            background: #f0f0f0; 
+            border: 1px solid #a4a4a4; 
+            margin-bottom: 15px; 
+            padding: 10px;
+            font-size: 11px;
+        }
         .box-header {
-            background: #e9e9e9; border-bottom: 1px solid #a4a4a4;
-            padding: 5px; font-size: 11px; font-weight: bold; margin: -10px -10px 10px -10px;
+            background: #e9e9e9;
+            border-bottom: 1px solid #a4a4a4;
+            padding: 4px;
+            font-weight: bold;
+            margin: -10px -10px 10px -10px;
+            color: #333;
         }
 
-        /* SETTINGS STYLING */
-        .setting-item { margin-bottom: 15px; font-size: 12px; }
-        .setting-item label { display: block; font-weight: bold; margin-bottom: 3px; }
-        .setting-item input { width: 90%; padding: 3px; border: 1px solid #777; }
-
-        /* COLOR PICKER */
-        .color-grid { display: grid; grid-template-columns: repeat(3, 30px); gap: 5px; margin-top: 5px; }
-        .color-sq { width: 30px; height: 30px; border: 1px solid #000; cursor: pointer; }
-
-        .btn { background: #f2f2f2; border: 1px solid #777; font-size: 11px; padding: 4px 12px; cursor: pointer; }
-        .save-btn { background: #72fb3c; border: 1px solid #1e6900; font-weight: bold; }
-
-        .footer { text-align: center; font-size: 10px; padding: 20px; color: #444; border-top: 1px solid #ccc; margin-top: 15px; }
+        /* SETTINGS INPUTS */
+        .setting-row { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input[type="text"], textarea, select { width: 95%; padding: 4px; font-size: 11px; border: 1px solid #aaa; }
+        .save-btn { background: #72fb3c; border: 1px solid #27ae60; padding: 5px 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        .danger-zone { border: 1px solid #ff4d4d; background: #fff1f1; }
     </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <div class="banner-container">
-            <img src="Banner.png" alt="Blype Banner" class="banner-img">
+        <div class="banner-container" onclick="window.location.href='index.html'">
+            <img src="Banner.png" alt="BLYPE" class="banner-img">
         </div>
 
-        <div class="sub-nav">
-            <a href="index.html">Games</a> | <a href="marketplace.html">Marketplace</a> | <a href="people.html">People</a> | <a href="forum.html">Forum</a> | <a href="news.html">News</a> | <a href="help.html">Help</a> | <a href="settings.html">Settings</a>
+        <div class="sub-nav" id="main-nav">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="people.html">People</a> |
+            <a href="marketplace.html">Marketplace</a> | 
+            <a href="character.html">Character</a> | 
+            <a href="forum.html">Forum</a> | 
+            <a href="settings.html">Settings</a>
         </div>
 
         <div class="main-container">
             <aside>
                 <div class="box">
-                    <div class="box-header">Character Preview</div>
-                    <div style="background: #eee; height: 200px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666;">
-                        [ 3D Avatar Rendering ]
-                    </div>
-                    <p style="font-size: 10px; text-align: center; margin-top: 5px;">Currently wearing: <b>Brown Shirt</b></p>
+                    <div class="box-header">Account</div>
+                    <a href="#" style="display:block; margin-bottom:5px;">Personal Info</a>
+                    <a href="#" style="display:block; margin-bottom:5px;">Privacy</a>
+                    <a href="#" style="display:block; margin-bottom:5px;">Billing</a>
+                </div>
+
+                <div class="box" id="admin-sidebar" style="display:none;">
+                    <div class="box-header" style="color: #d9534f;">System Override</div>
+                    <span style="font-size: 9px; color: #666;">You are editing the root configuration for Admin_Krew.</span>
                 </div>
             </aside>
 
             <main>
                 <div class="box">
-                    <div class="box-header">Account Settings</div>
+                    <div class="box-header">My Settings</div>
                     
-                    <div class="setting-item">
-                        <label>Update Email</label>
-                        <input type="text" placeholder="user@example.com">
+                    <div class="setting-row">
+                        <label>Display Name</label>
+                        <input type="text" id="display-name" value="Admin">
                     </div>
 
-                    <div class="setting-item">
-                        <label>Change Password</label>
-                        <input type="password" placeholder="New Password">
-                        <input type="password" placeholder="Confirm Password" style="margin-top: 5px;">
+                    <div class="setting-row">
+                        <label>Personal Blurb (Bio)</label>
+                        <textarea id="bio" rows="3">Building the future of BLYPEME.</textarea>
                     </div>
 
-                    <hr>
-
-                    <div class="setting-item">
-                        <label>Character Skin Tone</label>
-                        <div class="color-grid">
-                            <div class="color-sq" style="background: #f5de1e;" title="Classic Yellow"></div>
-                            <div class="color-sq" style="background: #ffaf00;" title="Orange"></div>
-                            <div class="color-sq" style="background: #a34b4b;" title="Red-Brown"></div>
-                            <div class="color-sq" style="background: #0080ff;" title="Bright Blue"></div>
-                            <div class="color-sq" style="background: #27462c;" title="Dark Green"></div>
-                            <div class="color-sq" style="background: #ffffff;" title="White"></div>
-                        </div>
+                    <div class="setting-row">
+                        <label>Profile Theme</label>
+                        <select>
+                            <option>Default Blue</option>
+                            <option>Classic Purple</option>
+                            <option>Midnight</option>
+                            <option>Blypo-Gold</option>
+                        </select>
                     </div>
 
-                    <div style="text-align: right;">
-                        <button class="btn">Cancel</button>
-                        <button class="btn save-btn">Update Settings</button>
-                    </div>
+                    <button class="save-btn" onclick="alert('Settings Saved!')">Update Profile</button>
                 </div>
 
-                <div class="box">
-                    <div class="box-header">Privacy Settings</div>
-                    <div class="setting-item" style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" style="width: auto;">
-                        <span>Show my online status to everyone</span>
+                <div class="box danger-zone" id="admin-settings" style="display:none;">
+                    <div class="box-header" style="background:#ff4d4d; color:white;">Global System Settings</div>
+                    
+                    <div class="setting-row">
+                        <label>Site Status</label>
+                        <input type="radio" name="status" checked> Public 
+                        <input type="radio" name="status"> Maintenance Mode
                     </div>
-                    <div class="setting-item" style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" style="width: auto;" checked>
-                        <span>Allow others to see my inventory</span>
+
+                    <div class="setting-row">
+                        <label>Developer Debug Mode</label>
+                        <input type="checkbox" id="debug-toggle"> Show local storage keys in console
                     </div>
+
+                    <button class="save-btn" style="background:#ff4d4d; color:white; border-color:#900;" onclick="alert('System Updated!')">Apply Site-Wide Changes</button>
                 </div>
             </main>
         </div>
-
-        <div class="footer">
-            Privacy Policy | Advertise | Contact Us | About Us | Jobs
-            <br><br>
-            <b>BLYPE Corporation © 2026</b>
-        </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+            
+            if (isAdmin) {
+                // Show Admin specific boxes
+                document.getElementById('admin-sidebar').style.display = "block";
+                document.getElementById('admin-settings').style.display = "block";
+                
+                // Add Admin Tab to Nav
+                const nav = document.getElementById('main-nav');
+                if(!nav.innerHTML.includes("admin.html")) {
+                    nav.innerHTML += ' | <a href="admin.html" style="color:yellow;">Admin Panel</a>';
+                }
+            } else {
+                // Redirect non-admins to home if they try to access settings
+                window.location.href = "index.html";
+            }
+        };
+    </script>
 </body>
 </html>
