@@ -14,138 +14,160 @@
         .profile-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; padding: 20px; }
 
         /* LEFT COLUMN */
-        .avatar-card { border: 1px solid #ccc; background: #f9f9f9; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .avatar-card { border: 1px solid #ccc; background: #f9f9f9; padding: 15px; text-align: center; }
         .avatar-display { width: 250px; height: 300px; background: #fff; border: 1px inset #eee; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
 
-        /* BADGES SECTION */
-        .section-title { font-size: 14px; font-weight: bold; border-bottom: 1px solid #ccc; margin: 20px 0 10px; padding-bottom: 5px; color: #333; }
-        .badge-list { display: flex; flex-wrap: wrap; gap: 8px; }
-        .badge-icon { 
-            width: 60px; height: 65px; background: #eee; border: 1px solid #ccc; 
-            text-align: center; font-size: 9px; padding-top: 5px; border-radius: 4px;
-        }
-        .badge-img { font-size: 24px; display: block; margin-bottom: 2px; }
+        /* BUTTONS */
+        .social-btn { width: 100%; padding: 10px; font-weight: bold; cursor: pointer; margin-top: 5px; border: 1px solid #888; border-radius: 3px; }
+        .btn-friend { background: #007a3d; color: white; }
+        .btn-msg { background: #f4f4f4; color: #333; }
+        .btn-disabled { background: #ccc !important; cursor: not-allowed; }
 
-        /* FRIENDS SECTION */
+        /* MODAL POPUP */
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; background: white; border: 2px solid #000; z-index: 1000; padding: 20px; box-shadow: 5px 5px 0 rgba(0,0,0,0.2); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; padding: 5px; box-sizing: border-box; }
+
+        /* BADGES & FRIENDS (Existing Styles) */
+        .section-title { font-size: 14px; font-weight: bold; border-bottom: 1px solid #ccc; margin: 20px 0 10px; padding-bottom: 5px; }
+        .badge-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .badge-icon { width: 60px; height: 65px; background: #eee; border: 1px solid #ccc; text-align: center; font-size: 9px; padding-top: 5px; border-radius: 4px; }
         .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .friend-box { border: 1px solid #eee; padding: 5px; text-align: center; font-size: 10px; cursor: pointer; background: #fff; }
-        .friend-box:hover { border-color: #005596; }
-        .friend-img { width: 40px; height: 40px; background: #ddd; margin: 0 auto 5px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
-        /* INFO SECTION */
-        .info-header h1 { margin: 0; font-size: 24px; }
-        .status-box { background: #fffdf0; border: 1px solid #e6db55; padding: 10px; margin: 10px 0; font-style: italic; font-size: 13px; }
-        
-        .inv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .item-slot { border: 1px solid #eee; padding: 5px; text-align: center; font-size: 10px; background: #fff; }
-        .item-slot img { width: 50px; height: 50px; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
 
+    <div class="modal-overlay" id="overlay" onclick="closeMsg()"></div>
+    <div class="modal" id="msg-modal">
+        <h3 id="msg-title">Send Message to Bill</h3>
+        <textarea id="msg-text" placeholder="Write your message..."></textarea>
+        <button class="social-btn btn-friend" onclick="sendMessage()">Send Message</button>
+        <button class="social-btn" onclick="closeMsg()">Cancel</button>
+    </div>
+
     <div class="site-wrapper">
-        <div class="header">
-            <span>PLAYER PROFILE</span>
-            <span style="font-size:12px;">BLYPEME ver 2.0</span>
-        </div>
-        <div class="nav">
-            <a href="index.html">Home</a> | <a href="people.html">People</a> | <a href="marketplace.html">Shop</a>
-        </div>
+        <div class="header">PLAYER PROFILE</div>
+        <div class="nav"><a href="index.html">Home</a> | <a href="people.html">People</a></div>
 
         <div class="profile-layout">
             <div class="left-col">
                 <div class="avatar-card">
                     <div class="avatar-display">👤</div>
-                    <button style="width:100%; padding:8px; font-weight:bold; cursor:pointer;">Add Friend</button>
+                    <div id="social-actions">
+                        </div>
                 </div>
-
                 <div class="section-title">Friends (<span id="friend-count">0</span>)</div>
-                <div class="friends-grid" id="friends-list">
-                    </div>
+                <div class="friends-grid" id="friends-list"></div>
             </div>
 
             <div class="right-col">
-                <div class="info-header">
-                    <h1 id="p-username">User</h1>
-                    <div class="status-box" id="p-status">"Exploring BLYPEME!"</div>
-                </div>
-
+                <h1 id="p-username">User</h1>
                 <div class="section-title">Badges</div>
-                <div class="badge-list" id="badge-ribbon">
-                    </div>
-
+                <div class="badge-list" id="badge-ribbon"></div>
                 <div class="section-title">Inventory</div>
-                <div class="inv-grid" id="p-inv">
-                    </div>
+                <div id="p-inv" style="display:grid; grid-template-columns: repeat(4,1fr); gap:10px;"></div>
             </div>
         </div>
     </div>
 
     <script>
-        function loadProfile() {
-            const target = localStorage.getItem("profileTarget");
-            const db = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-            if (!target || !db[target]) return;
+        const BLYPE = {
+            viewer: localStorage.getItem("currentUser"),
+            target: localStorage.getItem("profileTarget"),
+            db: JSON.parse(localStorage.getItem("blypo_users") || "{}")
+        };
 
-            const user = db[target];
-            document.getElementById('p-username').innerText = target;
-            
-            // 1. RENDER INVENTORY
-            const invGrid = document.getElementById('p-inv');
-            invGrid.innerHTML = "";
-            const itemsOwned = user.inventory ? user.inventory.length : 0;
-            if(user.inventory) {
-                user.inventory.forEach(item => {
-                    const img = item.replace(/\s+/g, '') + "Front.png";
-                    invGrid.innerHTML += `<div class="item-slot"><img src="${img}" onerror="this.src='https://via.placeholder.com/40'"><b>${item}</b></div>`;
-                });
+        function loadProfile() {
+            const user = BLYPE.db[BLYPE.target];
+            if (!user) return;
+
+            document.getElementById('p-username').innerText = BLYPE.target;
+            document.getElementById('msg-title').innerText = "Send Message to " + BLYPE.target;
+
+            // 1. FRIENDS LIST & BUTTON LOGIC
+            const viewerData = BLYPE.db[BLYPE.viewer] || {};
+            const viewerFriends = viewerData.friends || [];
+            const actionDiv = document.getElementById('social-actions');
+
+            if (BLYPE.viewer === BLYPE.target) {
+                actionDiv.innerHTML = `<button class="social-btn btn-disabled">Viewing Your Profile</button>`;
+            } else if (viewerFriends.includes(BLYPE.target)) {
+                actionDiv.innerHTML = `<button class="social-btn btn-disabled">✓ Friends</button>
+                                       <button class="social-btn btn-msg" onclick="openMsg()">Message</button>`;
+            } else {
+                actionDiv.innerHTML = `<button class="social-btn btn-friend" onclick="addFriend()">Add Friend</button>
+                                       <button class="social-btn btn-msg" onclick="openMsg()">Message</button>`;
             }
 
             // 2. RENDER FRIENDS
-            const friendsList = document.getElementById('friends-list');
-            const friends = user.friends || []; // Assumes an array of names
+            const fList = document.getElementById('friends-list');
+            const friends = user.friends || [];
             document.getElementById('friend-count').innerText = friends.length;
-            friendsList.innerHTML = friends.length ? "" : "<p style='font-size:10px; color:#999;'>No friends yet.</p>";
-            friends.forEach(fName => {
-                friendsList.innerHTML += `
-                    <div class="friend-box" onclick="viewOther('${fName}')">
-                        <div class="friend-img">👤</div>
-                        ${fName}
-                    </div>`;
-            });
+            fList.innerHTML = friends.map(f => `<div class="friend-box" onclick="go('${f}')">👤<br>${f}</div>`).join('');
 
-            // 3. LIVE BADGE LOGIC
+            // 3. RENDER BADGES
             const ribbon = document.getElementById('badge-ribbon');
-            ribbon.innerHTML = "";
+            let badgeHTML = "";
+            if (user.isAdmin) badgeHTML += `<div class="badge-icon">🛡️<br>Admin</div>`;
+            if (friends.length >= 10) badgeHTML += `<div class="badge-icon">🤝<br>Friendly</div>`;
+            if ((user.inventory||[]).length >= 5) badgeHTML += `<div class="badge-icon">🛍️<br>Collector</div>`;
+            ribbon.innerHTML = badgeHTML;
 
-            const badges = [];
-            // Admin Badge
-            if (user.isAdmin) badges.push({ name: "Admin", img: "🛡️" });
-            
-            // Friend Badges
-            if (friends.length >= 1000) badges.push({ name: "1K Friends", img: "👑" });
-            else if (friends.length >= 10) badges.push({ name: "Friendly", img: "🤝" });
-
-            // Store Item Badges
-            if (itemsOwned >= 100) badges.push({ name: "Collector", img: "🛍️" });
-            
-            // Placeholder Badges (Simulated stats)
-            if (user.visited) badges.push({ name: "Traveler", img: "🌎" });
-            if (user.madePlace) badges.push({ name: "Builder", img: "🔨" });
-
-            badges.forEach(b => {
-                ribbon.innerHTML += `
-                    <div class="badge-icon">
-                        <span class="badge-img">${b.img}</span>
-                        <b>${b.name}</b>
-                    </div>`;
-            });
+            // 4. RENDER INVENTORY
+            const inv = document.getElementById('p-inv');
+            inv.innerHTML = (user.inventory||[]).map(item => `
+                <div style="border:1px solid #eee; text-align:center; font-size:10px; background:#fff;">
+                    <img src="${item.replace(/\s+/g,'')}Front.png" onerror="this.src='https://via.placeholder.com/40'" width="40"><br>${item}
+                </div>`).join('');
         }
 
-        function viewOther(name) {
-            localStorage.setItem("profileTarget", name);
+        // SOCIAL FUNCTIONS
+        function addFriend() {
+            if (!BLYPE.viewer) return alert("Log in to add friends!");
+            
+            // Update Viewer's friends
+            if (!BLYPE.db[BLYPE.viewer].friends) BLYPE.db[BLYPE.viewer].friends = [];
+            BLYPE.db[BLYPE.viewer].friends.push(BLYPE.target);
+
+            // Update Target's friends
+            if (!BLYPE.db[BLYPE.target].friends) BLYPE.db[BLYPE.target].friends = [];
+            BLYPE.db[BLYPE.target].friends.push(BLYPE.viewer);
+
+            localStorage.setItem("blypo_users", JSON.stringify(BLYPE.db));
+            alert("You are now friends with " + BLYPE.target + "!");
             location.reload();
         }
+
+        function openMsg() { 
+            if (!BLYPE.viewer) return alert("Log in to send messages!");
+            document.getElementById('msg-modal').style.display = 'block'; 
+            document.getElementById('overlay').style.display = 'block'; 
+        }
+
+        function closeMsg() { 
+            document.getElementById('msg-modal').style.display = 'none'; 
+            document.getElementById('overlay').style.display = 'none'; 
+        }
+
+        function sendMessage() {
+            const text = document.getElementById('msg-text').value;
+            if (!text) return;
+
+            let inbox = JSON.parse(localStorage.getItem("blypo_messages") || "[]");
+            inbox.push({
+                from: BLYPE.viewer,
+                to: BLYPE.target,
+                content: text,
+                date: new Date().toLocaleString()
+            });
+
+            localStorage.setItem("blypo_messages", JSON.stringify(inbox));
+            alert("Message sent to " + BLYPE.target + "!");
+            closeMsg();
+        }
+
+        function go(name) { localStorage.setItem("profileTarget", name); location.reload(); }
 
         window.onload = loadProfile;
     </script>
