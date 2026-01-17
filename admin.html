@@ -2,197 +2,256 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BLYPEME - Super Admin Console</title>
+    <title>BLYPEME - Staff Panel</title>
     <script>
-        // Security Gate
         if (localStorage.getItem("isAdmin") !== "true") window.location.replace("index.html");
     </script>
     <style>
         :root {
-            --classic-grey: #d4d0c8;
-            --classic-dark: #808080;
-            --win-blue: #000080;
+            --roblox-red: #d92525;
+            --panel-grey: #e1e1e1;
+            --border-dark: #b5b5b5;
         }
 
-        body { background: #3a6ea5; font-family: 'Tahoma', sans-serif; margin: 0; padding: 20px; }
+        body { background: #f4f4f4; font-family: Arial, sans-serif; margin: 0; padding: 0; color: #333; }
         
-        /* THE "WINDOW" LOOK */
-        .window { 
-            width: 900px; margin: 0 auto; background: var(--classic-grey); 
-            border: 2px solid #fff; border-right-color: #404040; border-bottom-color: #404040;
-            box-shadow: 2px 2px 0 #000;
+        /* STAFF HEADER */
+        .staff-header { background: #222; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--roblox-red); }
+        .staff-header h1 { font-size: 20px; margin: 0; letter-spacing: 1px; }
+        .staff-header .user-info { font-size: 12px; }
+
+        /* TAB NAVIGATION */
+        .tab-nav { background: var(--panel-grey); padding: 8px 20px 0; border-bottom: 1px solid var(--border-dark); display: flex; gap: 4px; }
+        .tab { 
+            padding: 10px 20px; background: #d0d0d0; border: 1px solid var(--border-dark); border-bottom: none; 
+            font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 5px 5px 0 0; color: #555;
         }
-        .title-bar { 
-            background: var(--win-blue); color: white; padding: 4px; font-weight: bold; 
-            font-size: 13px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .close-btn { background: var(--classic-grey); border: 1px solid #fff; width: 16px; height: 14px; color: #000; font-size: 9px; text-align: center; line-height: 12px; cursor: pointer; }
+        .tab.active { background: white; border-bottom: 1px solid white; margin-bottom: -1px; color: #000; }
 
-        .menu-bar { padding: 4px; border-bottom: 1px solid var(--classic-dark); font-size: 11px; }
-        .menu-bar span { margin-right: 15px; cursor: pointer; }
+        /* MAIN CONTENT AREA */
+        .main-content { padding: 25px; max-width: 1200px; margin: 0 auto; display: none; }
+        .main-content.active { display: block; }
 
-        /* CONTENT GRID */
-        .layout { display: grid; grid-template-columns: 250px 1fr; gap: 10px; padding: 10px; }
+        .dashboard-box { border: 1px solid var(--border-dark); background: white; margin-bottom: 25px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
+        .dashboard-header { background: #f0f0f0; padding: 12px; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-dark); display: flex; justify-content: space-between; }
+        .dashboard-inner { padding: 20px; }
 
-        /* PLAYER LIST BOX */
-        .player-box { background: #fff; border: 2px inset #eee; height: 400px; overflow-y: scroll; padding: 5px; }
-        .player-item { padding: 5px; border-bottom: 1px solid #eee; font-size: 12px; display: flex; justify-content: space-between; }
-        .player-item:hover { background: #000080; color: white; cursor: pointer; }
+        /* AUDIT PAGE */
+        .audit-grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        .info-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+        .info-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .info-table b { color: #444; }
 
-        /* COMMAND PANEL */
-        .control-panel { background: #fff; border: 2px inset #eee; padding: 15px; text-align: left; }
+        /* MOD QUEUE */
+        .mod-queue { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .asset-card { border: 1px solid #ccc; text-align: center; padding: 15px; background: #fafafa; }
+        .asset-preview { width: 100px; height: 100px; background: #fff; margin: 0 auto 10px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 30px;}
+
+        /* BUTTONS */
+        .btn { padding: 7px 15px; font-size: 12px; font-weight: bold; cursor: pointer; border: 1px solid #888; border-radius: 3px; }
+        .btn-approve { background: #28a745; color: white; border-color: #1e7e34; }
+        .btn-reject { background: #dc3545; color: white; border-color: #bd2130; }
         
-        h3 { margin-top: 0; font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-        .cmd-group { margin-bottom: 20px; }
-        .cmd-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+        input, select, textarea { padding: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-family: Arial; }
 
-        /* CLASSIC BUTTONS */
-        button { 
-            background: var(--classic-grey); border: 2px solid #fff; border-right-color: #404040; 
-            border-bottom-color: #404040; padding: 4px 10px; font-size: 11px; cursor: pointer;
-        }
-        button:active { border: 2px inset #404040; padding: 5px 9px 3px 11px; }
-        .btn-red { color: #800000; font-weight: bold; }
-
-        input { border: 2px inset #eee; padding: 4px; font-size: 11px; width: 100%; box-sizing: border-box; }
-
-        .status-bar { border-top: 1px solid var(--classic-dark); padding: 3px; font-size: 11px; background: var(--classic-grey); display: flex; justify-content: space-between; }
+        .alert-bar-preview { background: var(--roblox-red); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 20px; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-<div class="window">
-    <div class="title-bar">
-        <span>BLYPEME Admin Console (Logged in as: ADMIN)</span>
-        <div class="close-btn" onclick="window.location.href='index.html'">X</div>
-    </div>
-    
-    <div class="menu-bar">
-        <span>File</span> <span>Edit</span> <span>Database</span> <span onclick="refreshPlayers()">Refresh_Players</span> <span style="color:red" onclick="toggleSlock()">[SLOCK: OFF]</span>
-    </div>
+<div class="staff-header">
+    <h1>BLYPEME Staff Portal</h1>
+    <div class="user-info">ADMINISTRATOR: <b id="admin-name">ROOT</b> | <a href="index.html" style="color:white; text-decoration:none; border-bottom:1px dotted #fff;">Site Home</a></div>
+</div>
 
-    <div class="layout">
-        <div class="player-box" id="player-list">
-            </div>
+<div class="tab-nav">
+    <div class="tab active" onclick="openTab(event, 'audit')">User Search / Audit</div>
+    <div class="tab" onclick="openTab(event, 'queue')">Asset Approval</div>
+    <div class="tab" onclick="openTab(event, 'site')">Site-Wide Controls</div>
+    <div class="tab" onclick="openTab(event, 'economy')">Blypo-Bux Economy</div>
+</div>
 
-        <div class="control-panel">
-            <div class="cmd-group">
-                <h3>Selected Target: <span id="target-name" style="color:blue;">None</span></h3>
-                <input type="text" id="custom-reason" placeholder="Action Reason (Ban/Kick/Warning)...">
-                
-                <div class="cmd-row">
-                    <button class="btn-red" onclick="modAction('ban')">BAN</button>
-                    <button class="btn-red" onclick="modAction('kick')">KICK</button>
-                    <button onclick="modAction('warn')">WARN</button>
-                    <button onclick="modAction('kill')">KILL</button>
-                    <button onclick="modAction('respawn')">RESPAWN</button>
-                </div>
-            </div>
-
-            <div class="cmd-group">
-                <h3>Visual Effects (Aesthetics)</h3>
-                <div class="cmd-row">
-                    <button onclick="effect('fire')">FIRE</button>
-                    <button onclick="effect('sparkles')">SPARKLES</button>
-                    <button onclick="effect('smoke')">SMOKE</button>
-                    <button onclick="effect('ff')">FORCEFIELD</button>
-                    <button onclick="effect('unff')">REMOVE ALL</button>
-                </div>
-            </div>
-
-            <div class="cmd-group">
-                <h3>Asset Injection</h3>
-                <div class="cmd-row">
-                    <button onclick="giveAsset('B$ 1000')">GIVE 1K B$</button>
-                    <button onclick="giveAsset('Admin Cape')">GIVE CAPE</button>
-                    <button onclick="giveAsset('Crown')">GIVE CROWN</button>
-                </div>
-            </div>
-
-            <div class="cmd-group">
-                <h3>Global Message</h3>
-                <input type="text" id="m-text" placeholder="Message text...">
-                <div class="cmd-row">
-                    <button style="width:100%" onclick="sendGlobal()">ANNOUNCE TO SERVER</button>
-                </div>
+<div id="audit" class="main-content active">
+    <div class="dashboard-box">
+        <div class="dashboard-header">User Investigative Tool</div>
+        <div class="dashboard-inner">
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="search-name" placeholder="Search Username (e.g. Guest_1)...">
+                <button class="btn" style="background:#eee;" onclick="searchUser()">Search Database</button>
             </div>
         </div>
     </div>
 
-    <div class="status-bar">
-        <span id="sys-status">Ready.</span>
-        <span id="user-count">Users: 0</span>
+    <div class="audit-grid" id="audit-results" style="display:none;">
+        <div class="dashboard-box">
+            <div class="dashboard-header">Account Metadata</div>
+            <div class="dashboard-inner">
+                <table class="info-table">
+                    <tr><td><b>User ID:</b></td><td id="aud-id">---</td></tr>
+                    <tr><td><b>Email:</b></td><td><input type="text" id="aud-email" value="verified@blypeme.com"></td></tr>
+                    <tr><td><b>Membership:</b></td><td>Builders Club</td></tr>
+                    <tr><td><b>IP History:</b></td><td id="aud-ip" style="font-family:monospace; color:blue;">72.14.192.XXX</td></tr>
+                </table>
+                <button class="btn btn-approve" style="width:100%; margin-top:15px;">Manual Verify Email</button>
+            </div>
+        </div>
+        <div class="dashboard-box">
+            <div class="dashboard-header">Moderation & Wealth Management</div>
+            <div class="dashboard-inner">
+                <label><b>Adjust Blypo-Bux (B$):</b></label>
+                <div style="display:flex; gap:10px; margin-top:5px;">
+                    <input type="number" id="aud-bux" value="0">
+                    <button class="btn btn-approve" onclick="saveCurrency()">Update B$</button>
+                </div>
+                
+                <h4 style="border-bottom: 1px solid #eee; padding-bottom:10px; margin-top:25px;">Moderation Incident Log</h4>
+                <div id="aud-history" style="font-size:11px; background:#f9f9f9; padding:10px; border:1px inset #eee; height:80px; overflow-y:scroll;">
+                    -- No recent incidents found --
+                </div>
+                <div style="margin-top:10px; display:flex; gap:5px;">
+                    <button class="btn btn-reject" onclick="banTarget()">TERMINATE ACCOUNT</button>
+                    <button class="btn" onclick="alert('Warning Sent')">ISSUE WARNING</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="queue" class="main-content">
+    <div class="dashboard-box">
+        <div class="dashboard-header">Pending Asset Queue <span>Total: 3</span></div>
+        <div class="dashboard-inner mod-queue">
+            <div class="asset-card">
+                <div class="asset-preview">👕</div>
+                <b>Brown Shirt</b><br><span style="color:#666; font-size:10px;">ID: 9021</span><br><br>
+                <button class="btn btn-approve" onclick="this.parentElement.remove()">APPROVE</button>
+                <button class="btn btn-reject" onclick="this.parentElement.remove()">REJECT</button>
+            </div>
+            <div class="asset-card">
+                <div class="asset-preview">👒</div>
+                <b>Golden Hat</b><br><span style="color:#666; font-size:10px;">ID: 8842</span><br><br>
+                <button class="btn btn-approve" onclick="this.parentElement.remove()">APPROVE</button>
+                <button class="btn btn-reject" onclick="this.parentElement.remove()">REJECT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="site" class="main-content">
+    <div class="dashboard-box">
+        <div class="dashboard-header">Global System Alert (Red Bar)</div>
+        <div class="dashboard-inner">
+            <div class="alert-bar-preview" id="preview-text">No active site-wide messages.</div>
+            <textarea id="system-msg" rows="3" placeholder="Enter text to display at top of site..."></textarea>
+            <button class="btn btn-reject" style="width:100%; margin-top:15px; font-size:14px;" onclick="setRedBar()">POST ALERT</button>
+        </div>
+    </div>
+    <div class="dashboard-box" style="border-color:red;">
+        <div class="dashboard-header" style="background:#ffdada;">Emergency Maintenance Mode</div>
+        <div class="dashboard-inner" style="display:flex; justify-content:space-between; align-items:center;">
+            <p style="font-size:12px; margin:0;">Toggle "Under Construction" page for all non-admins.</p>
+            <button class="btn btn-reject" onclick="toggleMaintenance()">ENGAGE MAINTENANCE</button>
+        </div>
+    </div>
+</div>
+
+<div id="economy" class="main-content">
+    <div class="dashboard-box">
+        <div class="dashboard-header">Blypo-Bux (B$) Circulation Data</div>
+        <div class="dashboard-inner">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <div style="background:#f0faf0; border:1px solid #cce; padding:20px; text-align:center;">
+                    <span style="font-size:12px; color:#555;">Total B$ Minted</span><br>
+                    <b style="font-size:24px; color:#28a745;" id="econ-total">Calculating...</b>
+                </div>
+                <div style="background:#fffaf0; border:1px solid #eec; padding:20px; text-align:center;">
+                    <span style="font-size:12px; color:#555;">B$ From Store Purchases</span><br>
+                    <b style="font-size:24px; color:#d9a525;">882,400</b>
+                </div>
+            </div>
+            <h4 style="margin-top:25px;">Marketplace Flow Analysis</h4>
+            <div style="height:100px; background:#eee; border-radius:5px; border:1px solid #ddd; display:flex; align-items:flex-end; padding:10px; gap:5px;">
+                <div style="height:30%; background:#28a745; width:20px;"></div>
+                <div style="height:55%; background:#28a745; width:20px;"></div>
+                <div style="height:90%; background:#28a745; width:20px;"></div>
+                <div style="height:70%; background:#28a745; width:20px;"></div>
+            </div>
+            <p style="font-size:10px; color:#888;">Live minting history (B$ generated per hour)</p>
+        </div>
     </div>
 </div>
 
 <script>
-    let selectedUser = "";
-
-    function refreshPlayers() {
-        const users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
-        const list = document.getElementById('player-list');
-        list.innerHTML = "";
-        let count = 0;
-
-        for (let u in users) {
-            count++;
-            const div = document.createElement('div');
-            div.className = "player-item";
-            div.innerHTML = `<span>${u}</span> <span style="font-size:9px; color:gray;">B$: ${users[u].bux}</span>`;
-            div.onclick = () => selectUser(u);
-            list.appendChild(div);
-        }
-        document.getElementById('user-count').innerText = "Users: " + count;
-    }
-
-    function selectUser(name) {
-        selectedUser = name;
-        document.getElementById('target-name').innerText = name;
-        setStatus(`Focused on user: ${name}`);
-    }
-
-    function setStatus(msg) {
-        document.getElementById('sys-status').innerText = msg;
-    }
-
-    function modAction(type) {
-        if(!selectedUser) return alert("Select a player first!");
+    function openTab(evt, tabName) {
+        let contents = document.getElementsByClassName("main-content");
+        for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
         
-        if(type === 'ban') {
-            let blacklist = JSON.parse(localStorage.getItem("blypo_blacklist") || "[]");
-            if(!blacklist.includes(selectedUser)) {
-                blacklist.push(selectedUser);
-                localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
-                setStatus(`TERMINATED: ${selectedUser}`);
-            }
+        let tabs = document.getElementsByClassName("tab");
+        for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    function searchUser() {
+        const name = document.getElementById('search-name').value.trim();
+        if(!name) return;
+        
+        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        if(users[name]) {
+            document.getElementById('audit-results').style.display = 'grid';
+            document.getElementById('aud-id').innerText = Math.floor(Math.random() * 99000);
+            document.getElementById('aud-bux').value = users[name].bux;
         } else {
-            setStatus(`CMD: ${type.toUpperCase()} executed on ${selectedUser}`);
+            alert("User not found in BLYPEME registry.");
         }
-        alert(`Command [${type}] sent to server for ${selectedUser}`);
     }
 
-    function effect(type) {
-        if(!selectedUser) return alert("Select a player!");
-        setStatus(`VISUAL: Applied ${type} to ${selectedUser}`);
+    function saveCurrency() {
+        const name = document.getElementById('search-name').value.trim();
+        const amt = parseInt(document.getElementById('aud-bux').value);
+        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        if(users[name]) {
+            users[name].bux = amt;
+            localStorage.setItem("blypo_users", JSON.stringify(users));
+            if(localStorage.getItem("currentUser") === name) localStorage.setItem("blypoBux", amt);
+            alert("Economy adjustment successful for " + name);
+            refreshEcon();
+        }
     }
 
-    function giveAsset(item) {
-        if(!selectedUser) return alert("Select a player!");
-        setStatus(`ECONOMY: Granted ${item} to ${selectedUser}`);
-    }
-
-    function sendGlobal() {
-        const msg = document.getElementById('m-text').value;
+    function setRedBar() {
+        const msg = document.getElementById('system-msg').value;
         localStorage.setItem("globalAlert", msg);
-        setStatus("GLOBAL: Announcement sent.");
+        document.getElementById('preview-text').innerText = msg;
+        alert("Site-wide red bar updated.");
     }
 
-    function toggleSlock() {
-        alert("SERVER LOCK (SLOCK) ACTIVATED. No new players can join.");
-        setStatus("SYSTEM: Server is now locked.");
+    function banTarget() {
+        const name = document.getElementById('search-name').value.trim();
+        let blacklist = JSON.parse(localStorage.getItem("blypo_blacklist") || "[]");
+        if(!blacklist.includes(name)) {
+            blacklist.push(name);
+            localStorage.setItem("blypo_blacklist", JSON.stringify(blacklist));
+            alert(name + " has been TERMINATED.");
+        }
     }
 
-    window.onload = refreshPlayers;
+    function refreshEcon() {
+        let users = JSON.parse(localStorage.getItem("blypo_users") || "{}");
+        let total = 0;
+        for(let u in users) { total += users[u].bux; }
+        document.getElementById('econ-total').innerText = total.toLocaleString() + " B$";
+    }
+
+    function toggleMaintenance() {
+        alert("SITE-WIDE LOCKDOWN: MAINTENANCE MODE ON.");
+    }
+
+    window.onload = function() {
+        refreshEcon();
+        document.getElementById('admin-name').innerText = localStorage.getItem("currentUser") || "STAFF";
+    }
 </script>
 
 </body>
